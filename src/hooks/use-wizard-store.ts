@@ -1,0 +1,321 @@
+"use client";
+
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import type { StoryStyle, IllustrationStyle, AdditionalCharacter, ChildPhoto } from "@/types";
+
+interface WizardState {
+  step: number;
+  childName: string;
+  childAge: number | null;
+  childGender: string;
+  favoriteThings: string[];
+  customFavoriteThings: string[];
+  personalityTraits: string[];
+  customPersonalityTraits: string[];
+  theme: string;
+  occasion: string;
+  hobbies: string[];
+  customHobbies: string[];
+  favoriteCharacters: string[];
+  customFavoriteCharacters: string[];
+  favoriteAnimal: string[];
+  customFavoriteAnimals: string[];
+  // Legacy single photo
+  photoFile: File | null;
+  photoPreview: string | null;
+  photoKey: string | null;
+  // Multi-photo
+  childPhotos: ChildPhoto[];
+  childPhotoKeys: string[];
+  additionalCharacters: AdditionalCharacter[];
+  // Style
+  storyStyle: StoryStyle;
+  illustrationStyle: IllustrationStyle;
+  dedication: string;
+  // Title selection
+  selectedTitle: string;
+  titleOptions: string[];
+}
+
+interface WizardActions {
+  setStep: (step: number) => void;
+  nextStep: () => void;
+  prevStep: () => void;
+  setChildName: (name: string) => void;
+  setChildAge: (age: number | null) => void;
+  setChildGender: (gender: string) => void;
+  toggleFavoriteThing: (thing: string) => void;
+  addCustomFavoriteThing: (thing: string) => void;
+  removeCustomFavoriteThing: (thing: string) => void;
+  togglePersonalityTrait: (trait: string) => void;
+  addCustomPersonalityTrait: (trait: string) => void;
+  removeCustomPersonalityTrait: (trait: string) => void;
+  setTheme: (theme: string) => void;
+  setOccasion: (occasion: string) => void;
+  toggleHobby: (hobby: string) => void;
+  addCustomHobby: (hobby: string) => void;
+  removeCustomHobby: (hobby: string) => void;
+  toggleFavoriteCharacter: (character: string) => void;
+  addCustomFavoriteCharacter: (character: string) => void;
+  removeCustomFavoriteCharacter: (character: string) => void;
+  toggleFavoriteAnimal: (animal: string) => void;
+  addCustomFavoriteAnimal: (animal: string) => void;
+  removeCustomFavoriteAnimal: (animal: string) => void;
+  // Legacy single photo
+  setPhoto: (file: File | null, preview: string | null) => void;
+  setPhotoKey: (key: string) => void;
+  // Multi-photo
+  addChildPhoto: (photo: ChildPhoto) => void;
+  removeChildPhoto: (index: number) => void;
+  setChildPhotoKeys: (keys: string[]) => void;
+  addAdditionalCharacter: (character: AdditionalCharacter) => void;
+  updateAdditionalCharacter: (index: number, character: AdditionalCharacter) => void;
+  removeAdditionalCharacter: (index: number) => void;
+  // Style
+  setStoryStyle: (style: StoryStyle) => void;
+  setIllustrationStyle: (style: IllustrationStyle) => void;
+  setDedication: (text: string) => void;
+  // Title
+  setSelectedTitle: (title: string) => void;
+  setTitleOptions: (titles: string[]) => void;
+  reset: () => void;
+}
+
+const initialState: WizardState = {
+  step: 1,
+  childName: "",
+  childAge: null,
+  childGender: "",
+  favoriteThings: [],
+  customFavoriteThings: [],
+  personalityTraits: [],
+  customPersonalityTraits: [],
+  theme: "",
+  occasion: "",
+  hobbies: [],
+  customHobbies: [],
+  favoriteCharacters: [],
+  customFavoriteCharacters: [],
+  favoriteAnimal: [],
+  customFavoriteAnimals: [],
+  photoFile: null,
+  photoPreview: null,
+  photoKey: null,
+  childPhotos: [],
+  childPhotoKeys: [],
+  additionalCharacters: [],
+  storyStyle: "PROSE",
+  illustrationStyle: "WATERCOLOR_WHIMSY",
+  dedication: "",
+  selectedTitle: "",
+  titleOptions: [],
+};
+
+export const useWizardStore = create<WizardState & WizardActions>()(
+  persist(
+    (set, get) => ({
+      ...initialState,
+
+      setStep: (step) => set({ step }),
+      nextStep: () => set({ step: Math.min(get().step + 1, 6) }),
+      prevStep: () => set({ step: Math.max(get().step - 1, 1) }),
+
+      setChildName: (childName) => set({ childName }),
+      setChildAge: (childAge) => set({ childAge }),
+      setChildGender: (childGender) => set({ childGender }),
+
+      // Favorite things (preset + custom share the same max of 5)
+      toggleFavoriteThing: (thing) => {
+        const { favoriteThings, customFavoriteThings } = get();
+        const total = favoriteThings.length + customFavoriteThings.length;
+        if (favoriteThings.includes(thing)) {
+          set({ favoriteThings: favoriteThings.filter((t) => t !== thing) });
+        } else if (total < 5) {
+          set({ favoriteThings: [...favoriteThings, thing] });
+        }
+      },
+      addCustomFavoriteThing: (thing) => {
+        const { favoriteThings, customFavoriteThings } = get();
+        const total = favoriteThings.length + customFavoriteThings.length;
+        if (total < 5 && !customFavoriteThings.includes(thing)) {
+          set({ customFavoriteThings: [...customFavoriteThings, thing] });
+        }
+      },
+      removeCustomFavoriteThing: (thing) => {
+        set({ customFavoriteThings: get().customFavoriteThings.filter((t) => t !== thing) });
+      },
+
+      // Personality traits (preset + custom share max of 3)
+      togglePersonalityTrait: (trait) => {
+        const { personalityTraits, customPersonalityTraits } = get();
+        const total = personalityTraits.length + customPersonalityTraits.length;
+        if (personalityTraits.includes(trait)) {
+          set({ personalityTraits: personalityTraits.filter((t) => t !== trait) });
+        } else if (total < 3) {
+          set({ personalityTraits: [...personalityTraits, trait] });
+        }
+      },
+      addCustomPersonalityTrait: (trait) => {
+        const { personalityTraits, customPersonalityTraits } = get();
+        const total = personalityTraits.length + customPersonalityTraits.length;
+        if (total < 3 && !customPersonalityTraits.includes(trait)) {
+          set({ customPersonalityTraits: [...customPersonalityTraits, trait] });
+        }
+      },
+      removeCustomPersonalityTrait: (trait) => {
+        set({ customPersonalityTraits: get().customPersonalityTraits.filter((t) => t !== trait) });
+      },
+
+      setTheme: (theme) => set({ theme }),
+      setOccasion: (occasion) => set({ occasion }),
+
+      // Hobbies (preset + custom share max of 5)
+      toggleHobby: (hobby) => {
+        const { hobbies, customHobbies } = get();
+        const total = hobbies.length + customHobbies.length;
+        if (hobbies.includes(hobby)) {
+          set({ hobbies: hobbies.filter((h) => h !== hobby) });
+        } else if (total < 5) {
+          set({ hobbies: [...hobbies, hobby] });
+        }
+      },
+      addCustomHobby: (hobby) => {
+        const { hobbies, customHobbies } = get();
+        const total = hobbies.length + customHobbies.length;
+        if (total < 5 && !customHobbies.includes(hobby)) {
+          set({ customHobbies: [...customHobbies, hobby] });
+        }
+      },
+      removeCustomHobby: (hobby) => {
+        set({ customHobbies: get().customHobbies.filter((h) => h !== hobby) });
+      },
+
+      // Favorite characters (preset + custom share max of 3)
+      toggleFavoriteCharacter: (character) => {
+        const { favoriteCharacters, customFavoriteCharacters } = get();
+        const total = favoriteCharacters.length + customFavoriteCharacters.length;
+        if (favoriteCharacters.includes(character)) {
+          set({ favoriteCharacters: favoriteCharacters.filter((c) => c !== character) });
+        } else if (total < 3) {
+          set({ favoriteCharacters: [...favoriteCharacters, character] });
+        }
+      },
+      addCustomFavoriteCharacter: (character) => {
+        const { favoriteCharacters, customFavoriteCharacters } = get();
+        const total = favoriteCharacters.length + customFavoriteCharacters.length;
+        if (total < 3 && !customFavoriteCharacters.includes(character)) {
+          set({ customFavoriteCharacters: [...customFavoriteCharacters, character] });
+        }
+      },
+      removeCustomFavoriteCharacter: (character) => {
+        set({ customFavoriteCharacters: get().customFavoriteCharacters.filter((c) => c !== character) });
+      },
+
+      // Favorite animals (preset + custom share max of 3)
+      toggleFavoriteAnimal: (animal) => {
+        const { favoriteAnimal, customFavoriteAnimals } = get();
+        const total = favoriteAnimal.length + customFavoriteAnimals.length;
+        if (favoriteAnimal.includes(animal)) {
+          set({ favoriteAnimal: favoriteAnimal.filter((a) => a !== animal) });
+        } else if (total < 3) {
+          set({ favoriteAnimal: [...favoriteAnimal, animal] });
+        }
+      },
+      addCustomFavoriteAnimal: (animal) => {
+        const { favoriteAnimal, customFavoriteAnimals } = get();
+        const total = favoriteAnimal.length + customFavoriteAnimals.length;
+        if (total < 3 && !customFavoriteAnimals.includes(animal)) {
+          set({ customFavoriteAnimals: [...customFavoriteAnimals, animal] });
+        }
+      },
+      removeCustomFavoriteAnimal: (animal) => {
+        set({ customFavoriteAnimals: get().customFavoriteAnimals.filter((a) => a !== animal) });
+      },
+
+      // Legacy single photo
+      setPhoto: (photoFile, photoPreview) => set({ photoFile, photoPreview }),
+      setPhotoKey: (photoKey) => set({ photoKey }),
+
+      // Multi-photo
+      addChildPhoto: (photo) => {
+        const current = get().childPhotos;
+        if (current.length < 5) {
+          set({ childPhotos: [...current, photo] });
+        }
+      },
+      removeChildPhoto: (index) => {
+        set({ childPhotos: get().childPhotos.filter((_, i) => i !== index) });
+      },
+      setChildPhotoKeys: (childPhotoKeys) => set({ childPhotoKeys }),
+
+      // Additional characters
+      addAdditionalCharacter: (character) => {
+        const current = get().additionalCharacters;
+        if (current.length < 4) {
+          set({ additionalCharacters: [...current, character] });
+        }
+      },
+      updateAdditionalCharacter: (index, character) => {
+        const current = [...get().additionalCharacters];
+        current[index] = character;
+        set({ additionalCharacters: current });
+      },
+      removeAdditionalCharacter: (index) => {
+        set({ additionalCharacters: get().additionalCharacters.filter((_, i) => i !== index) });
+      },
+
+      // Style
+      setStoryStyle: (storyStyle) => set({ storyStyle }),
+      setIllustrationStyle: (illustrationStyle) => set({ illustrationStyle }),
+      setDedication: (dedication) => set({ dedication }),
+
+      // Title
+      setSelectedTitle: (selectedTitle) => set({ selectedTitle }),
+      setTitleOptions: (titleOptions) => set({ titleOptions }),
+
+      reset: () => set(initialState),
+    }),
+    {
+      name: "wizard-storage",
+      partialize: (state) => ({
+        step: state.step,
+        childName: state.childName,
+        childAge: state.childAge,
+        childGender: state.childGender,
+        favoriteThings: state.favoriteThings,
+        customFavoriteThings: state.customFavoriteThings,
+        personalityTraits: state.personalityTraits,
+        customPersonalityTraits: state.customPersonalityTraits,
+        theme: state.theme,
+        occasion: state.occasion,
+        hobbies: state.hobbies,
+        customHobbies: state.customHobbies,
+        favoriteCharacters: state.favoriteCharacters,
+        customFavoriteCharacters: state.customFavoriteCharacters,
+        favoriteAnimal: state.favoriteAnimal,
+        customFavoriteAnimals: state.customFavoriteAnimals,
+        photoPreview: state.photoPreview,
+        photoKey: state.photoKey,
+        childPhotoKeys: state.childPhotoKeys,
+        additionalCharacters: state.additionalCharacters.map((c) => ({
+          name: c.name,
+          role: c.role,
+          photoPreview: c.photoPreview,
+          photoKey: c.photoKey,
+          photoFile: null,
+        })),
+        storyStyle: state.storyStyle,
+        illustrationStyle: state.illustrationStyle,
+        dedication: state.dedication,
+        selectedTitle: state.selectedTitle,
+        titleOptions: state.titleOptions,
+        // Persist childPhotos previews only (exclude File objects)
+        childPhotos: state.childPhotos.map((p) => ({
+          file: null,
+          preview: p.preview,
+        })),
+      }),
+    }
+  )
+);
