@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 const protectedPaths = ["/dashboard", "/preview", "/checkout", "/generate"];
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   // In demo mode, skip all auth checks
   if (process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
     return NextResponse.next();
