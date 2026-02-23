@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const protectedPaths = ["/dashboard", "/create", "/preview", "/checkout", "/generate"];
+const protectedPaths = ["/dashboard", "/preview", "/checkout", "/generate"];
 
 export function middleware(req: NextRequest) {
+  // In demo mode, skip all auth checks
+  if (process.env.NEXT_PUBLIC_DEMO_MODE === "true") {
+    return NextResponse.next();
+  }
+
   const { pathname } = req.nextUrl;
 
   const isProtected = protectedPaths.some((path) => pathname.startsWith(path));

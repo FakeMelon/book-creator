@@ -112,19 +112,6 @@ export const updatePageTextSchema = z.object({
   text: z.string().min(1).max(500),
 });
 
-export const suggestTitlesSchema = z.object({
-  childName: z.string().min(1),
-  childAge: z.number().int().min(3).max(8),
-  childGender: z.string(),
-  theme: z.string().min(1),
-  occasion: z.string().min(1),
-  favoriteThings: z.array(z.string()).optional(),
-  personalityTraits: z.array(z.string()).optional(),
-  hobbies: z.array(z.string()).optional(),
-  favoriteCharacters: z.array(z.string()).optional(),
-  favoriteAnimal: z.array(z.string()).optional(),
-});
-
 // ─── Type exports ───
 
 export type ChildInfoInput = z.infer<typeof childInfoSchema>;
@@ -132,4 +119,3 @@ export type CreativeDirectionInput = z.infer<typeof creativeDirectionSchema>;
 export type StoryStyleInput = z.infer<typeof storyStyleSchema>;
 export type CreateBookInput = z.infer<typeof createBookSchema>;
 export type CheckoutInput = z.infer<typeof checkoutSchema>;
-export type SuggestTitlesInput = z.infer<typeof suggestTitlesSchema>;

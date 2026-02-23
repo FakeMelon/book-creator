@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer base {
+  button, [role="button"] {
+    cursor: pointer;
+  }
+}
+
 @theme {
   --color-background: #ffffff;
   --color-foreground: #0a0a0a;

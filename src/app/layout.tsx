@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Quicksand, Fredoka, Baloo_2 } from "next/font/google";
+import { Providers } from "@/components/providers";
 import "./globals.css";
 
 const quicksand = Quicksand({
@@ -49,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${quicksand.variable} ${fredoka.variable} ${baloo2.variable}`}>
       <body className="font-sans min-h-screen">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

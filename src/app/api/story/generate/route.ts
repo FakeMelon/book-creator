@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { isDemoMode } from "@/lib/config";
 import { THEMES, PERSONALITY_TRAITS, ILLUSTRATION_STYLES } from "@/constants";
 
 export async function POST(req: Request) {
+  if (!isDemoMode) {
+    return NextResponse.json({ error: "Not available" }, { status: 403 });
+  }
+
   const apiKey = process.env.OPENROUTER_API_KEY;
   const model = process.env.STORY_MODEL;
 
@@ -135,7 +140,7 @@ Write the complete 32-page book now.`;
     return NextResponse.json(story);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
-    console.error("Demo generation error:", message);
+    console.error("Story generation error:", message);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

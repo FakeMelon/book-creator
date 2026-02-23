@@ -86,7 +86,7 @@ export default function LandingPage() {
             <Link href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground">
               Sign In
             </Link>
-            <Link href="/create">
+            <Link href="/get-started">
               <Button size="sm">Create a Book</Button>
             </Link>
           </div>
@@ -112,7 +112,7 @@ export default function LandingPage() {
               Upload a photo, choose a theme, and get a beautifully illustrated 32-page hardcover book delivered to your door. Created in under 5 minutes.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/create">
+              <Link href="/get-started">
                 <Button size="xl" className="text-lg px-10">
                   Create Your Book — $24.99
                 </Button>
@@ -306,7 +306,7 @@ export default function LandingPage() {
                       </li>
                     ))}
                   </ul>
-                  <Link href="/create" className="block mt-6">
+                  <Link href="/get-started" className="block mt-6">
                     <Button className="w-full" variant={plan.badge ? "default" : "outline"}>
                       Get Started
                     </Button>
@@ -358,7 +358,7 @@ export default function LandingPage() {
           <p className="text-xl text-white/80 mb-8">
             It takes less than 5 minutes. Start for free.
           </p>
-          <Link href="/create">
+          <Link href="/get-started">
             <Button size="xl" variant="secondary" className="text-lg px-10">
               Create Your Book Now
             </Button>
@@ -378,7 +378,7 @@ export default function LandingPage() {
           <div>
             <h4 className="font-bold mb-4">Product</h4>
             <ul className="space-y-2 text-sm text-white/60">
-              <li><Link href="/create" className="hover:text-white">Create a Book</Link></li>
+              <li><Link href="/get-started" className="hover:text-white">Create a Book</Link></li>
               <li><Link href="/examples" className="hover:text-white">Examples</Link></li>
               <li><Link href="/pricing" className="hover:text-white">Pricing</Link></li>
               <li><Link href="/faq" className="hover:text-white">FAQ</Link></li>

@@ -3,6 +3,7 @@ import { readFile, writeFile } from "fs/promises";
 import { join } from "path";
 import { tmpdir } from "os";
 import { randomUUID } from "crypto";
+import { isDemoMode } from "@/lib/config";
 import {
   generateCharacterReference,
   generatePageIllustration,
@@ -13,6 +14,10 @@ import type { IllustrationStyle } from "@/types";
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
+  if (!isDemoMode) {
+    return NextResponse.json({ error: "Not available" }, { status: 403 });
+  }
+
   try {
     const body = await req.json();
     const { type } = body;
@@ -25,7 +30,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ error: "Invalid type" }, { status: 400 });
   } catch (err) {
-    console.error("Demo image error:", err);
+    console.error("Image generation error:", err);
     const message = err instanceof Error ? err.message : "Image generation failed";
     return NextResponse.json({ error: message }, { status: 500 });
   }

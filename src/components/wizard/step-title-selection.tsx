@@ -1,10 +1,98 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+// ─── Title templates (name + theme only, no specific details) ───
+
+type TitleFn = (name: string) => string;
+
+const THEME_TITLES: Record<string, TitleFn[]> = {
+  adventure: [
+    (n) => `${n}'s Big Adventure`,
+    (n) => `${n}'s Secret Quest`,
+    (n) => `The Adventures of ${n}`,
+    (n) => `${n} and the Hidden Treasure`,
+    (n) => `${n} Finds the Way`,
+    (n) => `${n}'s Daring Journey`,
+    (n) => `${n}'s Greatest Adventure`,
+    (n) => `${n} and the Lost Map`,
+  ],
+  friendship: [
+    (n) => `${n}'s New Best Friend`,
+    (n) => `${n} Makes a Friend`,
+    (n) => `A Friend for ${n}`,
+    (n) => `Friends Like ${n}`,
+    (n) => `${n} and the Friendship Tree`,
+    (n) => `${n}'s Kindest Day`,
+    (n) => `${n} Shares the Fun`,
+    (n) => `${n}'s Circle of Friends`,
+  ],
+  space: [
+    (n) => `${n} Goes to Space`,
+    (n) => `Captain ${n}'s Mission`,
+    (n) => `Astronaut ${n}`,
+    (n) => `${n} Among the Stars`,
+    (n) => `${n}'s Cosmic Journey`,
+    (n) => `${n}'s Rocket Ride`,
+    (n) => `${n} Reaches the Moon`,
+    (n) => `${n} and the Starry Sky`,
+  ],
+  "enchanted-forest": [
+    (n) => `${n}'s Enchanted Forest`,
+    (n) => `${n} and the Magic Woods`,
+    (n) => `${n}'s Magical Path`,
+    (n) => `${n} and the Talking Trees`,
+    (n) => `Deep in ${n}'s Forest`,
+    (n) => `${n}'s Woodland Wonder`,
+    (n) => `The Secret Forest of ${n}`,
+    (n) => `${n} and the Forest Spell`,
+  ],
+  superheroes: [
+    (n) => `Super ${n} Saves the Day`,
+    (n) => `${n}'s Super Powers`,
+    (n) => `The Amazing ${n}`,
+    (n) => `${n} to the Rescue`,
+    (n) => `The Mighty ${n}`,
+    (n) => `${n}'s Secret Power`,
+    (n) => `Hero ${n}'s Big Day`,
+    (n) => `${n}: Tiny Superhero`,
+  ],
+  "fairy-tale": [
+    (n) => `Once Upon a ${n}`,
+    (n) => `${n}'s Fairy Tale`,
+    (n) => `The Tale of ${n}`,
+    (n) => `${n}'s Enchanted Story`,
+    (n) => `${n}'s Castle of Dreams`,
+    (n) => `A Fairy Tale for ${n}`,
+    (n) => `The Magic of ${n}`,
+    (n) => `${n}'s Storybook Kingdom`,
+  ],
+};
+
+const GENERIC_TITLES: TitleFn[] = [
+  (n) => `A Story About ${n}`,
+  (n) => `${n}'s Special Day`,
+  (n) => `The World of ${n}`,
+  (n) => `${n}'s Amazing Story`,
+  (n) => `${n}'s Wonderful Day`,
+];
+
+function pickRandom<T>(arr: T[], count: number): T[] {
+  const shuffled = [...arr].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, count);
+}
+
+function generateTitles(name: string, theme: string): string[] {
+  const themePool = THEME_TITLES[theme] || [];
+  const pool = [...themePool, ...GENERIC_TITLES];
+  return pickRandom(pool, 3).map((fn) => fn(name));
+}
+
+// ─── Component ───
 
 export function StepTitleSelection() {
   const {
@@ -13,100 +101,20 @@ export function StepTitleSelection() {
     titleOptions,
     setTitleOptions,
     childName,
-    childAge,
-    childGender,
     theme,
-    occasion,
-    favoriteThings,
-    customFavoriteThings,
-    personalityTraits,
-    customPersonalityTraits,
-    hobbies,
-    customHobbies,
-    favoriteCharacters,
-    customFavoriteCharacters,
-    favoriteAnimal,
-    customFavoriteAnimals,
     nextStep,
     prevStep,
   } = useWizardStore();
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
   useEffect(() => {
     if (titleOptions.length > 0) return;
-
-    async function fetchTitles() {
-      setLoading(true);
-      setError("");
-
-      try {
-        const res = await fetch("/api/books/suggest-titles", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            childName,
-            childAge,
-            childGender,
-            theme,
-            occasion,
-            favoriteThings: [...favoriteThings, ...customFavoriteThings],
-            personalityTraits: [...personalityTraits, ...customPersonalityTraits],
-            hobbies: [...hobbies, ...customHobbies],
-            favoriteCharacters: [...favoriteCharacters, ...customFavoriteCharacters],
-            favoriteAnimal: [...favoriteAnimal, ...customFavoriteAnimals],
-          }),
-        });
-
-        if (!res.ok) throw new Error("Failed to generate titles");
-
-        const data = await res.json();
-        setTitleOptions(data.titles);
-      } catch {
-        setError("Failed to generate title suggestions. Please try again.");
-      }
-
-      setLoading(false);
-    }
-
-    fetchTitles();
+    setTitleOptions(generateTitles(childName, theme));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function handleRetry() {
-    setTitleOptions([]);
+  function handleShuffle() {
     setSelectedTitle("");
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await fetch("/api/books/suggest-titles", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          childName,
-          childAge,
-          childGender,
-          theme,
-          occasion,
-          favoriteThings: [...favoriteThings, ...customFavoriteThings],
-          personalityTraits: [...personalityTraits, ...customPersonalityTraits],
-          hobbies: [...hobbies, ...customHobbies],
-          favoriteCharacters: [...favoriteCharacters, ...customFavoriteCharacters],
-          favoriteAnimal: [...favoriteAnimal, ...customFavoriteAnimals],
-        }),
-      });
-
-      if (!res.ok) throw new Error("Failed to generate titles");
-
-      const data = await res.json();
-      setTitleOptions(data.titles);
-    } catch {
-      setError("Failed to generate title suggestions. Please try again.");
-    }
-
-    setLoading(false);
+    setTitleOptions(generateTitles(childName, theme));
   }
 
   return (
@@ -123,50 +131,30 @@ export function StepTitleSelection() {
         </p>
       </div>
 
-      {loading && (
-        <div className="text-center py-12 space-y-4">
-          <div className="w-12 h-12 mx-auto border-4 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">Generating title ideas...</p>
-        </div>
-      )}
-
-      {error && (
-        <div className="text-center py-8 space-y-4">
-          <p className="text-sm text-destructive">{error}</p>
-          <Button onClick={handleRetry} variant="outline" size="sm">
-            Try Again
-          </Button>
-        </div>
-      )}
-
-      {!loading && titleOptions.length > 0 && (
-        <>
-          <div className="space-y-3">
-            {titleOptions.map((title, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedTitle(title)}
-                className={cn(
-                  "w-full p-5 rounded-2xl text-left transition-all duration-200 border-2",
-                  selectedTitle === title
-                    ? "border-primary bg-primary/5 shadow-lg"
-                    : "border-transparent bg-muted hover:bg-muted/80"
-                )}
-              >
-                <p className="font-display text-xl font-bold">{title}</p>
-              </button>
-            ))}
-          </div>
-
+      <div className="space-y-3">
+        {titleOptions.map((title, index) => (
           <button
-            type="button"
-            onClick={handleRetry}
-            className="text-sm text-primary hover:underline w-full text-center"
+            key={index}
+            onClick={() => setSelectedTitle(title)}
+            className={cn(
+              "w-full p-5 rounded-2xl text-left transition-all duration-200 border-2",
+              selectedTitle === title
+                ? "border-primary bg-primary/5 shadow-lg"
+                : "border-transparent bg-muted hover:bg-muted/80"
+            )}
           >
-            Generate new suggestions
+            <p className="font-display text-xl font-bold">{title}</p>
           </button>
-        </>
-      )}
+        ))}
+      </div>
+
+      <button
+        type="button"
+        onClick={handleShuffle}
+        className="text-sm text-primary hover:underline w-full text-center"
+      >
+        Shuffle suggestions
+      </button>
 
       <div className="flex gap-3">
         <Button onClick={prevStep} variant="outline" size="lg" className="flex-1">

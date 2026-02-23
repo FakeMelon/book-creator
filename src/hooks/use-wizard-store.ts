@@ -36,6 +36,10 @@ interface WizardState {
   // Title selection
   selectedTitle: string;
   titleOptions: string[];
+  // Guest onboarding
+  guestName: string;
+  guestEmail: string;
+  onboardingComplete: boolean;
 }
 
 interface WizardActions {
@@ -79,6 +83,11 @@ interface WizardActions {
   // Title
   setSelectedTitle: (title: string) => void;
   setTitleOptions: (titles: string[]) => void;
+  // Guest onboarding
+  setGuestName: (name: string) => void;
+  setGuestEmail: (email: string) => void;
+  setOnboardingComplete: (complete: boolean) => void;
+  resetWizard: () => void;
   reset: () => void;
 }
 
@@ -110,6 +119,9 @@ const initialState: WizardState = {
   dedication: "",
   selectedTitle: "",
   titleOptions: [],
+  guestName: "",
+  guestEmail: "",
+  onboardingComplete: false,
 };
 
 export const useWizardStore = create<WizardState & WizardActions>()(
@@ -274,6 +286,17 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       setSelectedTitle: (selectedTitle) => set({ selectedTitle }),
       setTitleOptions: (titleOptions) => set({ titleOptions }),
 
+      // Guest onboarding
+      setGuestName: (guestName) => set({ guestName }),
+      setGuestEmail: (guestEmail) => set({ guestEmail }),
+      setOnboardingComplete: (onboardingComplete) => set({ onboardingComplete }),
+
+      // Reset wizard fields only (keep guest onboarding info)
+      resetWizard: () => {
+        const { guestName, guestEmail, onboardingComplete } = get();
+        set({ ...initialState, guestName, guestEmail, onboardingComplete });
+      },
+
       reset: () => set(initialState),
     }),
     {
@@ -315,6 +338,9 @@ export const useWizardStore = create<WizardState & WizardActions>()(
           file: null,
           preview: p.preview,
         })),
+        guestName: state.guestName,
+        guestEmail: state.guestEmail,
+        onboardingComplete: state.onboardingComplete,
       }),
     }
   )
