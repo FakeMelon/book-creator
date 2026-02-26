@@ -8,6 +8,7 @@ import {
   generateCharacterReference,
   generatePageIllustration,
   generateCoverIllustration,
+  generateBackCoverIllustration,
 } from "@/lib/image-gen";
 import type { IllustrationStyle } from "@/types";
 
@@ -77,30 +78,44 @@ async function handleCharacterRef(body: {
 
 async function handleIllustration(body: {
   characterRefId?: string;
+  photoFilename?: string;
   sceneDescription: string;
   illustrationStyle: IllustrationStyle;
   pageNumber: number;
   pageType: string;
   bookTitle?: string;
+  hiddenMotif?: string;
 }) {
-  const { characterRefId, sceneDescription, illustrationStyle, pageNumber, pageType, bookTitle } =
+  const { characterRefId, photoFilename, sceneDescription, illustrationStyle, pageNumber, pageType, bookTitle, hiddenMotif } =
     body;
 
   if (!sceneDescription || !illustrationStyle) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
   }
 
-  // Load character ref data URL if available
+  // Load reference image: character ref sheet if available, otherwise raw photo
   let characterRefDataUrl: string | undefined;
   if (characterRefId) {
     const refPath = join(tmpdir(), `${characterRefId}.png`);
     const refBuffer = await readFile(refPath);
     characterRefDataUrl = `data:image/png;base64,${refBuffer.toString("base64")}`;
+  } else if (photoFilename) {
+    const photoPath = join(tmpdir(), photoFilename);
+    const photoBuffer = await readFile(photoPath);
+    const ext = photoFilename.split(".").pop() || "jpg";
+    const mimeType = ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg";
+    characterRefDataUrl = `data:${mimeType};base64,${photoBuffer.toString("base64")}`;
   }
 
   let imageDataUrl: string;
 
-  if (pageType === "COVER" && bookTitle) {
+  if (pageType === "BACK_COVER" && hiddenMotif) {
+    imageDataUrl = await generateBackCoverIllustration(
+      characterRefDataUrl || "",
+      hiddenMotif,
+      illustrationStyle
+    );
+  } else if (pageType === "COVER" && bookTitle) {
     imageDataUrl = await generateCoverIllustration(
       characterRefDataUrl || "",
       bookTitle,

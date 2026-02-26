@@ -138,7 +138,6 @@ export default function CreatePage() {
 
         <WizardSteps
           uploadFile={demo?.demoUploadFile}
-          onSubmit={demo?.handleGenerate}
         />
       </main>
     </div>

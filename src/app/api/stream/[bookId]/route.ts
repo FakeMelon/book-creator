@@ -47,13 +47,14 @@ export async function GET(
               "STORY_GENERATION",
               "SAFETY_REVIEW",
               "CHARACTER_DESIGN",
+              "COVER_ILLUSTRATIONS",
               "PAGE_ILLUSTRATIONS",
               "PDF_ASSEMBLY",
               "QUALITY_CHECK",
             ].indexOf(log.stage);
 
             const progress = Math.min(
-              Math.round(((stageIndex + (log.status === "COMPLETED" ? 1 : 0.5)) / 6) * 100),
+              Math.round(((stageIndex + (log.status === "COMPLETED" ? 1 : 0.5)) / 7) * 100),
               100
             );
 
@@ -69,7 +70,7 @@ export async function GET(
           lastLogCount = logs.length;
 
           // Check if completed
-          if (book.status === "PREVIEW_READY" && !completed) {
+          if ((book.status === "PREVIEW_READY" || book.status === "COVER_READY") && !completed) {
             completed = true;
             sendEvent({
               type: "complete",

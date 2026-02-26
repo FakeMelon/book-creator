@@ -46,16 +46,9 @@ export async function POST(req: Request) {
           : undefined,
         // Use user-selected title
         title: data.selectedTitle,
-        status: "GENERATING",
-        generationStartedAt: new Date(),
+        status: "DRAFT",
       },
     });
-
-    // Trigger the generation pipeline
-    fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/books/${book.id}/generate`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    }).catch(console.error);
 
     return NextResponse.json({ bookId: book.id }, { status: 201 });
   } catch (error) {

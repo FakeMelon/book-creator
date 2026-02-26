@@ -86,9 +86,22 @@ export async function generatePageIllustration(
 ): Promise<string> {
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === illustrationStyle);
 
-  const prompt = `${sceneDescription}. Rendered in ${styleConfig?.fluxStylePrompt}. Full bleed children's book illustration, professional quality, high detail, vibrant colors suitable for print at 300 DPI. The main character should match the reference image exactly in appearance and style.`;
+  const prompt = `${sceneDescription}. Rendered in ${styleConfig?.fluxStylePrompt}. Full bleed children's book illustration, professional quality, high detail, vibrant colors suitable for print at 300 DPI. STRICTLY FORBIDDEN: no text, no letters, no words, no numbers, no writing, no signs anywhere in the image. The main character should match the reference image exactly in appearance and style.`;
 
   return generateImage(prompt, characterRefUrl);
+}
+
+export async function generateBackCoverIllustration(
+  _characterRefUrl: string,
+  hiddenMotif: string,
+  illustrationStyle: IllustrationStyle
+): Promise<string> {
+  const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === illustrationStyle);
+
+  const prompt = `Decorative children's book back cover illustration: a beautiful, whimsical seamless pattern featuring "${hiddenMotif}" motifs scattered across the design. Pure decorative pattern only — gentle colors, organic shapes, and playful motifs filling the entire image. STRICTLY FORBIDDEN: no text, no letters, no words, no numbers, no barcode, no ISBN, no price tag, no UPC code, no QR code, no characters, no people, no faces. ${styleConfig?.fluxStylePrompt}. Professional quality, suitable for print at 300 DPI.`;
+
+  // Do NOT pass character reference — it's a decorative pattern with no characters
+  return generateImage(prompt);
 }
 
 export async function generateCoverIllustration(
@@ -100,7 +113,7 @@ export async function generateCoverIllustration(
 ): Promise<string> {
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === illustrationStyle);
 
-  const prompt = `Book cover illustration: ${sceneDescription}. The title "${title}" area should be at the top with clear space for text overlay. ${styleConfig?.fluxStylePrompt}. Eye-catching children's book cover, professional quality, vibrant and inviting. The main character should match the reference image exactly.`;
+  const prompt = `Book cover illustration: ${sceneDescription}. Leave a clear, uncluttered area at the top ~25% of the image for title text overlay. STRICTLY FORBIDDEN: no text, no letters, no words, no numbers, no writing, no signs, no labels anywhere in the image — the title will be added digitally later. ${styleConfig?.fluxStylePrompt}. Eye-catching children's book cover, professional quality, vibrant and inviting. The main character should match the reference image exactly.`;
 
   return generateImage(prompt, characterRefUrl);
 }

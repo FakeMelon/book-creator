@@ -8,7 +8,7 @@ const STEPS = [
   { number: 3, label: "Photos" },
   { number: 4, label: "Style" },
   { number: 5, label: "Book Idea" },
-  { number: 6, label: "Review" },
+  { number: 6, label: "Cover Preview" },
 ];
 
 interface ProgressBarProps {

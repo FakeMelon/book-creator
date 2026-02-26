@@ -264,7 +264,7 @@ export function StepCreativeDirection() {
             {/* Occasion */}
             <div>
               <label className="block text-sm font-semibold mb-2">
-                What's the occasion? <span className="text-destructive">*</span>
+                What&apos;s the occasion? <span className="text-destructive">*</span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {OCCASION_OPTIONS.map((occ) => (

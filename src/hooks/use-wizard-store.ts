@@ -41,6 +41,10 @@ interface WizardState {
   bookIdeas: BookIdea[];
   selectedBookIdea: BookIdea | null;
   ideasInputFingerprint: string;
+  // Cover generation
+  bookId: string | null;
+  coverPhase: "review" | "generating" | "ready" | "error";
+  coverError: string | null;
   // Guest onboarding
   guestName: string;
   guestEmail: string;
@@ -94,6 +98,10 @@ interface WizardActions {
   setBookIdeas: (ideas: BookIdea[], fingerprint: string) => void;
   setSelectedBookIdea: (idea: BookIdea) => void;
   clearBookIdeas: () => void;
+  // Cover generation
+  setBookId: (id: string | null) => void;
+  setCoverPhase: (phase: "review" | "generating" | "ready" | "error") => void;
+  setCoverError: (error: string | null) => void;
   // Guest onboarding
   setGuestName: (name: string) => void;
   setGuestEmail: (email: string) => void;
@@ -135,6 +143,9 @@ const initialState: WizardState = {
   bookIdeas: [],
   selectedBookIdea: null,
   ideasInputFingerprint: "",
+  bookId: null,
+  coverPhase: "review",
+  coverError: null,
   guestName: "",
   guestEmail: "",
   referralSource: "",
@@ -335,6 +346,11 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       clearBookIdeas: () =>
         set({ bookIdeas: [], selectedBookIdea: null, ideasInputFingerprint: "", selectedTitle: "" }),
 
+      // Cover generation
+      setBookId: (bookId) => set({ bookId }),
+      setCoverPhase: (coverPhase) => set({ coverPhase }),
+      setCoverError: (coverError) => set({ coverError }),
+
       // Guest onboarding
       setGuestName: (guestName) => set({ guestName }),
       setGuestEmail: (guestEmail) => set({ guestEmail }),
@@ -392,6 +408,9 @@ export const useWizardStore = create<WizardState & WizardActions>()(
           file: null,
           preview: p.preview,
         })),
+        bookId: state.bookId,
+        coverPhase: state.coverPhase,
+        coverError: state.coverError,
         guestName: state.guestName,
         guestEmail: state.guestEmail,
         referralSource: state.referralSource,

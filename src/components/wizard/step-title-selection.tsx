@@ -53,7 +53,10 @@ export function StepTitleSelection() {
     prevStep,
   } = store;
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(() => {
+    const currentFingerprint = computeFingerprint(store);
+    return bookIdeas.length === 0 || ideasInputFingerprint !== currentFingerprint;
+  });
   const [error, setError] = useState("");
 
   const fetchIdeas = useCallback(async () => {

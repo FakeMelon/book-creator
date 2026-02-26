@@ -12,11 +12,9 @@ import { StepReview } from "@/components/wizard/step-review";
 interface WizardStepsProps {
   /** Custom upload function for StepPhotoUpload */
   uploadFile?: (file: File) => Promise<string>;
-  /** Custom submit handler for StepReview */
-  onSubmit?: () => void;
 }
 
-export function WizardSteps({ uploadFile, onSubmit }: WizardStepsProps) {
+export function WizardSteps({ uploadFile }: WizardStepsProps) {
   const step = useWizardStore((s) => s.step);
 
   return (
@@ -31,7 +29,7 @@ export function WizardSteps({ uploadFile, onSubmit }: WizardStepsProps) {
       )}
       {step === 4 && <StepStoryStyle key="step4" />}
       {step === 5 && <StepTitleSelection key="step5" />}
-      {step === 6 && <StepReview key="step6" onSubmit={onSubmit} />}
+      {step === 6 && <StepReview key="step6" />}
     </AnimatePresence>
   );
 }

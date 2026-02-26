@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { generateStory, reviewStorySafety } from "@/lib/claude";
-import { generateCharacterReference, generatePageIllustration, generateCoverIllustration, dataUrlToBuffer } from "@/lib/image-gen";
+import { generateCharacterReference, generatePageIllustration, dataUrlToBuffer } from "@/lib/image-gen";
 import { uploadToR2, getPublicUrl, generateIllustrationKey, generateCharacterRefKey } from "@/lib/r2";
 import type { GeneratedStory } from "@/types";
 
@@ -26,7 +26,7 @@ async function updateGenerationLog(
 }
 
 export async function POST(
-  req: Request,
+  _req: Request,
   { params }: { params: Promise<{ bookId: string }> }
 ) {
   const { bookId } = await params;
@@ -36,6 +36,22 @@ export async function POST(
     if (!book) {
       return NextResponse.json({ error: "Book not found" }, { status: 404 });
     }
+
+    if (book.status !== "COVER_READY") {
+      return NextResponse.json(
+        { error: "Book must be in COVER_READY status to generate" },
+        { status: 400 }
+      );
+    }
+
+    // Covers already exist from generate-cover step — reuse them
+    await updateGenerationLog(bookId, "COVER_ILLUSTRATIONS", "COMPLETED", "Covers already generated");
+
+    // Set status to GENERATING
+    await db.book.update({
+      where: { id: bookId },
+      data: { status: "GENERATING" },
+    });
 
     // Stage 1: Story Generation
     await updateGenerationLog(bookId, "STORY_GENERATION", "IN_PROGRESS", "Writing the story...");
@@ -52,6 +68,7 @@ export async function POST(
         storyStyle: book.storyStyle,
         illustrationStyle: book.illustrationStyle,
         dedication: book.dedication || undefined,
+        title: book.title || undefined,
       });
 
       await db.book.update({
@@ -78,7 +95,6 @@ export async function POST(
         await updateGenerationLog(bookId, "SAFETY_REVIEW", "FAILED", "Content review failed", {
           issues: review.issues,
         });
-        // Regenerate the story if safety review fails
         story = await generateStory({
           childName: book.childName,
           childAge: book.childAge,
@@ -89,6 +105,11 @@ export async function POST(
           storyStyle: book.storyStyle,
           illustrationStyle: book.illustrationStyle,
           dedication: book.dedication || undefined,
+          title: book.title || undefined,
+        });
+        await db.book.update({
+          where: { id: bookId },
+          data: { title: story.title, storyText: story as any },
         });
       }
       await updateGenerationLog(bookId, "SAFETY_REVIEW", "COMPLETED", "Content approved!");
@@ -121,16 +142,17 @@ export async function POST(
       throw error;
     }
 
-    // Stage 4: Page Illustrations
+    // Stage 4: Page Illustrations — only ILLUSTRATION pages (covers already exist)
     await updateGenerationLog(bookId, "PAGE_ILLUSTRATIONS", "IN_PROGRESS", "Illustrating pages...");
 
     try {
-      // Create BookPage records
       const pages = story.pages;
 
+      // Create BookPage records for pages that don't already exist
       for (const page of pages) {
-        await db.bookPage.create({
-          data: {
+        await db.bookPage.upsert({
+          where: { bookId_pageNumber: { bookId, pageNumber: page.pageNumber } },
+          create: {
             bookId,
             pageNumber: page.pageNumber,
             type: page.type as any,
@@ -138,33 +160,24 @@ export async function POST(
             textPosition: page.textPosition,
             illustrationPrompt: page.illustrationDescription,
           },
+          update: {},
         });
       }
 
-      // Generate illustrations in batches of 4
-      const illustrationPages = pages.filter(
-        (p) => p.type === "COVER" || p.type === "ILLUSTRATION"
-      );
+      // Skip COVER and BACK_COVER — they were already generated in generate-cover
+      const pagesToIllustrate = pages.filter((p) => p.type === "ILLUSTRATION");
 
-      for (let i = 0; i < illustrationPages.length; i += 4) {
-        const batch = illustrationPages.slice(i, i + 4);
+      for (let i = 0; i < pagesToIllustrate.length; i += 4) {
+        const batch = pagesToIllustrate.slice(i, i + 4);
 
         await Promise.all(
           batch.map(async (page) => {
-            const imgDataUrl =
-              page.type === "COVER"
-                ? await generateCoverIllustration(
-                    characterRefUrl,
-                    story.title,
-                    page.illustrationDescription,
-                    book.illustrationStyle
-                  )
-                : await generatePageIllustration(
-                    characterRefUrl,
-                    page.illustrationDescription,
-                    book.illustrationStyle,
-                    page.pageNumber
-                  );
+            const imgDataUrl = await generatePageIllustration(
+              characterRefUrl,
+              page.illustrationDescription,
+              book.illustrationStyle,
+              page.pageNumber
+            );
 
             const imgBuffer = dataUrlToBuffer(imgDataUrl);
             const key = generateIllustrationKey(bookId, page.pageNumber);
@@ -175,13 +188,6 @@ export async function POST(
               where: { bookId_pageNumber: { bookId, pageNumber: page.pageNumber } },
               data: { illustrationUrl: r2Url, illustrationKey: key },
             });
-
-            if (page.type === "COVER") {
-              await db.book.update({
-                where: { id: bookId },
-                data: { coverImageUrl: r2Url, coverImageKey: key },
-              });
-            }
 
             await updateGenerationLog(bookId, "PAGE_ILLUSTRATIONS", "IN_PROGRESS", `Page ${page.pageNumber} illustrated`, {
               pageNumber: page.pageNumber,

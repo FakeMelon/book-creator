@@ -13,12 +13,12 @@ import { Input } from "@/components/ui/input";
 export default function GetStartedPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
-  const [nameInput, setNameInput] = useState("");
-  const [emailInput, setEmailInput] = useState("");
-
   const hasHydrated = useWizardHydrated();
   const { guestName, onboardingComplete, setGuestName, setGuestEmail, setReferralSource, setOnboardingComplete } =
     useWizardStore();
+
+  const [nameInput, setNameInput] = useState(() => guestName || "");
+  const [emailInput, setEmailInput] = useState("");
 
   // If already completed onboarding, go straight to wizard
   useEffect(() => {
@@ -26,11 +26,6 @@ export default function GetStartedPage() {
       router.replace("/create");
     }
   }, [hasHydrated, onboardingComplete, router]);
-
-  // Pre-fill from store if returning
-  useEffect(() => {
-    if (guestName) setNameInput(guestName);
-  }, [guestName]);
 
   function handleStep1() {
     if (!nameInput.trim()) return;

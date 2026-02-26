@@ -67,6 +67,7 @@ model VerificationToken {
 enum BookStatus {
   DRAFT
   GENERATING
+  COVER_READY
   PREVIEW_READY
   APPROVED
   ORDERED
@@ -135,8 +136,10 @@ model Book {
   storyText       Json?
   characterRefUrl String?
   characterRefKey String?
-  coverImageUrl   String?
-  coverImageKey   String?
+  coverImageUrl     String?
+  coverImageKey     String?
+  backCoverImageUrl String?
+  backCoverImageKey String?
 
   // PDFs
   pdfUrl        String?
@@ -270,6 +273,7 @@ enum GenerationStage {
   STORY_GENERATION
   SAFETY_REVIEW
   CHARACTER_DESIGN
+  COVER_ILLUSTRATIONS
   PAGE_ILLUSTRATIONS
   PDF_ASSEMBLY
   QUALITY_CHECK

@@ -1,22 +1,168 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useWizardStore } from "@/hooks/use-wizard-store";
+import { useCoverPolling } from "@/hooks/use-cover-polling";
+import { useDemoCoverGeneration } from "@/hooks/use-demo-cover-generation";
+import { isDemoMode } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { THEMES, PERSONALITY_TRAITS, ILLUSTRATION_STYLES, OCCASION_OPTIONS } from "@/constants";
+import { Progress } from "@/components/ui/progress";
+import { THEMES, PERSONALITY_TRAITS, ILLUSTRATION_STYLES } from "@/constants";
+import { cn } from "@/lib/utils";
 
-interface StepReviewProps {
-  onSubmit?: () => void;
+const GENERATING_MESSAGES = [
+  "Crafting the story...",
+  "Imagining the characters...",
+  "Painting the scenes...",
+  "Adding a sprinkle of magic...",
+  "Mixing the colors...",
+  "Writing the adventure...",
+  "Polishing the details...",
+  "Almost there...",
+];
+
+const COVER_STAGES = [
+  { key: "FRONT_COVER", label: "Front Cover" },
+  { key: "BACK_COVER", label: "Back Cover" },
+];
+
+const REVIEW_SUB_STEPS = [
+  { label: "Review" },
+  { label: "Cover Preview" },
+];
+
+function getReviewSubStepIndex(phase: string): number {
+  if (phase === "review") return 0;
+  if (phase === "generating") return 0; // still on "Review" step, transitioning
+  return 1; // ready or error
 }
 
-export function StepReview({ onSubmit }: StepReviewProps = {}) {
+function ReviewSubStepDots({ phase }: { phase: string }) {
+  const currentIndex = getReviewSubStepIndex(phase);
+  return (
+    <div className="flex items-center justify-center gap-2">
+      {REVIEW_SUB_STEPS.map((_, i) => (
+        <div
+          key={i}
+          className={cn(
+            "w-2 h-2 rounded-full transition-all duration-300",
+            i === currentIndex
+              ? "bg-primary w-6"
+              : i < currentIndex
+              ? "bg-primary"
+              : "bg-muted"
+          )}
+        />
+      ))}
+    </div>
+  );
+}
+
+export function StepReview() {
   const store = useWizardStore();
-  const router = useRouter();
+  const demoCover = useDemoCoverGeneration(isDemoMode);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
+  const [coverData, setCoverData] = useState<{
+    title: string | null;
+    coverImageUrl: string | null;
+    backCoverImageUrl: string | null;
+  } | null>(null);
+  const [rotatingMsg, setRotatingMsg] = useState(0);
+  const [generationProgress, setGenerationProgress] = useState(0);
+
+  const coverPhase = store.coverPhase;
+  const bookId = store.bookId;
+
+  // Rotate fun messages during generation
+  useEffect(() => {
+    if (coverPhase !== "generating") return;
+    const timer = setInterval(() => {
+      setRotatingMsg((prev) => (prev + 1) % GENERATING_MESSAGES.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [coverPhase]);
+
+  // Animate progress bar during generation
+  useEffect(() => {
+    if (coverPhase !== "generating") {
+      setGenerationProgress(0);
+      return;
+    }
+    // Slowly increment progress to ~85% over ~90s, then wait for completion
+    const timer = setInterval(() => {
+      setGenerationProgress((prev) => {
+        if (prev >= 85) return prev;
+        return prev + 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [coverPhase]);
+
+  const handleCoverReady = useCallback(
+    (data: { title: string | null; coverImageUrl: string | null; backCoverImageUrl: string | null }) => {
+      setCoverData(data);
+      setGenerationProgress(100);
+      store.setCoverPhase("ready");
+    },
+    [store]
+  );
+
+  const handlePollingError = useCallback(
+    (msg: string) => {
+      store.setCoverError(msg);
+      store.setCoverPhase("error");
+    },
+    [store]
+  );
+
+  useCoverPolling({
+    bookId,
+    enabled: !isDemoMode && coverPhase === "generating",
+    onCoverReady: handleCoverReady,
+    onError: handlePollingError,
+  });
+
+  // On mount, if we're in "ready" phase but don't have coverData, refetch (non-demo only)
+  useEffect(() => {
+    if (isDemoMode || !bookId) return;
+    if (coverPhase === "ready" && !coverData) {
+      fetch(`/api/books/${bookId}/status`)
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.coverImageUrl) {
+            setCoverData({
+              title: data.title,
+              coverImageUrl: data.coverImageUrl,
+              backCoverImageUrl: data.backCoverImageUrl,
+            });
+          }
+        })
+        .catch(() => {});
+    }
+  }, [coverPhase, coverData, bookId]);
+
+  // Sync demo cover hook state → wizard store coverPhase
+  useEffect(() => {
+    if (!demoCover) return;
+    const s = useWizardStore.getState();
+    if (demoCover.phase === "done" && demoCover.coverData) {
+      setCoverData({
+        title: demoCover.coverData.title,
+        coverImageUrl: demoCover.coverData.coverImageUrl,
+        backCoverImageUrl: demoCover.coverData.backCoverImageUrl,
+      });
+      setGenerationProgress(100);
+      s.setCoverPhase("ready");
+    } else if (demoCover.error) {
+      s.setCoverError(demoCover.error);
+      s.setCoverPhase("error");
+    } else if (demoCover.phase !== "idle" && demoCover.phase !== "done") {
+      setGenerationProgress(demoCover.progress);
+    }
+  }, [demoCover, demoCover?.phase, demoCover?.error, demoCover?.coverData, demoCover?.progress]);
 
   const themeConfig = THEMES.find((t) => t.id === store.theme);
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === store.illustrationStyle);
@@ -28,22 +174,22 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
   const allHobbies = [...store.hobbies, ...store.customHobbies];
   const allCharacters = [...store.favoriteCharacters, ...store.customFavoriteCharacters];
   const allAnimals = [...store.favoriteAnimal, ...store.customFavoriteAnimals];
-  const allTraitLabels = [
-    ...selectedTraits.map((t) => t!.label),
-    ...store.customPersonalityTraits,
-  ];
   const photoCount = store.childPhotos.length || (store.photoPreview ? 1 : 0);
 
-  async function handleCreate() {
-    if (onSubmit) {
-      onSubmit();
-      return;
-    }
-
+  async function handleGenerateCover() {
     setCreating(true);
     setError("");
 
+    if (isDemoMode && demoCover) {
+      // Demo mode: orchestrate client-side via demo APIs
+      store.setCoverPhase("generating");
+      demoCover.generate();
+      setCreating(false);
+      return;
+    }
+
     try {
+      // Step 1: Create the book in DRAFT status
       const res = await fetch("/api/books", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,13 +209,14 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
           dedication: store.dedication || undefined,
           childPhotoKey: store.childPhotoKeys[0] || store.photoKey,
           childPhotoKeys: store.childPhotoKeys.length > 0 ? store.childPhotoKeys : undefined,
-          additionalCharacters: store.additionalCharacters.length > 0
-            ? store.additionalCharacters.map((c) => ({
-                name: c.name,
-                role: c.role,
-                photoKey: c.photoKey,
-              }))
-            : undefined,
+          additionalCharacters:
+            store.additionalCharacters.length > 0
+              ? store.additionalCharacters.map((c) => ({
+                  name: c.name,
+                  role: c.role,
+                  photoKey: c.photoKey,
+                }))
+              : undefined,
           selectedTitle: store.selectedTitle,
         }),
       });
@@ -79,9 +226,16 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
         throw new Error(data.error || "Failed to create book");
       }
 
-      const { bookId } = await res.json();
-      store.reset();
-      router.push(`/generate/${bookId}`);
+      const { bookId: newBookId } = await res.json();
+      store.setBookId(newBookId);
+
+      // Step 2: Fire-and-forget cover generation
+      fetch(`/api/books/${newBookId}/generate-cover`, {
+        method: "POST",
+      }).catch(console.error);
+
+      // Step 3: Switch to generating phase (polling starts automatically)
+      store.setCoverPhase("generating");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     }
@@ -89,6 +243,240 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
     setCreating(false);
   }
 
+  function handleRetry() {
+    store.setBookId(null);
+    store.setCoverError(null);
+    store.setCoverPhase("review");
+    setError("");
+  }
+
+  function handleGoBackFromCovers() {
+    store.setBookId(null);
+    store.setCoverPhase("review");
+    store.setCoverError(null);
+    setCoverData(null);
+    store.prevStep();
+  }
+
+  // ── Phase: Error ──
+  if (coverPhase === "error") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="space-y-6 max-w-lg mx-auto text-center"
+      >
+        <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
+          <svg className="w-8 h-8 text-destructive" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
+        </div>
+        <ReviewSubStepDots phase={coverPhase} />
+        <h2 className="font-display text-2xl font-bold">Cover Generation Failed</h2>
+        <p className="text-muted-foreground">
+          {store.coverError || "Something went wrong while generating your covers. Please try again."}
+        </p>
+        <div className="space-y-3">
+          <Button onClick={handleRetry} size="xl" className="w-full">
+            Try Again
+          </Button>
+          <Button onClick={handleGoBackFromCovers} variant="ghost" className="w-full">
+            Go Back & Edit
+          </Button>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // ── Phase: Generating ──
+  if (coverPhase === "generating") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="space-y-8 max-w-lg mx-auto text-center"
+      >
+        <div>
+          <h2 className="font-display text-3xl font-bold">Creating Your Covers</h2>
+          <p className="text-muted-foreground mt-2">This usually takes 1-2 minutes</p>
+        </div>
+
+        <ReviewSubStepDots phase={coverPhase} />
+
+        {/* Progress bar */}
+        <div className="space-y-3">
+          <Progress value={generationProgress} />
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={rotatingMsg}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="text-sm text-muted-foreground font-medium"
+            >
+              {GENERATING_MESSAGES[rotatingMsg]}
+            </motion.p>
+          </AnimatePresence>
+        </div>
+
+        {/* Stage indicators */}
+        <div className="space-y-2">
+          {COVER_STAGES.map((stage, i) => {
+            const stageProgress = (generationProgress / 100) * COVER_STAGES.length;
+            const currentStageIndex = Math.min(Math.floor(stageProgress), COVER_STAGES.length - 1);
+            const isComplete = generationProgress >= 100 ? true : i < currentStageIndex;
+            const isActive = !isComplete && i === currentStageIndex;
+            return (
+              <div key={stage.key} className="flex items-center gap-3 text-left">
+                <div
+                  className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                    isComplete
+                      ? "bg-primary text-primary-foreground"
+                      : isActive
+                      ? "bg-primary/20 text-primary ring-2 ring-primary/30"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  {isComplete ? (
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <span className="text-xs font-bold">{i + 1}</span>
+                  )}
+                </div>
+                <span
+                  className={`text-sm font-medium ${
+                    isComplete ? "text-foreground" : isActive ? "text-primary" : "text-muted-foreground"
+                  }`}
+                >
+                  {stage.label}
+                </span>
+                {isActive && (
+                  <div className="ml-auto">
+                    <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </motion.div>
+    );
+  }
+
+  // ── Phase: Ready (covers generated) ──
+  if (coverPhase === "ready") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="space-y-8 max-w-lg mx-auto"
+      >
+        <ReviewSubStepDots phase={coverPhase} />
+
+        <div className="text-center">
+          <h2 className="font-display text-3xl font-bold">Your Covers Are Ready!</h2>
+          <p className="text-muted-foreground mt-2">
+            Here&apos;s a sneak peek of <span className="font-semibold">{coverData?.title || store.selectedTitle}</span>
+          </p>
+        </div>
+
+        {/* Cover images side by side */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <p className="text-xs font-semibold text-muted-foreground text-center uppercase tracking-wide">
+              Front Cover
+            </p>
+            <div className="aspect-square rounded-xl overflow-hidden shadow-lg border relative">
+              {coverData?.coverImageUrl ? (
+                <>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={coverData.coverImageUrl}
+                    alt="Front cover"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-x-0 top-0 p-3 pt-4 text-center">
+                    <h3
+                      className="font-display font-bold text-white leading-tight"
+                      style={{
+                        fontSize: "clamp(0.7rem, 3.5cqi, 1.2rem)",
+                        textShadow: "0 1px 4px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.3)",
+                      }}
+                    >
+                      {coverData.title || store.selectedTitle}
+                    </h3>
+                  </div>
+                </>
+              ) : (
+                <div className="w-full h-full bg-muted flex items-center justify-center">
+                  <span className="text-muted-foreground text-sm">Loading...</span>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <p className="text-xs font-semibold text-muted-foreground text-center uppercase tracking-wide">
+              Back Cover
+            </p>
+            <div className="aspect-square rounded-xl overflow-hidden shadow-lg border">
+              {coverData?.backCoverImageUrl ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={coverData.backCoverImageUrl}
+                  alt="Back cover"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-muted flex items-center justify-center">
+                  <span className="text-muted-foreground text-sm">Loading...</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* CTAs */}
+        <div className="space-y-3">
+          {isDemoMode ? (
+            <>
+              <Button
+                size="xl"
+                className="w-full"
+                onClick={() => { window.location.href = "/register"; }}
+              >
+                Sign Up to Generate Full Book
+              </Button>
+              <p className="text-center text-xs text-muted-foreground">
+                Create an account to generate the complete illustrated book
+              </p>
+            </>
+          ) : (
+            <>
+              <Button
+                size="xl"
+                className="w-full"
+                onClick={() => {
+                  window.location.href = `/generate/${bookId}`;
+                }}
+              >
+                Generate Full Book
+              </Button>
+              <p className="text-center text-xs text-muted-foreground">
+                Generate the complete illustrated book with all pages
+              </p>
+            </>
+          )}
+          <Button onClick={handleGoBackFromCovers} variant="ghost" className="w-full">
+            Go Back & Edit
+          </Button>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // ── Phase: Review (default) ──
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -96,9 +484,11 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
       exit={{ opacity: 0, x: -20 }}
       className="space-y-8 max-w-lg mx-auto"
     >
+      <ReviewSubStepDots phase={coverPhase} />
+
       <div className="text-center">
         <h2 className="font-display text-3xl font-bold">Ready to Create!</h2>
-        <p className="text-muted-foreground mt-2">Review your choices before we start</p>
+        <p className="text-muted-foreground mt-2">Review your choices, then generate a free cover preview</p>
       </div>
 
       <div className="bg-muted/30 rounded-2xl p-6 space-y-6">
@@ -285,13 +675,11 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
       )}
 
       <div className="space-y-3">
-        <Button onClick={handleCreate} loading={creating} size="xl" className="w-full">
-          {onSubmit ? "Generate Story Preview" : "Create My Book"}
+        <Button onClick={handleGenerateCover} loading={creating} size="xl" className="w-full">
+          Generate Cover Preview
         </Button>
         <p className="text-center text-xs text-muted-foreground">
-          {onSubmit
-            ? "A free preview will be generated so you can see your story."
-            : "Book generation takes 3-5 minutes. You\u2019ll see a live preview as pages are created."}
+          Free preview — see your book covers before committing
         </p>
         <Button onClick={store.prevStep} variant="ghost" className="w-full">
           Go Back & Edit
