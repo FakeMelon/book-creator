@@ -4,6 +4,7 @@ import type { IllustrationStyle } from "@/types";
 
 const IMAGE_MODEL = process.env.IMAGE_MODEL!;
 const IMAGE_SIZE = process.env.IMAGE_SIZE || "1K"; // 1K, 2K, or 4K — use 1K for testing, 4K for print
+const IS_MULTIMODAL_MODEL = IMAGE_MODEL.startsWith("google/");
 
 function getClient() {
   return new OpenAI({
@@ -39,7 +40,7 @@ export async function generateImage(
     model: IMAGE_MODEL,
     messages: [{ role: "user", content }],
     // @ts-expect-error -- OpenRouter extends the OpenAI API with modalities and image_config
-    modalities: ["image"],
+    modalities: IS_MULTIMODAL_MODEL ? ["image", "text"] : ["image"],
     image_config: {
       aspect_ratio: "1:1",
       image_size: IMAGE_SIZE,

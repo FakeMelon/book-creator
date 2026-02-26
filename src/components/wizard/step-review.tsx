@@ -149,24 +149,29 @@ export function StepReview() {
   }, [coverPhase, coverData, bookId]);
 
   // Sync demo cover hook results into wizard store and local component state
+  const demoCoverPhase = demoCover?.phase;
+  const demoCoverProgress = demoCover?.progress;
+  const demoCoverError = demoCover?.error;
+  const demoCoverData = demoCover?.coverData;
+
   useEffect(() => {
     if (!demoCover) return;
     const s = useWizardStore.getState();
-    if (demoCover.phase === "done" && demoCover.coverData) {
+    if (demoCoverPhase === "done" && demoCoverData) {
       setCoverData({
-        title: demoCover.coverData.title,
-        coverImageUrl: demoCover.coverData.coverImageUrl,
-        backCoverImageUrl: demoCover.coverData.backCoverImageUrl,
+        title: demoCoverData.title,
+        coverImageUrl: demoCoverData.coverImageUrl,
+        backCoverImageUrl: demoCoverData.backCoverImageUrl,
       });
       setGenerationProgress(100);
       s.setCoverPhase("ready");
-    } else if (demoCover.error) {
-      s.setCoverError(demoCover.error);
+    } else if (demoCoverError) {
+      s.setCoverError(demoCoverError);
       s.setCoverPhase("error");
-    } else if (demoCover.phase !== "idle" && demoCover.phase !== "done") {
-      setGenerationProgress(demoCover.progress);
+    } else if (demoCoverPhase !== "idle" && demoCoverPhase !== "done") {
+      setGenerationProgress(demoCoverProgress ?? 0);
     }
-  }, [demoCover]);
+  }, [demoCover, demoCoverPhase, demoCoverProgress, demoCoverError, demoCoverData]);
 
   const themeConfig = THEMES.find((t) => t.id === store.theme);
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === store.illustrationStyle);

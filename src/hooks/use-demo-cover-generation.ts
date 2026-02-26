@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useMemo } from "react";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { THEMES } from "@/constants";
 
@@ -115,13 +115,14 @@ export function useDemoCoverGeneration(enabled: boolean): DemoCoverGeneration | 
     }
   }, []);
 
-  if (!enabled) return null;
-
-  return {
-    generate,
-    phase,
-    progress: PHASE_PROGRESS[phase],
-    coverData,
-    error,
-  };
+  return useMemo(() => {
+    if (!enabled) return null;
+    return {
+      generate,
+      phase,
+      progress: PHASE_PROGRESS[phase],
+      coverData,
+      error,
+    };
+  }, [enabled, generate, phase, coverData, error]);
 }

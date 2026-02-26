@@ -367,8 +367,17 @@ export const useWizardStore = create<WizardState & WizardActions>()(
     }),
     {
       name: "wizard-storage",
+      version: 1,
+      migrate: (persisted: any, version: number) => {
+        if (version === 0) {
+          // Reset cover-related state added in v1
+          return { ...persisted, step: Math.min(persisted.step ?? 1, 5), bookId: null, coverPhase: "review", coverError: null };
+        }
+        return persisted as WizardState;
+      },
       partialize: (state) => ({
-        step: state.step,
+        // Cap at step 5 so users re-enter the cover preview flow fresh
+        step: Math.min(state.step, 5),
         childName: state.childName,
         childAge: state.childAge,
         childGender: state.childGender,
@@ -408,9 +417,6 @@ export const useWizardStore = create<WizardState & WizardActions>()(
           file: null,
           preview: p.preview,
         })),
-        bookId: state.bookId,
-        coverPhase: state.coverPhase,
-        coverError: state.coverError,
         guestName: state.guestName,
         guestEmail: state.guestEmail,
         referralSource: state.referralSource,
