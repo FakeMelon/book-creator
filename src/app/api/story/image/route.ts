@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { readFile, writeFile } from "fs/promises";
-import { join } from "path";
+import { join, basename } from "path";
 import { tmpdir } from "os";
 import { randomUUID } from "crypto";
 import { isDemoMode } from "@/lib/config";
@@ -50,7 +50,7 @@ async function handleCharacterRef(body: {
   }
 
   // Read photo from temp dir and convert to data URL
-  const filename = photoFilename || `${photoId}.jpg`;
+  const filename = basename(photoFilename || `${photoId}.jpg`);
   const filepath = join(tmpdir(), filename);
   const photoBuffer = await readFile(filepath);
   const ext = filename.split(".").pop() || "jpg";
@@ -100,7 +100,7 @@ async function handleIllustration(body: {
     const refBuffer = await readFile(refPath);
     characterRefDataUrl = `data:image/png;base64,${refBuffer.toString("base64")}`;
   } else if (photoFilename) {
-    const photoPath = join(tmpdir(), photoFilename);
+    const photoPath = join(tmpdir(), basename(photoFilename));
     const photoBuffer = await readFile(photoPath);
     const ext = photoFilename.split(".").pop() || "jpg";
     const mimeType = ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg";
@@ -111,7 +111,6 @@ async function handleIllustration(body: {
 
   if (pageType === "BACK_COVER" && hiddenMotif) {
     imageDataUrl = await generateBackCoverIllustration(
-      characterRefDataUrl || "",
       hiddenMotif,
       illustrationStyle
     );

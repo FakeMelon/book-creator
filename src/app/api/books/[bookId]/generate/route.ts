@@ -1,38 +1,51 @@
 import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { generateStory, reviewStorySafety } from "@/lib/claude";
 import { generateCharacterReference, generatePageIllustration, dataUrlToBuffer } from "@/lib/image-gen";
 import { uploadToR2, getPublicUrl, generateIllustrationKey, generateCharacterRefKey } from "@/lib/r2";
 import type { GeneratedStory } from "@/types";
+import type { GenerationStage, GenerationStatus } from "@prisma/client";
 
 async function updateGenerationLog(
   bookId: string,
-  stage: string,
-  status: string,
+  stage: GenerationStage,
+  status: GenerationStatus,
   message?: string,
   metadata?: Record<string, unknown>
 ) {
-  await db.generationLog.create({
-    data: {
-      bookId,
-      stage: stage as any,
-      status: status as any,
-      message,
-      metadata: (metadata as any) || undefined,
-      startedAt: status === "IN_PROGRESS" ? new Date() : undefined,
-      completedAt: status === "COMPLETED" || status === "FAILED" ? new Date() : undefined,
-    },
-  });
+  try {
+    await db.generationLog.create({
+      data: {
+        bookId,
+        stage,
+        status,
+        message,
+        metadata: (metadata as any) || undefined,
+        startedAt: status === "IN_PROGRESS" ? new Date() : undefined,
+        completedAt: status === "COMPLETED" || status === "FAILED" ? new Date() : undefined,
+      },
+    });
+  } catch (err) {
+    console.error(`Failed to write generation log [${stage}/${status}]:`, err);
+  }
 }
 
 export async function POST(
   _req: Request,
   { params }: { params: Promise<{ bookId: string }> }
 ) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { bookId } = await params;
 
   try {
-    const book = await db.book.findUnique({ where: { id: bookId } });
+    const book = await db.book.findUnique({
+      where: { id: bookId, userId: session.user.id },
+    });
     if (!book) {
       return NextResponse.json({ error: "Book not found" }, { status: 404 });
     }
@@ -44,10 +57,9 @@ export async function POST(
       );
     }
 
-    // Covers already exist from generate-cover step — reuse them
+    // Covers already exist from generate-cover step
     await updateGenerationLog(bookId, "COVER_ILLUSTRATIONS", "COMPLETED", "Covers already generated");
 
-    // Set status to GENERATING
     await db.book.update({
       where: { id: bookId },
       data: { status: "GENERATING" },
@@ -114,7 +126,8 @@ export async function POST(
       }
       await updateGenerationLog(bookId, "SAFETY_REVIEW", "COMPLETED", "Content approved!");
     } catch (error) {
-      await updateGenerationLog(bookId, "SAFETY_REVIEW", "COMPLETED", "Review skipped (non-critical)");
+      console.error("Safety review error:", error);
+      await updateGenerationLog(bookId, "SAFETY_REVIEW", "FAILED", `Review skipped due to error: ${String(error)}`);
     }
 
     // Stage 3: Character Design
@@ -122,7 +135,10 @@ export async function POST(
 
     let characterRefUrl: string;
     try {
-      const photoUrl = book.childPhotoUrl!;
+      if (!book.childPhotoUrl) {
+        throw new Error("Book is missing a child photo URL");
+      }
+      const photoUrl = book.childPhotoUrl;
       const characterDataUrl = await generateCharacterReference(photoUrl, book.childName, book.illustrationStyle);
 
       const imageBuffer = dataUrlToBuffer(characterDataUrl);
@@ -224,13 +240,17 @@ export async function POST(
   } catch (error) {
     console.error("Generation pipeline error:", error);
 
-    await db.book.update({
-      where: { id: bookId },
-      data: {
-        status: "DRAFT",
-        generationError: String(error),
-      },
-    });
+    try {
+      await db.book.update({
+        where: { id: bookId },
+        data: {
+          status: "COVER_READY",
+          generationError: String(error),
+        },
+      });
+    } catch (updateError) {
+      console.error("Failed to reset book status after generation error:", updateError);
+    }
 
     return NextResponse.json({ error: "Generation failed" }, { status: 500 });
   }

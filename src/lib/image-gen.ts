@@ -92,7 +92,6 @@ export async function generatePageIllustration(
 }
 
 export async function generateBackCoverIllustration(
-  _characterRefUrl: string,
   hiddenMotif: string,
   illustrationStyle: IllustrationStyle
 ): Promise<string> {
@@ -100,7 +99,7 @@ export async function generateBackCoverIllustration(
 
   const prompt = `Decorative children's book back cover illustration: a beautiful, whimsical seamless pattern featuring "${hiddenMotif}" motifs scattered across the design. Pure decorative pattern only — gentle colors, organic shapes, and playful motifs filling the entire image. STRICTLY FORBIDDEN: no text, no letters, no words, no numbers, no barcode, no ISBN, no price tag, no UPC code, no QR code, no characters, no people, no faces. ${styleConfig?.fluxStylePrompt}. Professional quality, suitable for print at 300 DPI.`;
 
-  // Do NOT pass character reference — it's a decorative pattern with no characters
+  // No character reference — back covers are decorative patterns with no characters
   return generateImage(prompt);
 }
 

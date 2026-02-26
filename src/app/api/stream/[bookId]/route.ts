@@ -14,6 +14,7 @@ export async function GET(
     async start(controller) {
       let lastLogCount = 0;
       let completed = false;
+      let errorCount = 0;
 
       const sendEvent = (data: Record<string, unknown>) => {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
@@ -43,7 +44,9 @@ export async function GET(
           // Send new logs
           for (let i = lastLogCount; i < logs.length; i++) {
             const log = logs[i];
-            const stageIndex = [
+            const stages = [
+              "FRONT_COVER",
+              "BACK_COVER",
               "STORY_GENERATION",
               "SAFETY_REVIEW",
               "CHARACTER_DESIGN",
@@ -51,10 +54,11 @@ export async function GET(
               "PAGE_ILLUSTRATIONS",
               "PDF_ASSEMBLY",
               "QUALITY_CHECK",
-            ].indexOf(log.stage);
+            ];
+            const stageIndex = stages.indexOf(log.stage);
 
             const progress = Math.min(
-              Math.round(((stageIndex + (log.status === "COMPLETED" ? 1 : 0.5)) / 7) * 100),
+              Math.round(((stageIndex + (log.status === "COMPLETED" ? 1 : 0.5)) / stages.length) * 100),
               100
             );
 
@@ -93,6 +97,14 @@ export async function GET(
           }
         } catch (error) {
           console.error("SSE polling error:", error);
+          errorCount++;
+          if (errorCount >= 3) {
+            try {
+              sendEvent({ type: "error", message: "Server error monitoring generation. Please refresh." });
+            } catch { /* stream may already be broken */ }
+            clearInterval(interval);
+            try { controller.close(); } catch { /* ignore close errors */ }
+          }
         }
       }, 2000);
 

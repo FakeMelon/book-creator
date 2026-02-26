@@ -28,22 +28,20 @@ const COVER_STAGES = [
   { key: "BACK_COVER", label: "Back Cover" },
 ];
 
-const REVIEW_SUB_STEPS = [
-  { label: "Review" },
-  { label: "Cover Preview" },
-];
+type WizardCoverPhase = "review" | "generating" | "ready" | "error";
 
-function getReviewSubStepIndex(phase: string): number {
-  if (phase === "review") return 0;
-  if (phase === "generating") return 0; // still on "Review" step, transitioning
+const REVIEW_SUB_STEP_COUNT = 2;
+
+function getReviewSubStepIndex(phase: WizardCoverPhase): number {
+  if (phase === "review" || phase === "generating") return 0;
   return 1; // ready or error
 }
 
-function ReviewSubStepDots({ phase }: { phase: string }) {
+function ReviewSubStepDots({ phase }: { phase: WizardCoverPhase }) {
   const currentIndex = getReviewSubStepIndex(phase);
   return (
     <div className="flex items-center justify-center gap-2">
-      {REVIEW_SUB_STEPS.map((_, i) => (
+      {Array.from({ length: REVIEW_SUB_STEP_COUNT }, (_, i) => (
         <div
           key={i}
           className={cn(
@@ -91,7 +89,7 @@ export function StepReview() {
       setGenerationProgress(0);
       return;
     }
-    // Slowly increment progress to ~85% over ~90s, then wait for completion
+    // Slowly increment progress to ~85%, then wait for real completion signal
     const timer = setInterval(() => {
       setGenerationProgress((prev) => {
         if (prev >= 85) return prev;
@@ -105,17 +103,18 @@ export function StepReview() {
     (data: { title: string | null; coverImageUrl: string | null; backCoverImageUrl: string | null }) => {
       setCoverData(data);
       setGenerationProgress(100);
-      store.setCoverPhase("ready");
+      useWizardStore.getState().setCoverPhase("ready");
     },
-    [store]
+    []
   );
 
   const handlePollingError = useCallback(
     (msg: string) => {
-      store.setCoverError(msg);
-      store.setCoverPhase("error");
+      const s = useWizardStore.getState();
+      s.setCoverError(msg);
+      s.setCoverPhase("error");
     },
-    [store]
+    []
   );
 
   useCoverPolling({
@@ -125,12 +124,15 @@ export function StepReview() {
     onError: handlePollingError,
   });
 
-  // On mount, if we're in "ready" phase but don't have coverData, refetch (non-demo only)
+  // When in "ready" phase without coverData in local state, refetch from server (non-demo only)
   useEffect(() => {
     if (isDemoMode || !bookId) return;
     if (coverPhase === "ready" && !coverData) {
       fetch(`/api/books/${bookId}/status`)
-        .then((r) => r.json())
+        .then((r) => {
+          if (!r.ok) throw new Error(`Status check failed: ${r.status}`);
+          return r.json();
+        })
         .then((data) => {
           if (data.coverImageUrl) {
             setCoverData({
@@ -140,11 +142,13 @@ export function StepReview() {
             });
           }
         })
-        .catch(() => {});
+        .catch((err) => {
+          console.error("Failed to refetch cover status:", err);
+        });
     }
   }, [coverPhase, coverData, bookId]);
 
-  // Sync demo cover hook state → wizard store coverPhase
+  // Sync demo cover hook results into wizard store and local component state
   useEffect(() => {
     if (!demoCover) return;
     const s = useWizardStore.getState();
@@ -162,7 +166,7 @@ export function StepReview() {
     } else if (demoCover.phase !== "idle" && demoCover.phase !== "done") {
       setGenerationProgress(demoCover.progress);
     }
-  }, [demoCover, demoCover?.phase, demoCover?.error, demoCover?.coverData, demoCover?.progress]);
+  }, [demoCover]);
 
   const themeConfig = THEMES.find((t) => t.id === store.theme);
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === store.illustrationStyle);
@@ -189,6 +193,8 @@ export function StepReview() {
     }
 
     try {
+      const allFavoriteThings = [...store.favoriteThings, ...store.customFavoriteThings];
+
       // Step 1: Create the book in DRAFT status
       const res = await fetch("/api/books", {
         method: "POST",
@@ -197,6 +203,7 @@ export function StepReview() {
           childName: store.childName,
           childAge: store.childAge,
           childGender: store.childGender,
+          favoriteThings: allFavoriteThings,
           personalityTraits: [...store.personalityTraits, ...store.customPersonalityTraits],
           theme: store.theme,
           occasion: store.occasion,
@@ -229,10 +236,14 @@ export function StepReview() {
       const { bookId: newBookId } = await res.json();
       store.setBookId(newBookId);
 
-      // Step 2: Fire-and-forget cover generation
-      fetch(`/api/books/${newBookId}/generate-cover`, {
+      // Step 2: Trigger cover generation — await to detect network/server failures
+      const coverRes = await fetch(`/api/books/${newBookId}/generate-cover`, {
         method: "POST",
-      }).catch(console.error);
+      });
+      if (!coverRes.ok) {
+        const coverErr = await coverRes.json().catch(() => ({}));
+        throw new Error(coverErr.error || "Failed to start cover generation");
+      }
 
       // Step 3: Switch to generating phase (polling starts automatically)
       store.setCoverPhase("generating");
@@ -324,7 +335,7 @@ export function StepReview() {
           {COVER_STAGES.map((stage, i) => {
             const stageProgress = (generationProgress / 100) * COVER_STAGES.length;
             const currentStageIndex = Math.min(Math.floor(stageProgress), COVER_STAGES.length - 1);
-            const isComplete = generationProgress >= 100 ? true : i < currentStageIndex;
+            const isComplete = generationProgress >= 100 || i < currentStageIndex;
             const isActive = !isComplete && i === currentStageIndex;
             return (
               <div key={stage.key} className="flex items-center gap-3 text-left">
