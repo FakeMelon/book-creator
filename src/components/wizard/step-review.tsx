@@ -280,20 +280,14 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
       )}
 
       <div className="space-y-3">
-        {process.env.NEXT_PUBLIC_DEMO_MODE === "true" ? (
-          <div className="text-center py-4 px-6 rounded-xl bg-muted/50 border border-border">
-            <p className="font-semibold text-muted-foreground">Book creation is disabled in demo mode</p>
-          </div>
-        ) : (
-          <>
-            <Button onClick={handleCreate} loading={creating} size="xl" className="w-full">
-              Create My Book
-            </Button>
-            <p className="text-center text-xs text-muted-foreground">
-              Book generation takes 3-5 minutes. You&apos;ll see a live preview as pages are created.
-            </p>
-          </>
-        )}
+        <Button onClick={handleCreate} loading={creating} size="xl" className="w-full">
+          {onSubmit ? "Generate Story Preview" : "Create My Book"}
+        </Button>
+        <p className="text-center text-xs text-muted-foreground">
+          {onSubmit
+            ? "A free preview will be generated so you can see your story."
+            : "Book generation takes 3-5 minutes. You\u2019ll see a live preview as pages are created."}
+        </p>
         <Button onClick={store.prevStep} variant="ghost" className="w-full">
           Go Back & Edit
         </Button>

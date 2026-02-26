@@ -30,7 +30,7 @@ export function Header({ rightContent, onBack }: HeaderProps) {
           )}
         </div>
         <Link href="/" className="font-display text-xl font-bold text-primary text-center">
-          Storymagic
+          Littletales
         </Link>
         <div className="flex items-center justify-end gap-4">
           {rightContent}

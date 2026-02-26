@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { useWizardStore } from "@/hooks/use-wizard-store";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const referralSource = useWizardStore((s) => s.referralSource);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,7 +27,7 @@ export default function RegisterPage() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, ...(referralSource && { referralSource }) }),
       });
 
       if (!res.ok) {
@@ -55,11 +57,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-white to-rose-50 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Link href="/" className="font-display text-3xl font-bold text-primary mb-2 block">
-            Storymagic
+            Littletales
           </Link>
           <CardTitle className="text-xl">Create an account</CardTitle>
           <CardDescription>Start creating personalized books in minutes</CardDescription>

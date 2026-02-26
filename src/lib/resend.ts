@@ -3,7 +3,7 @@ import { Resend } from "resend";
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
 }
-const fromEmail = process.env.RESEND_FROM_EMAIL || "books@storymagic.com";
+const fromEmail = process.env.RESEND_FROM_EMAIL || "books@littletales.com";
 
 export async function sendBookReadyEmail(params: {
   to: string;
@@ -12,18 +12,18 @@ export async function sendBookReadyEmail(params: {
   previewUrl: string;
 }) {
   await getResend().emails.send({
-    from: `Storymagic <${fromEmail}>`,
+    from: `Littletales <${fromEmail}>`,
     to: params.to,
     subject: `${params.childName}'s book is ready! 📖`,
     html: `
       <div style="font-family: 'Quicksand', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #6366f1; text-align: center;">Your Book is Ready!</h1>
+        <h1 style="color: #FF6B6B; text-align: center;">Your Book is Ready!</h1>
         <p style="font-size: 18px; text-align: center;">
           <strong>"${params.bookTitle}"</strong> featuring ${params.childName} is complete!
         </p>
         <div style="text-align: center; margin: 30px 0;">
           <a href="${params.previewUrl}"
-             style="background: #6366f1; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 18px; font-weight: bold;">
+             style="background: #FF6B6B; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 18px; font-weight: bold;">
             Preview Your Book
           </a>
         </div>
@@ -43,12 +43,12 @@ export async function sendOrderConfirmationEmail(params: {
   total: string;
 }) {
   await getResend().emails.send({
-    from: `Storymagic <${fromEmail}>`,
+    from: `Littletales <${fromEmail}>`,
     to: params.to,
     subject: `Order confirmed: ${params.bookTitle} (#${params.orderNumber})`,
     html: `
       <div style="font-family: 'Quicksand', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #6366f1; text-align: center;">Order Confirmed!</h1>
+        <h1 style="color: #FF6B6B; text-align: center;">Order Confirmed!</h1>
         <p style="font-size: 16px;">
           Thank you for your order! "${params.bookTitle}" for ${params.childName} is being sent to print.
         </p>
@@ -74,12 +74,12 @@ export async function sendShippingNotificationEmail(params: {
   carrier: string;
 }) {
   await getResend().emails.send({
-    from: `Storymagic <${fromEmail}>`,
+    from: `Littletales <${fromEmail}>`,
     to: params.to,
     subject: `${params.childName}'s book has shipped! 📦`,
     html: `
       <div style="font-family: 'Quicksand', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h1 style="color: #6366f1; text-align: center;">Your Book Has Shipped!</h1>
+        <h1 style="color: #FF6B6B; text-align: center;">Your Book Has Shipped!</h1>
         <p style="font-size: 16px; text-align: center;">
           "${params.bookTitle}" is on its way!
         </p>
@@ -89,7 +89,7 @@ export async function sendShippingNotificationEmail(params: {
         </div>
         <div style="text-align: center; margin: 30px 0;">
           <a href="${params.trackingUrl}"
-             style="background: #6366f1; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 18px; font-weight: bold;">
+             style="background: #FF6B6B; color: white; padding: 16px 32px; border-radius: 8px; text-decoration: none; font-size: 18px; font-weight: bold;">
             Track Your Package
           </a>
         </div>

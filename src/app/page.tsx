@@ -80,7 +80,7 @@ export default function LandingPage() {
       <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-sm border-b">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/" className="font-display text-2xl font-bold text-primary">
-            Storymagic
+            Littletales
           </Link>
           <div className="flex items-center gap-4">
             <Link href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground">
@@ -94,7 +94,7 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      <section className="pt-32 pb-20 px-4 bg-gradient-to-br from-rose-50 via-white to-rose-50">
         <div className="max-w-6xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -135,7 +135,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="mt-16 max-w-4xl mx-auto"
           >
-            <div className="relative aspect-[16/9] rounded-2xl bg-gradient-to-br from-primary/5 to-purple-100 border shadow-2xl overflow-hidden flex items-center justify-center">
+            <div className="relative aspect-[16/9] rounded-2xl bg-gradient-to-br from-primary/5 to-rose-100 border shadow-2xl overflow-hidden flex items-center justify-center">
               <div className="text-center p-8">
                 <div className="text-8xl mb-4">📖</div>
                 <p className="text-lg font-semibold text-muted-foreground">
@@ -189,7 +189,7 @@ export default function LandingPage() {
       <section className="py-20 px-4 bg-muted/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl font-bold">Why Parents Love Storymagic</h2>
+            <h2 className="font-display text-4xl font-bold">Why Parents Love Littletales</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -350,7 +350,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-4 bg-gradient-to-r from-primary to-purple-600 text-white">
+      <section className="py-20 px-4 bg-gradient-to-r from-primary to-rose-500 text-white">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="font-display text-4xl font-bold mb-4">
             Create a Book They&apos;ll Treasure Forever
@@ -370,7 +370,7 @@ export default function LandingPage() {
       <footer className="bg-foreground text-white py-12 px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
           <div>
-            <h3 className="font-display text-xl font-bold mb-4">Storymagic</h3>
+            <h3 className="font-display text-xl font-bold mb-4">Littletales</h3>
             <p className="text-sm text-white/60">
               AI-powered personalized children&apos;s books that make your child the star.
             </p>
@@ -396,12 +396,12 @@ export default function LandingPage() {
           <div>
             <h4 className="font-bold mb-4">Support</h4>
             <ul className="space-y-2 text-sm text-white/60">
-              <li><a href="mailto:hello@storymagic.com" className="hover:text-white">hello@storymagic.com</a></li>
+              <li><a href="mailto:hello@littletales.com" className="hover:text-white">hello@littletales.com</a></li>
             </ul>
           </div>
         </div>
         <div className="max-w-6xl mx-auto mt-8 pt-8 border-t border-white/10 text-center text-sm text-white/40">
-          &copy; {new Date().getFullYear()} Storymagic. All rights reserved.
+          &copy; {new Date().getFullYear()} Littletales. All rights reserved.
         </div>
       </footer>
     </div>

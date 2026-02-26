@@ -16,6 +16,7 @@ model User {
   emailVerified DateTime?
   passwordHash  String?
   image         String?
+  referralSource String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

@@ -81,11 +81,11 @@ export default function GeneratePage() {
   }, [funMessages.length]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-50">
       <header className="border-b bg-white/80 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="font-display text-xl font-bold text-primary">
-            Storymagic
+            Littletales
           </Link>
         </div>
       </header>

@@ -24,7 +24,7 @@ export const THEMES: ThemeConfig[] = [
     name: "Space",
     description: "Rockets, planets, and cosmic wonders",
     icon: "🚀",
-    color: "#6366f1",
+    color: "#FF6B6B",
     storyPromptHint: "a journey through outer space with rockets, planets, stars, and cosmic discoveries",
   },
   {
@@ -50,6 +50,30 @@ export const THEMES: ThemeConfig[] = [
     icon: "👑",
     color: "#a855f7",
     storyPromptHint: "a classic fairy tale with castles, enchantments, and a happily-ever-after ending",
+  },
+  {
+    id: "robots",
+    name: "Robots",
+    description: "Friendly bots and cool inventions",
+    icon: "🤖",
+    color: "#64748b",
+    storyPromptHint: "a world of friendly robots, amazing inventions, and learning how things work together",
+  },
+  {
+    id: "underwater",
+    name: "Underwater",
+    description: "Deep sea adventures and ocean friends",
+    icon: "🐠",
+    color: "#06b6d4",
+    storyPromptHint: "an underwater adventure with colorful sea creatures, coral reefs, and ocean mysteries",
+  },
+  {
+    id: "dinosaurs",
+    name: "Dinosaurs",
+    description: "Roaring fun in prehistoric times",
+    icon: "🦕",
+    color: "#84cc16",
+    storyPromptHint: "a journey to a land of dinosaurs with gentle giants, exciting discoveries, and prehistoric wonders",
   },
 ];
 
@@ -108,9 +132,25 @@ export const OCCASION_OPTIONS = [
   "Birthday", "Holiday", "Just Because", "Achievement", "New Sibling",
 ];
 
+export const OCCASION_EMOJIS: Record<string, string> = {
+  "Birthday": "🎂",
+  "Holiday": "🎄",
+  "Just Because": "💫",
+  "Achievement": "🏆",
+  "New Sibling": "👶",
+};
+
 export const HOBBY_OPTIONS = [
   "Drawing", "Sports", "Music", "Building", "Outdoor Play",
 ];
+
+export const HOBBY_EMOJIS: Record<string, string> = {
+  "Drawing": "🎨",
+  "Sports": "⚽",
+  "Music": "🎵",
+  "Building": "🧱",
+  "Outdoor Play": "🌳",
+};
 
 export const CHARACTER_OPTIONS = [
   "Superheroes", "Princesses", "Dinosaurs", "Animals", "Robots",
@@ -120,8 +160,44 @@ export const ANIMAL_OPTIONS = [
   "Dog", "Cat", "Bunny", "Horse", "Dolphin",
 ];
 
+export const ANIMAL_EMOJIS: Record<string, string> = {
+  "Dog": "🐶",
+  "Cat": "🐱",
+  "Bunny": "🐰",
+  "Horse": "🐴",
+  "Dolphin": "🐬",
+};
+
+export const FOOD_OPTIONS = [
+  "Pizza", "Ice Cream", "Pasta", "Chocolate", "Pancakes",
+];
+
+export const FOOD_EMOJIS: Record<string, string> = {
+  "Pizza": "🍕",
+  "Ice Cream": "🍦",
+  "Pasta": "🍝",
+  "Chocolate": "🍫",
+  "Pancakes": "🥞",
+};
+
 export const CHARACTER_ROLE_OPTIONS = [
   "Mom", "Dad", "Sister", "Brother", "Pet", "Friend", "Grandparent",
+];
+
+// ─── Referral Sources ───
+
+export const REFERRAL_SOURCE_OPTIONS = [
+  "Google",
+  "Facebook",
+  "Instagram",
+  "TikTok",
+  "YouTube",
+  "Friend",
+  "TV",
+  "Pinterest",
+  "Email",
+  "Podcast",
+  "Other",
 ];
 
 // ─── Book Specs ───

@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useWizardStore } from "@/hooks/use-wizard-store";
+import { useWizardStore, useWizardHydrated } from "@/hooks/use-wizard-store";
+import { REFERRAL_SOURCE_OPTIONS } from "@/constants";
 import { Header } from "@/components/shared/header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,15 +16,16 @@ export default function GetStartedPage() {
   const [nameInput, setNameInput] = useState("");
   const [emailInput, setEmailInput] = useState("");
 
-  const { guestName, onboardingComplete, setGuestName, setGuestEmail, setOnboardingComplete } =
+  const hasHydrated = useWizardHydrated();
+  const { guestName, onboardingComplete, setGuestName, setGuestEmail, setReferralSource, setOnboardingComplete } =
     useWizardStore();
 
   // If already completed onboarding, go straight to wizard
   useEffect(() => {
-    if (onboardingComplete) {
+    if (hasHydrated && onboardingComplete) {
       router.replace("/create");
     }
-  }, [onboardingComplete, router]);
+  }, [hasHydrated, onboardingComplete, router]);
 
   // Pre-fill from store if returning
   useEffect(() => {
@@ -42,6 +44,21 @@ export default function GetStartedPage() {
     setStep(3);
   }
 
+  function handleReferralSelect(source: string) {
+    setReferralSource(source);
+    // Fire-and-forget save to API (best-effort for authenticated users)
+    fetch("/api/referral-source", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ referralSource: source }),
+    }).catch(() => {});
+    setStep(4);
+  }
+
+  function handleSkipReferral() {
+    setStep(4);
+  }
+
   function handleStart() {
     setOnboardingComplete(true);
     router.push("/create");
@@ -55,18 +72,13 @@ export default function GetStartedPage() {
     }
   }
 
-  if (onboardingComplete) return null;
+  if (!hasHydrated || onboardingComplete) return null;
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      <Header
-        onBack={handleBack}
-        rightContent={
-          <span className="text-sm text-muted-foreground">Step {step} of 3</span>
-        }
-      />
+    <div className="h-screen flex flex-col overflow-hidden bg-gradient-to-br from-rose-50 via-white to-rose-50">
+      <Header onBack={handleBack} />
 
-      <main className="flex-1 max-w-2xl w-full mx-auto px-4 flex items-center justify-center overflow-auto">
+      <main className="flex-1 max-w-3xl w-full mx-auto px-4 flex items-center justify-center overflow-auto">
         <AnimatePresence mode="wait">
           {step === 1 && (
             <motion.div
@@ -170,14 +182,55 @@ export default function GetStartedPage() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -40 }}
               transition={{ duration: 0.3 }}
+              className="w-full max-w-xl mx-auto"
+            >
+              <div className="bg-white rounded-2xl border shadow-sm p-12 space-y-8 text-center">
+                <div className="space-y-3">
+                  <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground">
+                    Where did you hear about us?
+                  </h1>
+                  <p className="text-lg text-muted-foreground">
+                    This helps us reach more families like yours
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  {REFERRAL_SOURCE_OPTIONS.map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => handleReferralSelect(option)}
+                      className="rounded-xl border-2 border-border bg-white px-3 py-3 text-sm font-medium text-foreground transition-all hover:border-primary hover:bg-primary/5 active:scale-95"
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={handleSkipReferral}
+                  className="text-sm text-muted-foreground hover:text-foreground underline underline-offset-2 transition-colors"
+                >
+                  Skip
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {step === 4 && (
+            <motion.div
+              key="step4"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: 0.3 }}
               className="text-center space-y-10"
             >
               <div className="space-y-3">
                 <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground">
-                  Here&apos;s what you&apos;ll create
+                  The perfect gift for your child
                 </h1>
                 <p className="text-lg text-muted-foreground">
-                  A personalized book starring your child
+                  A one-of-a-kind storybook where your child is the hero
                 </p>
               </div>
 
@@ -190,7 +243,7 @@ export default function GetStartedPage() {
                   >
                     {/* Book cover */}
                     <motion.div
-                      className="absolute inset-0 rounded-r-lg rounded-l-sm bg-gradient-to-br from-primary to-purple-600 shadow-2xl flex flex-col items-center justify-center text-white p-6"
+                      className="absolute inset-0 rounded-r-lg rounded-l-sm bg-gradient-to-br from-primary to-rose-500 shadow-2xl flex flex-col items-center justify-center text-white p-6"
                       animate={{ rotateY: [0, -15, 0] }}
                       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                       style={{ transformOrigin: "left center", backfaceVisibility: "hidden" }}
@@ -208,21 +261,6 @@ export default function GetStartedPage() {
                     <div className="absolute left-0 top-2 bottom-2 w-3 bg-primary/40 rounded-l-sm" />
                   </motion.div>
                 </div>
-              </div>
-
-              {/* Feature highlights */}
-              <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto">
-                {[
-                  { icon: "\u270F\uFE0F", label: "Personalized Story", desc: "Tailored to your child" },
-                  { icon: "\uD83C\uDFA8", label: "Custom Illustrations", desc: "Your child as the hero" },
-                  { icon: "\uD83D\uDCD6", label: "32 Pages", desc: "Print-quality hardcover" },
-                ].map((feature) => (
-                  <div key={feature.label} className="text-center space-y-1">
-                    <div className="text-3xl">{feature.icon}</div>
-                    <p className="text-sm font-semibold">{feature.label}</p>
-                    <p className="text-xs text-muted-foreground">{feature.desc}</p>
-                  </div>
-                ))}
               </div>
 
               <Button size="lg" onClick={handleStart} className="px-12 text-lg">

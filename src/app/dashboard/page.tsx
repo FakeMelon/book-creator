@@ -60,11 +60,11 @@ function DashboardContent() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-50">
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="font-display text-xl font-bold text-primary">
-            Storymagic
+            Littletales
           </Link>
           <Link href="/create">
             <Button size="sm">Create New Book</Button>
@@ -131,7 +131,7 @@ function DashboardContent() {
                     onClick={() => router.push(bookUrl)}
                   >
                     {/* Cover image */}
-                    <div className="aspect-square bg-gradient-to-br from-primary/10 to-purple-50 relative overflow-hidden">
+                    <div className="aspect-square bg-gradient-to-br from-primary/10 to-rose-50 relative overflow-hidden">
                       {book.coverImageUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img

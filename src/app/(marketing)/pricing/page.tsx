@@ -6,10 +6,10 @@ export const metadata = { title: "Pricing" };
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-50">
       <nav className="border-b bg-white/80 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="font-display text-2xl font-bold text-primary">Storymagic</Link>
+          <Link href="/" className="font-display text-2xl font-bold text-primary">Littletales</Link>
           <Link href="/create"><Button size="sm">Create a Book</Button></Link>
         </div>
       </nav>

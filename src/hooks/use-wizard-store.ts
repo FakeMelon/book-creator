@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { StoryStyle, IllustrationStyle, AdditionalCharacter, ChildPhoto } from "@/types";
@@ -21,6 +22,8 @@ interface WizardState {
   customFavoriteCharacters: string[];
   favoriteAnimal: string[];
   customFavoriteAnimals: string[];
+  favoriteFoods: string[];
+  customFavoriteFoods: string[];
   // Legacy single photo
   photoFile: File | null;
   photoPreview: string | null;
@@ -39,6 +42,7 @@ interface WizardState {
   // Guest onboarding
   guestName: string;
   guestEmail: string;
+  referralSource: string;
   onboardingComplete: boolean;
 }
 
@@ -66,6 +70,9 @@ interface WizardActions {
   toggleFavoriteAnimal: (animal: string) => void;
   addCustomFavoriteAnimal: (animal: string) => void;
   removeCustomFavoriteAnimal: (animal: string) => void;
+  toggleFavoriteFood: (food: string) => void;
+  addCustomFavoriteFood: (food: string) => void;
+  removeCustomFavoriteFood: (food: string) => void;
   // Legacy single photo
   setPhoto: (file: File | null, preview: string | null) => void;
   setPhotoKey: (key: string) => void;
@@ -86,6 +93,7 @@ interface WizardActions {
   // Guest onboarding
   setGuestName: (name: string) => void;
   setGuestEmail: (email: string) => void;
+  setReferralSource: (source: string) => void;
   setOnboardingComplete: (complete: boolean) => void;
   resetWizard: () => void;
   reset: () => void;
@@ -108,6 +116,8 @@ const initialState: WizardState = {
   customFavoriteCharacters: [],
   favoriteAnimal: [],
   customFavoriteAnimals: [],
+  favoriteFoods: [],
+  customFavoriteFoods: [],
   photoFile: null,
   photoPreview: null,
   photoKey: null,
@@ -121,6 +131,7 @@ const initialState: WizardState = {
   titleOptions: [],
   guestName: "",
   guestEmail: "",
+  referralSource: "",
   onboardingComplete: false,
 };
 
@@ -245,6 +256,27 @@ export const useWizardStore = create<WizardState & WizardActions>()(
         set({ customFavoriteAnimals: get().customFavoriteAnimals.filter((a) => a !== animal) });
       },
 
+      // Favorite foods (preset + custom share max of 3)
+      toggleFavoriteFood: (food) => {
+        const { favoriteFoods, customFavoriteFoods } = get();
+        const total = favoriteFoods.length + customFavoriteFoods.length;
+        if (favoriteFoods.includes(food)) {
+          set({ favoriteFoods: favoriteFoods.filter((f) => f !== food) });
+        } else if (total < 3) {
+          set({ favoriteFoods: [...favoriteFoods, food] });
+        }
+      },
+      addCustomFavoriteFood: (food) => {
+        const { favoriteFoods, customFavoriteFoods } = get();
+        const total = favoriteFoods.length + customFavoriteFoods.length;
+        if (total < 3 && !customFavoriteFoods.includes(food)) {
+          set({ customFavoriteFoods: [...customFavoriteFoods, food] });
+        }
+      },
+      removeCustomFavoriteFood: (food) => {
+        set({ customFavoriteFoods: get().customFavoriteFoods.filter((f) => f !== food) });
+      },
+
       // Legacy single photo
       setPhoto: (photoFile, photoPreview) => set({ photoFile, photoPreview }),
       setPhotoKey: (photoKey) => set({ photoKey }),
@@ -289,12 +321,13 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       // Guest onboarding
       setGuestName: (guestName) => set({ guestName }),
       setGuestEmail: (guestEmail) => set({ guestEmail }),
+      setReferralSource: (referralSource) => set({ referralSource }),
       setOnboardingComplete: (onboardingComplete) => set({ onboardingComplete }),
 
       // Reset wizard fields only (keep guest onboarding info)
       resetWizard: () => {
-        const { guestName, guestEmail, onboardingComplete } = get();
-        set({ ...initialState, guestName, guestEmail, onboardingComplete });
+        const { guestName, guestEmail, referralSource, onboardingComplete } = get();
+        set({ ...initialState, guestName, guestEmail, referralSource, onboardingComplete });
       },
 
       reset: () => set(initialState),
@@ -318,6 +351,8 @@ export const useWizardStore = create<WizardState & WizardActions>()(
         customFavoriteCharacters: state.customFavoriteCharacters,
         favoriteAnimal: state.favoriteAnimal,
         customFavoriteAnimals: state.customFavoriteAnimals,
+        favoriteFoods: state.favoriteFoods,
+        customFavoriteFoods: state.customFavoriteFoods,
         photoPreview: state.photoPreview,
         photoKey: state.photoKey,
         childPhotoKeys: state.childPhotoKeys,
@@ -340,8 +375,18 @@ export const useWizardStore = create<WizardState & WizardActions>()(
         })),
         guestName: state.guestName,
         guestEmail: state.guestEmail,
+        referralSource: state.referralSource,
         onboardingComplete: state.onboardingComplete,
       }),
     }
   )
 );
+
+/** Wait for Zustand persist hydration before reading store values */
+export function useWizardHydrated() {
+  return useSyncExternalStore(
+    (cb) => useWizardStore.persist.onFinishHydration(cb),
+    () => useWizardStore.persist.hasHydrated(),
+    () => false
+  );
+}

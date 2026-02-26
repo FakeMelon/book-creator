@@ -11,7 +11,7 @@ export default function PrivacyPage() {
       <header className="border-b">
         <div className="max-w-3xl mx-auto px-4 py-4">
           <Link href="/" className="font-display text-xl font-bold text-primary">
-            Storymagic
+            Littletales
           </Link>
         </div>
       </header>
@@ -66,7 +66,7 @@ export default function PrivacyPage() {
 
         <h2>6. Children&apos;s Privacy (COPPA)</h2>
         <p>
-          Storymagic is designed for use by parents and guardians to create books for their children.
+          Littletales is designed for use by parents and guardians to create books for their children.
           The Service is not directed at children under 13. We do not knowingly collect personal information
           directly from children. All information about children is provided by their parent or legal guardian.
         </p>
@@ -100,7 +100,7 @@ export default function PrivacyPage() {
         <h2>10. Contact</h2>
         <p>
           For privacy-related questions or to exercise your data rights, contact us at{" "}
-          <a href="mailto:hello@storymagic.com" className="text-primary hover:underline">hello@storymagic.com</a>.
+          <a href="mailto:hello@littletales.com" className="text-primary hover:underline">hello@littletales.com</a>.
         </p>
         <p>
           See also our{" "}

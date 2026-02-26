@@ -47,11 +47,11 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-rose-50 via-white to-rose-50 p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Link href="/" className="font-display text-3xl font-bold text-primary mb-2 block">
-            Storymagic
+            Littletales
           </Link>
           <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription>Sign in to create magical books</CardDescription>

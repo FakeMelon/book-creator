@@ -7,13 +7,31 @@ import { Button } from "@/components/ui/button";
 import {
   THEMES,
   PERSONALITY_TRAITS,
-  FAVORITE_THINGS_OPTIONS,
   OCCASION_OPTIONS,
+  OCCASION_EMOJIS,
   HOBBY_OPTIONS,
-  CHARACTER_OPTIONS,
+  HOBBY_EMOJIS,
   ANIMAL_OPTIONS,
+  ANIMAL_EMOJIS,
+  FOOD_OPTIONS,
+  FOOD_EMOJIS,
 } from "@/constants";
 import { cn } from "@/lib/utils";
+
+const MULTI_CONCEPT_PATTERN = /\s+(and|or|&)\s+|[,;\/]/i;
+
+function detectMultiConcept(text: string): string[] | null {
+  const trimmed = text.trim();
+  if (!trimmed) return null;
+
+  // Split by common separators: ", " / " and " / " or " / " & " / ";" / "/"
+  const parts = trimmed
+    .split(/\s+(?:and|or|&)\s+|[,;\/]/i)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  return parts.length > 1 ? parts : null;
+}
 
 function AddCustomInput({
   placeholder,
@@ -25,39 +43,99 @@ function AddCustomInput({
   disabled?: boolean;
 }) {
   const [value, setValue] = useState("");
+  const [suggestions, setSuggestions] = useState<string[] | null>(null);
+
+  function handleChange(text: string) {
+    setValue(text);
+    if (MULTI_CONCEPT_PATTERN.test(text)) {
+      setSuggestions(detectMultiConcept(text));
+    } else {
+      setSuggestions(null);
+    }
+  }
 
   function handleAdd() {
     const trimmed = value.trim();
     if (trimmed) {
       onAdd(trimmed);
       setValue("");
+      setSuggestions(null);
     }
   }
 
+  function handleAddAll(parts: string[]) {
+    for (const part of parts) {
+      onAdd(part);
+    }
+    setValue("");
+    setSuggestions(null);
+  }
+
   return (
-    <div className="flex items-center gap-2 mt-2">
-      <input
-        type="text"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            handleAdd();
-          }
-        }}
-        placeholder={placeholder}
-        disabled={disabled}
-        className="flex-1 px-3 py-1.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50"
-      />
-      <button
-        type="button"
-        onClick={handleAdd}
-        disabled={disabled || !value.trim()}
-        className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium disabled:opacity-50 hover:bg-primary/90 transition-colors"
-      >
-        Add
-      </button>
+    <div className="mt-2 space-y-1.5">
+      <div className="flex items-center gap-2">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => handleChange(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleAdd();
+            }
+          }}
+          placeholder={placeholder}
+          disabled={disabled}
+          className="flex-1 px-3 py-1.5 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 disabled:opacity-50"
+        />
+        <button
+          type="button"
+          onClick={handleAdd}
+          disabled={disabled || !value.trim()}
+          className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium disabled:opacity-50 hover:bg-primary/90 transition-colors"
+        >
+          Add
+        </button>
+      </div>
+
+      {suggestions && suggestions.length > 1 && (
+        <div className="rounded-lg bg-primary/5 border border-primary/20 px-3 py-2.5 text-sm animate-in fade-in slide-in-from-top-1 duration-200">
+          <p className="text-muted-foreground font-medium">
+            Looks like you have multiple items — add them separately for best results!
+          </p>
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            {suggestions.map((part, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => {
+                  onAdd(part);
+                  const remaining = suggestions.filter((_, j) => j !== i);
+                  if (remaining.length <= 1) {
+                    setValue(remaining[0] ?? "");
+                    setSuggestions(null);
+                  } else {
+                    setSuggestions(remaining);
+                    setValue(remaining.join(", "));
+                  }
+                }}
+                disabled={disabled}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-muted text-foreground hover:bg-primary/10 transition-colors disabled:opacity-50"
+              >
+                + {part}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => handleAddAll(suggestions)}
+              disabled={disabled}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
+            >
+              Add all
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -89,11 +167,6 @@ export function StepCreativeDirection() {
   const {
     occasion,
     setOccasion,
-    favoriteThings,
-    customFavoriteThings,
-    toggleFavoriteThing,
-    addCustomFavoriteThing,
-    removeCustomFavoriteThing,
     personalityTraits,
     customPersonalityTraits,
     togglePersonalityTrait,
@@ -104,11 +177,11 @@ export function StepCreativeDirection() {
     toggleHobby,
     addCustomHobby,
     removeCustomHobby,
-    favoriteCharacters,
-    customFavoriteCharacters,
-    toggleFavoriteCharacter,
-    addCustomFavoriteCharacter,
-    removeCustomFavoriteCharacter,
+    favoriteFoods,
+    customFavoriteFoods,
+    toggleFavoriteFood,
+    addCustomFavoriteFood,
+    removeCustomFavoriteFood,
     favoriteAnimal,
     customFavoriteAnimals,
     toggleFavoriteAnimal,
@@ -120,16 +193,15 @@ export function StepCreativeDirection() {
     prevStep,
   } = useWizardStore();
 
-  const totalFavorites = favoriteThings.length + customFavoriteThings.length;
   const totalTraits = personalityTraits.length + customPersonalityTraits.length;
   const totalHobbies = hobbies.length + customHobbies.length;
-  const totalCharacters = favoriteCharacters.length + customFavoriteCharacters.length;
+  const totalFoods = favoriteFoods.length + customFavoriteFoods.length;
   const totalAnimals = favoriteAnimal.length + customFavoriteAnimals.length;
 
   // Validation per sub-step
   const subStepValid = [
     occasion !== "" && theme !== "",                  // Sub-step 0: Occasion + Theme
-    totalFavorites >= 1 && totalTraits >= 1,          // Sub-step 1: Favorites + Traits
+    totalHobbies >= 1 && totalTraits >= 1,              // Sub-step 1: Hobbies + Traits
     true,                                              // Sub-step 2: Optional extras (always valid)
   ];
 
@@ -200,13 +272,14 @@ export function StepCreativeDirection() {
                     key={occ}
                     onClick={() => setOccasion(occ)}
                     className={cn(
-                      "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                      "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
                       occasion === occ
                         ? "bg-primary text-primary-foreground shadow"
                         : "bg-muted hover:bg-muted/80 text-foreground"
                     )}
                   >
-                    {occ}
+                    {OCCASION_EMOJIS[occ] && <span>{OCCASION_EMOJIS[occ]}</span>}
+                    <span>{occ}</span>
                   </button>
                 ))}
                 {occasion && !OCCASION_OPTIONS.includes(occasion) && (
@@ -301,39 +374,40 @@ export function StepCreativeDirection() {
               />
             </div>
 
-            {/* Favorite Things */}
+            {/* Hobbies */}
             <div>
               <label className="block text-sm font-semibold mb-2">
-                Favorite Things <span className="text-destructive">*</span>{" "}
-                <span className="text-muted-foreground font-normal">({totalFavorites}/5)</span>
+                Hobbies <span className="text-destructive">*</span>{" "}
+                <span className="text-muted-foreground font-normal">({totalHobbies}/5)</span>
               </label>
               <div className="flex flex-wrap gap-2">
-                {FAVORITE_THINGS_OPTIONS.map((thing) => (
+                {HOBBY_OPTIONS.map((hobby) => (
                   <button
-                    key={thing}
-                    onClick={() => toggleFavoriteThing(thing)}
+                    key={hobby}
+                    onClick={() => toggleHobby(hobby)}
                     className={cn(
-                      "px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
-                      favoriteThings.includes(thing)
-                        ? "bg-primary text-primary-foreground shadow"
+                      "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200",
+                      hobbies.includes(hobby)
+                        ? "bg-primary text-primary-foreground shadow-lg scale-105"
                         : "bg-muted hover:bg-muted/80 text-foreground"
                     )}
                   >
-                    {thing}
+                    {HOBBY_EMOJIS[hobby] && <span>{HOBBY_EMOJIS[hobby]}</span>}
+                    <span>{hobby}</span>
                   </button>
                 ))}
-                {customFavoriteThings.map((thing) => (
+                {customHobbies.map((hobby) => (
                   <CustomBadge
-                    key={thing}
-                    label={thing}
-                    onRemove={() => removeCustomFavoriteThing(thing)}
+                    key={hobby}
+                    label={hobby}
+                    onRemove={() => removeCustomHobby(hobby)}
                   />
                 ))}
               </div>
               <AddCustomInput
                 placeholder="Add your own..."
-                onAdd={addCustomFavoriteThing}
-                disabled={totalFavorites >= 5}
+                onAdd={addCustomHobby}
+                disabled={totalHobbies >= 5}
               />
             </div>
           </motion.div>
@@ -351,78 +425,6 @@ export function StepCreativeDirection() {
               These are optional but help us make the story even more personal.
             </p>
 
-            {/* Hobbies */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">
-                Hobbies{" "}
-                <span className="text-muted-foreground font-normal">({totalHobbies}/5)</span>
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {HOBBY_OPTIONS.map((hobby) => (
-                  <button
-                    key={hobby}
-                    onClick={() => toggleHobby(hobby)}
-                    className={cn(
-                      "px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
-                      hobbies.includes(hobby)
-                        ? "bg-primary text-primary-foreground shadow"
-                        : "bg-muted hover:bg-muted/80 text-foreground"
-                    )}
-                  >
-                    {hobby}
-                  </button>
-                ))}
-                {customHobbies.map((hobby) => (
-                  <CustomBadge
-                    key={hobby}
-                    label={hobby}
-                    onRemove={() => removeCustomHobby(hobby)}
-                  />
-                ))}
-              </div>
-              <AddCustomInput
-                placeholder="Add your own..."
-                onAdd={addCustomHobby}
-                disabled={totalHobbies >= 5}
-              />
-            </div>
-
-            {/* Favorite Characters/Heroes */}
-            <div>
-              <label className="block text-sm font-semibold mb-2">
-                Favorite Characters / Heroes{" "}
-                <span className="text-muted-foreground font-normal">({totalCharacters}/3)</span>
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {CHARACTER_OPTIONS.map((char) => (
-                  <button
-                    key={char}
-                    onClick={() => toggleFavoriteCharacter(char)}
-                    className={cn(
-                      "px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
-                      favoriteCharacters.includes(char)
-                        ? "bg-primary text-primary-foreground shadow"
-                        : "bg-muted hover:bg-muted/80 text-foreground"
-                    )}
-                  >
-                    {char}
-                  </button>
-                ))}
-                {customFavoriteCharacters.map((char) => (
-                  <CustomBadge
-                    key={char}
-                    label={char}
-                    onRemove={() => removeCustomFavoriteCharacter(char)}
-                  />
-                ))}
-              </div>
-              <AddCustomInput
-                placeholder="Add your own..."
-                onAdd={addCustomFavoriteCharacter}
-                disabled={totalCharacters >= 3}
-              />
-            </div>
-
             {/* Favorite Animal */}
             <div>
               <label className="block text-sm font-semibold mb-2">
@@ -435,13 +437,14 @@ export function StepCreativeDirection() {
                     key={animal}
                     onClick={() => toggleFavoriteAnimal(animal)}
                     className={cn(
-                      "px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
+                      "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200",
                       favoriteAnimal.includes(animal)
-                        ? "bg-primary text-primary-foreground shadow"
+                        ? "bg-primary text-primary-foreground shadow-lg scale-105"
                         : "bg-muted hover:bg-muted/80 text-foreground"
                     )}
                   >
-                    {animal}
+                    {ANIMAL_EMOJIS[animal] && <span>{ANIMAL_EMOJIS[animal]}</span>}
+                    <span>{animal}</span>
                   </button>
                 ))}
                 {customFavoriteAnimals.map((animal) => (
@@ -456,6 +459,43 @@ export function StepCreativeDirection() {
                 placeholder="Add your own..."
                 onAdd={addCustomFavoriteAnimal}
                 disabled={totalAnimals >= 3}
+              />
+            </div>
+
+            {/* Favorite Foods */}
+            <div>
+              <label className="block text-sm font-semibold mb-2">
+                Favorite Foods{" "}
+                <span className="text-muted-foreground font-normal">({totalFoods}/3)</span>
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {FOOD_OPTIONS.map((food) => (
+                  <button
+                    key={food}
+                    onClick={() => toggleFavoriteFood(food)}
+                    className={cn(
+                      "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200",
+                      favoriteFoods.includes(food)
+                        ? "bg-primary text-primary-foreground shadow-lg scale-105"
+                        : "bg-muted hover:bg-muted/80 text-foreground"
+                    )}
+                  >
+                    {FOOD_EMOJIS[food] && <span>{FOOD_EMOJIS[food]}</span>}
+                    <span>{food}</span>
+                  </button>
+                ))}
+                {customFavoriteFoods.map((food) => (
+                  <CustomBadge
+                    key={food}
+                    label={food}
+                    onRemove={() => removeCustomFavoriteFood(food)}
+                  />
+                ))}
+              </div>
+              <AddCustomInput
+                placeholder="Add your own..."
+                onAdd={addCustomFavoriteFood}
+                disabled={totalFoods >= 3}
               />
             </div>
           </motion.div>

@@ -23,8 +23,8 @@ const baloo2 = Baloo_2({
 
 export const metadata: Metadata = {
   title: {
-    default: "Storymagic — Custom Children's Books with AI",
-    template: "%s | Storymagic",
+    default: "Littletales — Custom Children's Books with AI",
+    template: "%s | Littletales",
   },
   description:
     "Create personalized children's books where your child is the star. Upload a photo, choose a theme, and get a beautifully illustrated hardcover book delivered to your door.",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "Storymagic",
+    siteName: "Littletales",
   },
 };
 

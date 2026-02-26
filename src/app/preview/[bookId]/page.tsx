@@ -52,11 +52,11 @@ export default function PreviewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-50">
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="font-display text-xl font-bold text-primary">
-            Storymagic
+            Littletales
           </Link>
           <div className="flex items-center gap-3">
             <Button variant="outline" size="sm" onClick={() => router.push("/dashboard")}>

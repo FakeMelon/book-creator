@@ -11,7 +11,7 @@ export default function TermsPage() {
       <header className="border-b">
         <div className="max-w-3xl mx-auto px-4 py-4">
           <Link href="/" className="font-display text-xl font-bold text-primary">
-            Storymagic
+            Littletales
           </Link>
         </div>
       </header>
@@ -22,13 +22,13 @@ export default function TermsPage() {
 
         <h2>1. Acceptance of Terms</h2>
         <p>
-          By accessing or using Storymagic (&quot;the Service&quot;), you agree to be bound by these Terms of Use.
+          By accessing or using Littletales (&quot;the Service&quot;), you agree to be bound by these Terms of Use.
           If you do not agree to these terms, please do not use the Service.
         </p>
 
         <h2>2. Service Description</h2>
         <p>
-          Storymagic is an AI-powered platform that creates personalized children&apos;s books.
+          Littletales is an AI-powered platform that creates personalized children&apos;s books.
           Users provide information about their child, upload photos, and our AI generates a custom illustrated storybook
           that can be previewed digitally and ordered as a printed book.
         </p>
@@ -46,7 +46,7 @@ export default function TermsPage() {
           your generated books for personal, non-commercial purposes.
         </p>
         <p>
-          Storymagic retains the right to use anonymized, non-identifiable data to improve our AI models and service quality.
+          Littletales retains the right to use anonymized, non-identifiable data to improve our AI models and service quality.
         </p>
 
         <h2>5. Acceptable Use</h2>
@@ -74,7 +74,7 @@ export default function TermsPage() {
 
         <h2>8. Limitation of Liability</h2>
         <p>
-          The Service is provided &quot;as is&quot; without warranties of any kind. Storymagic shall not be liable for
+          The Service is provided &quot;as is&quot; without warranties of any kind. Littletales shall not be liable for
           any indirect, incidental, or consequential damages arising from your use of the Service.
           Our total liability shall not exceed the amount you paid for the specific order in question.
         </p>
@@ -102,7 +102,7 @@ export default function TermsPage() {
         <h2>12. Contact</h2>
         <p>
           For questions about these terms, contact us at{" "}
-          <a href="mailto:hello@storymagic.com" className="text-primary hover:underline">hello@storymagic.com</a>.
+          <a href="mailto:hello@littletales.com" className="text-primary hover:underline">hello@littletales.com</a>.
         </p>
       </main>
     </div>
