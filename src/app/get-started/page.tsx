@@ -51,7 +51,9 @@ export default function GetStartedPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ referralSource: source }),
-    }).catch(() => {});
+    }).catch((err) => {
+      console.warn("Failed to save referral source:", err);
+    });
     setStep(4);
   }
 

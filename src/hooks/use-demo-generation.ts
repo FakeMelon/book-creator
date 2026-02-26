@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useWizardStore } from "@/hooks/use-wizard-store";
-import type { BookPageView } from "@/types";
+import type { BookPageView, PageType } from "@/types";
 
 type DemoPhase = "wizard" | "generating" | "preview";
 
@@ -117,6 +117,8 @@ export function useDemoGeneration(enabled: boolean): DemoGeneration | null {
         if (res.ok) {
           const data = await res.json();
           characterRefId = data.characterRefId;
+        } else {
+          console.warn(`Character ref generation returned ${res.status}, proceeding without`);
         }
       } catch (err) {
         if ((err as Error).name === "AbortError") return;
@@ -164,6 +166,8 @@ export function useDemoGeneration(enabled: boolean): DemoGeneration | null {
               p.pageNumber === pageNumber ? { ...p, illustrationUrl: imageDataUrl } : p
             )
           );
+        } else {
+          console.warn("Image generation failed for a page:", result.reason);
         }
       }
 
@@ -195,8 +199,8 @@ export function useDemoGeneration(enabled: boolean): DemoGeneration | null {
         childName: store.childName,
         childAge: store.childAge,
         childGender: store.childGender,
-        favoriteThings: store.favoriteThings,
         personalityTraits: store.personalityTraits,
+        favoriteFoods: [...store.favoriteFoods, ...store.customFavoriteFoods],
         theme: store.theme,
         storyStyle: store.storyStyle,
         illustrationStyle: store.illustrationStyle,
@@ -214,7 +218,7 @@ export function useDemoGeneration(enabled: boolean): DemoGeneration | null {
         const data = await res.json();
 
         setGeneratedTitle(data.title);
-        const bookPages: BookPageView[] = data.pages.map((p: any) => ({
+        const bookPages: BookPageView[] = data.pages.map((p: { pageNumber: number; type: PageType; text: string; textPosition: string }) => ({
           pageNumber: p.pageNumber,
           type: p.type,
           text: p.text,

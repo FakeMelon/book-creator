@@ -12,13 +12,11 @@ import { StepReview } from "@/components/wizard/step-review";
 interface WizardStepsProps {
   /** Custom upload function for StepPhotoUpload */
   uploadFile?: (file: File) => Promise<string>;
-  /** Allow skipping photo upload */
-  allowSkip?: boolean;
   /** Custom submit handler for StepReview */
   onSubmit?: () => void;
 }
 
-export function WizardSteps({ uploadFile, allowSkip, onSubmit }: WizardStepsProps) {
+export function WizardSteps({ uploadFile, onSubmit }: WizardStepsProps) {
   const step = useWizardStore((s) => s.step);
 
   return (
@@ -29,7 +27,6 @@ export function WizardSteps({ uploadFile, allowSkip, onSubmit }: WizardStepsProp
         <StepPhotoUpload
           key="step3"
           uploadFile={uploadFile}
-          allowSkip={allowSkip}
         />
       )}
       {step === 4 && <StepStoryStyle key="step4" />}

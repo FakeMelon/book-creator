@@ -238,7 +238,6 @@ const NoFaceContext = createContext<(previewSrc: string) => void>(() => {});
 
 interface StepPhotoUploadProps {
   uploadFile?: (file: File) => Promise<string>;
-  allowSkip?: boolean;
 }
 
 const SLOT_LABELS = [
@@ -527,7 +526,7 @@ const PHOTO_SUB_STEPS = [
   { label: "Additional Characters", hint: "Add family members, friends, or pets" },
 ];
 
-export function StepPhotoUpload({ uploadFile, allowSkip }: StepPhotoUploadProps = {}) {
+export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
   const [subStep, setSubStep] = useState(0);
   const [noFacePreview, setNoFacePreview] = useState<string | null>(null);
   const [showIncomplete, setShowIncomplete] = useState(false);
@@ -576,11 +575,12 @@ export function StepPhotoUpload({ uploadFile, allowSkip }: StepPhotoUploadProps 
           });
           if (!res.ok) throw new Error("Failed to get upload URL");
           const { uploadUrl, key } = await res.json();
-          await fetch(uploadUrl, {
+          const putRes = await fetch(uploadUrl, {
             method: "PUT",
             body: photo.file,
             headers: { "Content-Type": photo.file.type },
           });
+          if (!putRes.ok) throw new Error(`Upload to storage failed (${putRes.status})`);
           keys.push(key);
         }
       }
@@ -603,11 +603,12 @@ export function StepPhotoUpload({ uploadFile, allowSkip }: StepPhotoUploadProps 
             });
             if (!res.ok) throw new Error("Failed to get upload URL");
             const { uploadUrl, key } = await res.json();
-            await fetch(uploadUrl, {
+            const putRes = await fetch(uploadUrl, {
               method: "PUT",
               body: photoFile,
               headers: { "Content-Type": photoFile.type },
             });
+            if (!putRes.ok) throw new Error(`Upload to storage failed (${putRes.status})`);
             keys.push(key);
           }
         }
@@ -638,18 +639,20 @@ export function StepPhotoUpload({ uploadFile, allowSkip }: StepPhotoUploadProps 
           });
           if (!res.ok) throw new Error("Failed to get upload URL");
           const { uploadUrl, key } = await res.json();
-          await fetch(uploadUrl, {
+          const putRes = await fetch(uploadUrl, {
             method: "PUT",
             body: char.photoFile,
             headers: { "Content-Type": char.photoFile.type },
           });
+          if (!putRes.ok) throw new Error(`Upload to storage failed (${putRes.status})`);
           updateAdditionalCharacter(i, { ...char, photoKey: key, photoFile: null });
         }
       }
 
       nextStep();
-    } catch {
-      setError("Upload failed. Please try again.");
+    } catch (err) {
+      console.error("Photo upload failed:", err);
+      setError(err instanceof Error ? err.message : "Upload failed. Please try again.");
     }
 
     setUploading(false);
@@ -810,7 +813,6 @@ export function StepPhotoUpload({ uploadFile, allowSkip }: StepPhotoUploadProps 
         </Button>
         <Button
           onClick={handleNext}
-          disabled={false}
           loading={uploading}
           size="lg"
           className="flex-[2]"

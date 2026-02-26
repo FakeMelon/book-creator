@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 
 const schema = z.object({
-  referralSource: z.string().min(1).max(100),
+  referralSource: z.string().trim().min(1).max(100),
 });
 
 export async function POST(req: Request) {
@@ -14,7 +14,9 @@ export async function POST(req: Request) {
 
     const session = await auth();
     if (!session?.user?.id) {
-      // Not authenticated — client stores it locally for now
+      // Not authenticated — return 200 without persisting.
+      // The client stores it in the Zustand wizard store regardless.
+      // Intentionally not 401 because this is also called from guest onboarding.
       return NextResponse.json({ stored: false });
     }
 
@@ -28,6 +30,7 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues[0].message }, { status: 400 });
     }
+    console.error("Failed to save referral source:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

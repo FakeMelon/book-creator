@@ -24,7 +24,7 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
     .map((id) => PERSONALITY_TRAITS.find((t) => t.id === id))
     .filter(Boolean);
 
-  const allFavoriteThings = [...store.favoriteThings, ...store.customFavoriteThings];
+  const allFoods = [...store.favoriteFoods, ...store.customFavoriteFoods];
   const allHobbies = [...store.hobbies, ...store.customHobbies];
   const allCharacters = [...store.favoriteCharacters, ...store.customFavoriteCharacters];
   const allAnimals = [...store.favoriteAnimal, ...store.customFavoriteAnimals];
@@ -51,13 +51,13 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
           childName: store.childName,
           childAge: store.childAge,
           childGender: store.childGender,
-          favoriteThings: allFavoriteThings,
           personalityTraits: [...store.personalityTraits, ...store.customPersonalityTraits],
           theme: store.theme,
           occasion: store.occasion,
           hobbies: allHobbies.length > 0 ? allHobbies : undefined,
           favoriteCharacters: allCharacters.length > 0 ? allCharacters : undefined,
           favoriteAnimal: allAnimals.length > 0 ? allAnimals : undefined,
+          favoriteFoods: allFoods.length > 0 ? allFoods : undefined,
           storyStyle: store.storyStyle,
           illustrationStyle: store.illustrationStyle,
           dedication: store.dedication || undefined,
@@ -169,16 +169,18 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
               ))}
             </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-muted-foreground mb-1">Favorite Things</p>
-            <div className="flex flex-wrap gap-1.5">
-              {allFavoriteThings.map((thing) => (
-                <Badge key={thing} variant="outline">
-                  {thing}
-                </Badge>
-              ))}
+          {allFoods.length > 0 && (
+            <div>
+              <p className="text-sm font-semibold text-muted-foreground mb-1">Favorite Foods</p>
+              <div className="flex flex-wrap gap-1.5">
+                {allFoods.map((food) => (
+                  <Badge key={food} variant="outline">
+                    {food}
+                  </Badge>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {allHobbies.length > 0 && (
             <div>

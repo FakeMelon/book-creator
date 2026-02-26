@@ -7,7 +7,7 @@ const registerSchema = z.object({
   name: z.string().min(1).max(100),
   email: z.string().email(),
   password: z.string().min(8).max(100),
-  referralSource: z.string().max(100).optional(),
+  referralSource: z.string().trim().min(1).max(100).optional(),
 });
 
 export async function POST(req: Request) {
@@ -31,6 +31,7 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues[0].message }, { status: 400 });
     }
+    console.error("Registration failed:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

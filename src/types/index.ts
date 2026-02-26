@@ -63,6 +63,8 @@ export interface WizardState {
   customFavoriteCharacters: string[];
   favoriteAnimal: string[];
   customFavoriteAnimals: string[];
+  favoriteFoods: string[];
+  customFavoriteFoods: string[];
   // Photo (legacy single)
   photoFile: File | null;
   photoPreview: string | null;
@@ -77,6 +79,11 @@ export interface WizardState {
   // Title selection
   selectedTitle: string;
   titleOptions: string[];
+  // Guest onboarding
+  guestName: string;
+  guestEmail: string;
+  referralSource: string;
+  onboardingComplete: boolean;
 }
 
 export interface WizardActions {

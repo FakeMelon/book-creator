@@ -7,14 +7,14 @@ import {
 } from "@mediapipe/tasks-vision";
 
 const CDN_BASE =
-  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm";
+  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.32/wasm";
 
 let detectorPromise: Promise<FaceDetector> | null = null;
 
 function getDetector(): Promise<FaceDetector> {
   if (!detectorPromise) {
-    detectorPromise = FilesetResolver.forVisionTasks(CDN_BASE).then(
-      (vision) =>
+    detectorPromise = FilesetResolver.forVisionTasks(CDN_BASE)
+      .then((vision) =>
         FaceDetector.createFromOptions(vision, {
           baseOptions: {
             modelAssetPath:
@@ -24,7 +24,11 @@ function getDetector(): Promise<FaceDetector> {
           runningMode: "IMAGE",
           minDetectionConfidence: 0.5,
         })
-    );
+      )
+      .catch((err) => {
+        detectorPromise = null; // Allow retry on next call
+        throw err;
+      });
   }
   return detectorPromise;
 }
@@ -55,7 +59,9 @@ export function useFaceDetection() {
   const warmUp = useCallback(() => {
     if (!initRef.current) {
       initRef.current = true;
-      getDetector().catch(() => {});
+      getDetector().catch((err) => {
+        console.warn("Face detection model failed to load during warmup:", err);
+      });
     }
   }, []);
 
