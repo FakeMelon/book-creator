@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { StoryStyle, IllustrationStyle, AdditionalCharacter, ChildPhoto } from "@/types";
+import type { StoryStyle, IllustrationStyle, AdditionalCharacter, ChildPhoto, BookIdea } from "@/types";
 
 interface WizardState {
   step: number;
@@ -36,9 +36,11 @@ interface WizardState {
   storyStyle: StoryStyle;
   illustrationStyle: IllustrationStyle;
   dedication: string;
-  // Title selection
+  // Book idea selection
   selectedTitle: string;
-  titleOptions: string[];
+  bookIdeas: BookIdea[];
+  selectedBookIdea: BookIdea | null;
+  ideasInputFingerprint: string;
   // Guest onboarding
   guestName: string;
   guestEmail: string;
@@ -87,9 +89,11 @@ interface WizardActions {
   setStoryStyle: (style: StoryStyle) => void;
   setIllustrationStyle: (style: IllustrationStyle) => void;
   setDedication: (text: string) => void;
-  // Title
+  // Book ideas
   setSelectedTitle: (title: string) => void;
-  setTitleOptions: (titles: string[]) => void;
+  setBookIdeas: (ideas: BookIdea[], fingerprint: string) => void;
+  setSelectedBookIdea: (idea: BookIdea) => void;
+  clearBookIdeas: () => void;
   // Guest onboarding
   setGuestName: (name: string) => void;
   setGuestEmail: (email: string) => void;
@@ -128,7 +132,9 @@ const initialState: WizardState = {
   illustrationStyle: "WATERCOLOR_WHIMSY",
   dedication: "",
   selectedTitle: "",
-  titleOptions: [],
+  bookIdeas: [],
+  selectedBookIdea: null,
+  ideasInputFingerprint: "",
   guestName: "",
   guestEmail: "",
   referralSource: "",
@@ -144,7 +150,8 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       nextStep: () => set({ step: Math.min(get().step + 1, 6) }),
       prevStep: () => set({ step: Math.max(get().step - 1, 1) }),
 
-      setChildName: (childName) => set({ childName }),
+      setChildName: (childName) =>
+        set({ childName: childName.charAt(0).toUpperCase() + childName.slice(1) }),
       setChildAge: (childAge) => set({ childAge }),
       setChildGender: (childGender) => set({ childGender }),
 
@@ -314,9 +321,14 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       setIllustrationStyle: (illustrationStyle) => set({ illustrationStyle }),
       setDedication: (dedication) => set({ dedication }),
 
-      // Title
+      // Book ideas
       setSelectedTitle: (selectedTitle) => set({ selectedTitle }),
-      setTitleOptions: (titleOptions) => set({ titleOptions }),
+      setBookIdeas: (bookIdeas, ideasInputFingerprint) =>
+        set({ bookIdeas, ideasInputFingerprint, selectedBookIdea: null, selectedTitle: "" }),
+      setSelectedBookIdea: (idea) =>
+        set({ selectedBookIdea: idea, selectedTitle: idea.title }),
+      clearBookIdeas: () =>
+        set({ bookIdeas: [], selectedBookIdea: null, ideasInputFingerprint: "", selectedTitle: "" }),
 
       // Guest onboarding
       setGuestName: (guestName) => set({ guestName }),
@@ -367,7 +379,9 @@ export const useWizardStore = create<WizardState & WizardActions>()(
         illustrationStyle: state.illustrationStyle,
         dedication: state.dedication,
         selectedTitle: state.selectedTitle,
-        titleOptions: state.titleOptions,
+        bookIdeas: state.bookIdeas,
+        selectedBookIdea: state.selectedBookIdea,
+        ideasInputFingerprint: state.ideasInputFingerprint,
         // Persist childPhotos previews only (exclude File objects)
         childPhotos: state.childPhotos.map((p) => ({
           file: null,

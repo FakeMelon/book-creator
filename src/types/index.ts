@@ -31,6 +31,13 @@ export type {
   GenerationStatus,
 };
 
+// ─── Book Idea Types ───
+
+export interface BookIdea {
+  title: string;
+  description: string;
+}
+
 // ─── Wizard Types ───
 
 export interface AdditionalCharacter {
@@ -76,9 +83,11 @@ export interface WizardState {
   illustrationStyle: IllustrationStyle;
   dedication: string;
   photoKey: string | null;
-  // Title selection
+  // Book idea selection
   selectedTitle: string;
-  titleOptions: string[];
+  bookIdeas: BookIdea[];
+  selectedBookIdea: BookIdea | null;
+  ideasInputFingerprint: string;
   // Guest onboarding
   guestName: string;
   guestEmail: string;

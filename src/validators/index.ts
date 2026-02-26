@@ -112,6 +112,28 @@ export const updatePageTextSchema = z.object({
   text: z.string().min(1).max(500),
 });
 
+export const generateIdeasSchema = z.object({
+  childName: z.string().min(1).max(30),
+  childAge: z.number().int().min(3).max(8),
+  childGender: z.string(),
+  personalityTraits: z.array(z.string()).min(1).max(3),
+  theme: z.string().min(1),
+  occasion: z.string().min(1),
+  hobbies: z.array(z.string()).max(5).optional(),
+  favoriteCharacters: z.array(z.string()).max(3).optional(),
+  favoriteAnimal: z.array(z.string()).max(3).optional(),
+  favoriteFoods: z.array(z.string()).max(3).optional(),
+  storyStyle: z.enum(["PROSE", "RHYME"]),
+  illustrationStyle: z.enum([
+    "WATERCOLOR_WHIMSY",
+    "BRIGHT_AND_BOLD",
+    "STORYBOOK_CLASSIC",
+    "COZY_AND_WARM",
+  ]),
+});
+
+export type GenerateIdeasInput = z.infer<typeof generateIdeasSchema>;
+
 // ─── Type exports ───
 
 export type ChildInfoInput = z.infer<typeof childInfoSchema>;

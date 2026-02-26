@@ -102,11 +102,14 @@ export function StepReview({ onSubmit }: StepReviewProps = {}) {
       </div>
 
       <div className="bg-muted/30 rounded-2xl p-6 space-y-6">
-        {/* Selected Title */}
+        {/* Selected Book Idea */}
         {store.selectedTitle && (
           <div className="text-center pb-2">
-            <p className="text-sm font-semibold text-muted-foreground">Book Title</p>
+            <p className="text-sm font-semibold text-muted-foreground">Book Idea</p>
             <p className="font-display text-2xl font-bold text-primary">{store.selectedTitle}</p>
+            {store.selectedBookIdea?.description && (
+              <p className="text-muted-foreground text-sm mt-1">{store.selectedBookIdea.description}</p>
+            )}
           </div>
         )}
 

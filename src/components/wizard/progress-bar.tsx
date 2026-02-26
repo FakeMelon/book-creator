@@ -7,7 +7,7 @@ const STEPS = [
   { number: 2, label: "Creative" },
   { number: 3, label: "Photos" },
   { number: 4, label: "Style" },
-  { number: 5, label: "Title" },
+  { number: 5, label: "Book Idea" },
   { number: 6, label: "Review" },
 ];
 
