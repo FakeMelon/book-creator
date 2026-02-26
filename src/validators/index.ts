@@ -115,7 +115,9 @@ export const updatePageTextSchema = z.object({
 export const generateIdeasSchema = z.object({
   childName: z.string().min(1).max(30),
   childAge: z.number().int().min(3).max(8),
-  childGender: z.string(),
+  childGender: z.enum(["boy", "girl", "non-binary"], {
+    message: "Please select an option",
+  }),
   personalityTraits: z.array(z.string()).min(1).max(3),
   theme: z.string().min(1),
   occasion: z.string().min(1),
@@ -123,13 +125,17 @@ export const generateIdeasSchema = z.object({
   favoriteCharacters: z.array(z.string()).max(3).optional(),
   favoriteAnimal: z.array(z.string()).max(3).optional(),
   favoriteFoods: z.array(z.string()).max(3).optional(),
-  storyStyle: z.enum(["PROSE", "RHYME"]),
+  storyStyle: z.enum(["PROSE", "RHYME"], {
+    message: "Please select a story style",
+  }),
   illustrationStyle: z.enum([
     "WATERCOLOR_WHIMSY",
     "BRIGHT_AND_BOLD",
     "STORYBOOK_CLASSIC",
     "COZY_AND_WARM",
-  ]),
+  ], {
+    message: "Please select an illustration style",
+  }),
 });
 
 export type GenerateIdeasInput = z.infer<typeof generateIdeasSchema>;

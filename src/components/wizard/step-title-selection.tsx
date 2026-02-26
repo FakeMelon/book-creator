@@ -5,27 +5,21 @@ import { motion } from "framer-motion";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import type { BookIdea } from "@/types";
+import type { WizardState } from "@/types";
 
-function computeFingerprint(state: {
-  childName: string;
-  childAge: number | null;
-  childGender: string;
-  personalityTraits: string[];
-  customPersonalityTraits: string[];
-  theme: string;
-  occasion: string;
-  hobbies: string[];
-  customHobbies: string[];
-  favoriteCharacters: string[];
-  customFavoriteCharacters: string[];
-  favoriteAnimal: string[];
-  customFavoriteAnimals: string[];
-  favoriteFoods: string[];
-  customFavoriteFoods: string[];
-  storyStyle: string;
-  illustrationStyle: string;
-}): string {
+type FingerprintFields = Pick<
+  WizardState,
+  | "childName" | "childAge" | "childGender"
+  | "personalityTraits" | "customPersonalityTraits"
+  | "theme" | "occasion"
+  | "hobbies" | "customHobbies"
+  | "favoriteCharacters" | "customFavoriteCharacters"
+  | "favoriteAnimal" | "customFavoriteAnimals"
+  | "favoriteFoods" | "customFavoriteFoods"
+  | "storyStyle" | "illustrationStyle"
+>;
+
+function computeFingerprint(state: FingerprintFields): string {
   return JSON.stringify({
     childName: state.childName,
     childAge: state.childAge,
@@ -42,14 +36,18 @@ function computeFingerprint(state: {
   });
 }
 
+const stepTransition = {
+  initial: { opacity: 0, x: 20 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -20 },
+} as const;
+
 export function StepTitleSelection() {
   const store = useWizardStore();
   const {
     bookIdeas,
     selectedBookIdea,
     ideasInputFingerprint,
-    setBookIdeas,
-    setSelectedBookIdea,
     childName,
     nextStep,
     prevStep,
@@ -63,44 +61,57 @@ export function StepTitleSelection() {
     setError("");
 
     try {
-      const allTraits = [...store.personalityTraits, ...store.customPersonalityTraits];
-      const allHobbies = [...store.hobbies, ...store.customHobbies];
-      const allCharacters = [...store.favoriteCharacters, ...store.customFavoriteCharacters];
-      const allAnimals = [...store.favoriteAnimal, ...store.customFavoriteAnimals];
-      const allFoods = [...store.favoriteFoods, ...store.customFavoriteFoods];
+      // Always read current state at call time, not at closure creation time
+      const current = useWizardStore.getState();
+
+      const allTraits = [...current.personalityTraits, ...current.customPersonalityTraits];
+      const allHobbies = [...current.hobbies, ...current.customHobbies];
+      const allCharacters = [...current.favoriteCharacters, ...current.customFavoriteCharacters];
+      const allAnimals = [...current.favoriteAnimal, ...current.customFavoriteAnimals];
+      const allFoods = [...current.favoriteFoods, ...current.customFavoriteFoods];
 
       const res = await fetch("/api/ideas/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          childName: store.childName,
-          childAge: store.childAge,
-          childGender: store.childGender,
+          childName: current.childName,
+          childAge: current.childAge,
+          childGender: current.childGender,
           personalityTraits: allTraits,
-          theme: store.theme,
-          occasion: store.occasion,
+          theme: current.theme,
+          occasion: current.occasion,
           hobbies: allHobbies.length > 0 ? allHobbies : undefined,
           favoriteCharacters: allCharacters.length > 0 ? allCharacters : undefined,
           favoriteAnimal: allAnimals.length > 0 ? allAnimals : undefined,
           favoriteFoods: allFoods.length > 0 ? allFoods : undefined,
-          storyStyle: store.storyStyle,
-          illustrationStyle: store.illustrationStyle,
+          storyStyle: current.storyStyle,
+          illustrationStyle: current.illustrationStyle,
         }),
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Failed to generate ideas");
+        let errorMessage = `Server error (${res.status})`;
+        try {
+          const data = await res.json();
+          errorMessage = data.error || errorMessage;
+        } catch {
+          // Error response was not JSON; use the status-based message
+        }
+        throw new Error(errorMessage);
       }
 
-      const { ideas } = await res.json();
-      setBookIdeas(ideas, computeFingerprint(store));
+      const responseData = await res.json();
+      const ideas = responseData?.ideas;
+      if (!Array.isArray(ideas) || ideas.length === 0) {
+        throw new Error("No book ideas were returned. Please try again.");
+      }
+
+      current.setBookIdeas(ideas, computeFingerprint(current));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -108,19 +119,13 @@ export function StepTitleSelection() {
     if (bookIdeas.length === 0 || ideasInputFingerprint !== currentFingerprint) {
       fetchIdeas();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentionally run once on mount; fingerprint check handles staleness
   }, []);
-
-  function handleSelect(idea: BookIdea) {
-    setSelectedBookIdea(idea);
-  }
 
   if (loading) {
     return (
       <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
+        {...stepTransition}
         className="space-y-8 max-w-lg mx-auto text-center"
       >
         <div>
@@ -144,9 +149,7 @@ export function StepTitleSelection() {
   if (error) {
     return (
       <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
+        {...stepTransition}
         className="space-y-8 max-w-lg mx-auto text-center"
       >
         <div>
@@ -172,9 +175,7 @@ export function StepTitleSelection() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
+      {...stepTransition}
       className="space-y-8 max-w-lg mx-auto"
     >
       <div className="text-center">
@@ -188,7 +189,7 @@ export function StepTitleSelection() {
         {bookIdeas.map((idea, index) => (
           <button
             key={index}
-            onClick={() => handleSelect(idea)}
+            onClick={() => store.setSelectedBookIdea(idea)}
             className={cn(
               "w-full p-5 rounded-2xl text-left transition-all duration-200 border-2",
               selectedBookIdea?.title === idea.title

@@ -2,14 +2,14 @@ import OpenAI from "openai";
 import type { GeneratedStory, StoryStyle, IllustrationStyle } from "@/types";
 import { THEMES, PERSONALITY_TRAITS, ILLUSTRATION_STYLES } from "@/constants";
 
-function getClient() {
+export function getClient() {
   return new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     apiKey: process.env.OPENROUTER_API_KEY!,
   });
 }
 
-const STORY_MODEL = process.env.STORY_MODEL!;
+export const STORY_MODEL = process.env.STORY_MODEL!;
 const REVIEW_MODEL = process.env.REVIEW_MODEL!;
 
 interface AdditionalCharacterInput {

@@ -1,19 +1,10 @@
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
 import { isDemoMode } from "@/lib/config";
 import { auth } from "@/lib/auth";
+import { getClient, STORY_MODEL } from "@/lib/claude";
 import { generateIdeasSchema } from "@/validators";
 import { THEMES, PERSONALITY_TRAITS } from "@/constants";
 import type { BookIdea } from "@/types";
-
-function getClient() {
-  return new OpenAI({
-    baseURL: "https://openrouter.ai/api/v1",
-    apiKey: process.env.OPENROUTER_API_KEY!,
-  });
-}
-
-const STORY_MODEL = process.env.STORY_MODEL!;
 
 export async function POST(req: Request) {
   if (!isDemoMode) {
@@ -28,6 +19,13 @@ export async function POST(req: Request) {
     const data = generateIdeasSchema.parse(body);
 
     const themeConfig = THEMES.find((t) => t.id === data.theme);
+    if (!themeConfig) {
+      return NextResponse.json(
+        { error: "Unknown theme. Please go back and select a valid theme." },
+        { status: 400 }
+      );
+    }
+
     const traitDescriptions = data.personalityTraits
       .map((id) => {
         const preset = PERSONALITY_TRAITS.find((t) => t.id === id);
@@ -51,7 +49,7 @@ Rules:
 
     const userPrompt = `Child: ${data.childName}, age ${data.childAge}, ${data.childGender} (${pronouns})
 Personality: ${traitDescriptions}
-Theme: ${themeConfig?.name} — ${themeConfig?.storyPromptHint}
+Theme: ${themeConfig.name} — ${themeConfig.storyPromptHint}
 Story style: ${data.storyStyle === "RHYME" ? "Rhyming verse" : "Prose"}
 Occasion: ${data.occasion}
 ${data.hobbies?.length ? `Hobbies: ${data.hobbies.join(", ")}` : ""}
@@ -76,6 +74,7 @@ Generate 3 unique book ideas now.`;
       throw new Error("No content in OpenRouter response");
     }
 
+    // Defensive: strip markdown fences even though prompt says not to — models sometimes ignore instructions
     const cleaned = text.replace(/^```(?:json)?\s*\n?/i, "").replace(/\n?```\s*$/i, "").trim();
     const parsed = JSON.parse(cleaned);
 
@@ -83,16 +82,26 @@ Generate 3 unique book ideas now.`;
       throw new Error("Invalid ideas structure from model");
     }
 
-    const ideas: BookIdea[] = parsed.ideas.slice(0, 3).map((idea: { title?: string; description?: string }) => ({
-      title: String(idea.title || ""),
-      description: String(idea.description || ""),
-    }));
+    const ideas: BookIdea[] = parsed.ideas
+      .filter((idea: Record<string, unknown>) => {
+        return typeof idea.title === "string" && idea.title.trim().length > 0
+          && typeof idea.description === "string" && idea.description.trim().length > 0;
+      })
+      .slice(0, 3)
+      .map((idea: { title: string; description: string }) => ({
+        title: idea.title.trim(),
+        description: idea.description.trim(),
+      }));
+
+    if (ideas.length < 3) {
+      throw new Error("Model returned incomplete ideas");
+    }
 
     return NextResponse.json({ ideas });
   } catch (err) {
     console.error("Failed to generate book ideas:", err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Failed to generate ideas" },
+      { error: "Failed to generate ideas. Please try again." },
       { status: 500 }
     );
   }

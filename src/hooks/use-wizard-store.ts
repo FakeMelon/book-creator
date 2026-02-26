@@ -151,7 +151,12 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       prevStep: () => set({ step: Math.max(get().step - 1, 1) }),
 
       setChildName: (childName) =>
-        set({ childName: childName.charAt(0).toUpperCase() + childName.slice(1) }),
+        set({
+          childName: childName
+            .split(/(\s+)/)
+            .map((part) => (part.trim() ? part.charAt(0).toUpperCase() + part.slice(1) : part))
+            .join(""),
+        }),
       setChildAge: (childAge) => set({ childAge }),
       setChildGender: (childGender) => set({ childGender }),
 
@@ -321,7 +326,7 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       setIllustrationStyle: (illustrationStyle) => set({ illustrationStyle }),
       setDedication: (dedication) => set({ dedication }),
 
-      // Book ideas
+      // Book ideas — prefer setSelectedBookIdea; selectedTitle is kept for createBook API compat
       setSelectedTitle: (selectedTitle) => set({ selectedTitle }),
       setBookIdeas: (bookIdeas, ideasInputFingerprint) =>
         set({ bookIdeas, ideasInputFingerprint, selectedBookIdea: null, selectedTitle: "" }),
