@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, createContext, useContext } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useDropzone } from "react-dropzone";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { useFaceDetection } from "@/hooks/use-face-detection";
@@ -29,6 +30,8 @@ interface NoFaceModalProps {
 }
 
 function NoFaceModal({ open, previewSrc, onClose }: NoFaceModalProps) {
+  const t = useTranslations("Wizard.photos");
+
   // Lock body scroll while open
   useEffect(() => {
     if (open) document.body.style.overflow = "hidden";
@@ -66,38 +69,36 @@ function NoFaceModal({ open, previewSrc, onClose }: NoFaceModalProps) {
 
             <div className="space-y-2">
               <h3 className="font-display text-xl font-bold">
-                We couldn&apos;t detect a face
+                {t("noFaceHeading")}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                This photo doesn&apos;t seem to contain a visible face.
-                For the best illustrated characters, please use a photo where
-                your child&apos;s face is clear and easy to see.
+                {t("noFaceMessage")}
               </p>
             </div>
 
             {/* Tips */}
-            <div className="bg-muted/60 rounded-xl p-4 text-left space-y-2">
+            <div className="bg-muted/60 rounded-xl p-4 text-start space-y-2">
               <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                Quick tips
+                {t("quickTipsHeading")}
               </p>
               <ul className="text-sm text-muted-foreground space-y-1.5">
                 <li className="flex gap-2 items-start">
                   <span className="shrink-0">&#10003;</span>
-                  <span>Use a close-up or half-body shot</span>
+                  <span>{t("tip1")}</span>
                 </li>
                 <li className="flex gap-2 items-start">
                   <span className="shrink-0">&#10003;</span>
-                  <span>Make sure the face is well-lit and not blurry</span>
+                  <span>{t("tip2")}</span>
                 </li>
                 <li className="flex gap-2 items-start">
                   <span className="shrink-0">&#10003;</span>
-                  <span>Avoid sunglasses, masks, or heavy shadows</span>
+                  <span>{t("tip3")}</span>
                 </li>
               </ul>
             </div>
 
             <Button onClick={onClose} size="lg" className="w-full">
-              Got it, I&apos;ll try another photo
+              {t("noFaceDismiss")}
             </Button>
           </motion.div>
         </motion.div>
@@ -120,6 +121,8 @@ function IncompleteCharacterModal({
   onRemoveIncomplete: () => void;
   onClose: () => void;
 }) {
+  const t = useTranslations("Wizard.photos");
+
   useEffect(() => {
     if (open) document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
@@ -148,26 +151,24 @@ function IncompleteCharacterModal({
           >
             <div className="space-y-2">
               <h3 className="font-display text-xl font-bold">
-                Almost there!
+                {t("incompleteHeading")}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                {incomplete.length === 1
-                  ? "One of your characters is missing a name or photo."
-                  : `${incomplete.length} characters are missing a name or photo.`}
-                {" "}Each character needs both to appear in the story.
+                {t("incompleteMessage", { count: incomplete.length })}
+                {" "}{t("incompleteNeedsBoth")}
               </p>
             </div>
 
             <div className="space-y-3">
               <Button onClick={onClose} variant="outline" size="lg" className="w-full">
-                Go back and complete
+                {t("incompleteGoBack")}
               </Button>
               <Button
                 onClick={() => { onRemoveIncomplete(); onClose(); }}
                 size="lg"
                 className="w-full"
               >
-                Remove incomplete and continue
+                {t("incompleteRemove")}
               </Button>
             </div>
           </motion.div>
@@ -187,6 +188,8 @@ function PhotoRequiredModal({
   open: boolean;
   onClose: () => void;
 }) {
+  const t = useTranslations("Wizard.photos");
+
   useEffect(() => {
     if (open) document.body.style.overflow = "hidden";
     return () => { document.body.style.overflow = ""; };
@@ -213,16 +216,15 @@ function PhotoRequiredModal({
           >
             <div className="space-y-2">
               <h3 className="font-display text-xl font-bold">
-                We need a photo!
+                {t("requiredHeading")}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Please upload at least one photo of your child so we can create
-                their illustrated character for the book.
+                {t("requiredMessage")}
               </p>
             </div>
 
             <Button onClick={onClose} size="lg" className="w-full">
-              Got it
+              {t("requiredDismiss")}
             </Button>
           </motion.div>
         </motion.div>
@@ -240,17 +242,12 @@ interface StepPhotoUploadProps {
   uploadFile?: (file: File) => Promise<string>;
 }
 
-const SLOT_LABELS = [
-  "Best photo",
-  "Different angle",
-  "Full body",
-  "Another angle",
-];
-
 function PhotoSlot({
   photo,
   index,
   label,
+  altText,
+  checkingText,
   onRemove,
   getRootProps,
   getInputProps,
@@ -259,6 +256,8 @@ function PhotoSlot({
   photo?: { preview?: string | null } | null;
   index: number;
   label: string;
+  altText: string;
+  checkingText: string;
   onRemove: (index: number) => void;
   getRootProps: ReturnType<typeof useDropzone>["getRootProps"];
   getInputProps: ReturnType<typeof useDropzone>["getInputProps"];
@@ -271,14 +270,14 @@ function PhotoSlot({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={photo.preview}
-            alt={`Photo ${index + 1}`}
+            alt={altText}
             className="w-full h-full object-cover"
           />
         </div>
         <button
           type="button"
           onClick={(e) => { e.stopPropagation(); onRemove(index); }}
-          className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-destructive text-destructive-foreground rounded-full text-[10px] font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute -top-1.5 -end-1.5 w-5 h-5 bg-destructive text-destructive-foreground rounded-full text-[10px] font-bold flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
         >
           x
         </button>
@@ -293,7 +292,7 @@ function PhotoSlot({
     >
       <input {...getInputProps()} />
       {detectingFace ? (
-        <p className="text-xs text-muted-foreground font-medium">Checking...</p>
+        <p className="text-xs text-muted-foreground font-medium">{checkingText}</p>
       ) : (
         <>
           <svg
@@ -318,6 +317,14 @@ function ChildPhotoDropzone() {
   const [error, setError] = useState("");
   const { detectFace, loading: detectingFace, warmUp } = useFaceDetection();
   const showNoFaceModal = useContext(NoFaceContext);
+  const t = useTranslations("Wizard.photos");
+
+  const slotLabels = [
+    t("slotLabel1"),
+    t("slotLabel2"),
+    t("slotLabel3"),
+    t("slotLabel4"),
+  ];
 
   useEffect(() => { warmUp(); }, [warmUp]);
 
@@ -326,11 +333,11 @@ function ChildPhotoDropzone() {
       setError("");
       for (const file of acceptedFiles) {
         if (file.size > 10 * 1024 * 1024) {
-          setError("Each photo must be under 10MB");
+          setError(t("errorTooLarge"));
           return;
         }
         if (useWizardStore.getState().childPhotos.length >= 4) {
-          setError("Maximum 4 photos");
+          setError(t("errorMaxPhotos"));
           return;
         }
         const preview = await new Promise<string>((resolve) => {
@@ -348,7 +355,7 @@ function ChildPhotoDropzone() {
         addChildPhoto({ file, preview });
       }
     },
-    [addChildPhoto, detectFace, showNoFaceModal]
+    [addChildPhoto, detectFace, showNoFaceModal, t]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -371,7 +378,9 @@ function ChildPhotoDropzone() {
           <PhotoSlot
             photo={childPhotos[0]}
             index={0}
-            label="Best photo"
+            label={slotLabels[0]}
+            altText={t("photoAlt", { index: 1 })}
+            checkingText={t("checking")}
             onRemove={removeChildPhoto}
             getRootProps={getRootProps}
             getInputProps={getInputProps}
@@ -385,7 +394,9 @@ function ChildPhotoDropzone() {
             <PhotoSlot
               photo={childPhotos[i]}
               index={i}
-              label={SLOT_LABELS[i]}
+              label={slotLabels[i]}
+              altText={t("photoAlt", { index: i + 1 })}
+              checkingText={t("checking")}
               onRemove={removeChildPhoto}
               getRootProps={getRootProps}
               getInputProps={getInputProps}
@@ -396,23 +407,13 @@ function ChildPhotoDropzone() {
       </div>
 
       <p className="text-sm text-muted-foreground text-center">
-        Multiple angles help us create a more accurate character
+        {t("multipleAnglesInfo")}
       </p>
 
       {error && <p className="text-sm text-destructive text-center mt-1">{error}</p>}
     </div>
   );
 }
-
-const ROLE_EMOJIS: Record<string, string> = {
-  Mom: "👩",
-  Dad: "👨",
-  Sister: "👧",
-  Brother: "👦",
-  Pet: "🐾",
-  Friend: "🧒",
-  Grandparent: "👴",
-};
 
 function AdditionalCharacterCard({
   character,
@@ -427,6 +428,11 @@ function AdditionalCharacterCard({
 }) {
   const { detectFace } = useFaceDetection();
   const showNoFaceModal = useContext(NoFaceContext);
+  const t = useTranslations("Wizard.photos");
+  const tRoles = useTranslations("Constants.roles");
+
+  const roleOption = CHARACTER_ROLE_OPTIONS.find((r) => r.id === character.role);
+  const emoji = roleOption?.emoji ?? "👤";
 
   const onPhotoDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -467,8 +473,6 @@ function AdditionalCharacterCard({
     multiple: false,
   });
 
-  const emoji = ROLE_EMOJIS[character.role] || "👤";
-
   return (
     <div className="flex items-center gap-3 bg-muted/40 rounded-xl p-3">
       {/* Photo or role emoji */}
@@ -493,16 +497,16 @@ function AdditionalCharacterCard({
       {/* Name input */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 mb-0.5">
-          <span className="text-sm font-semibold text-primary">{character.role}</span>
+          <span className="text-sm font-semibold text-primary">{tRoles(character.role)}</span>
           {!character.photoPreview && (
-            <span className="text-xs text-muted-foreground">tap photo to add</span>
+            <span className="text-xs text-muted-foreground">{t("tapPhotoToAdd")}</span>
           )}
         </div>
         <input
           type="text"
           value={character.name}
           onChange={(e) => onUpdate(index, { ...character, name: e.target.value })}
-          placeholder={`${character.role}'s name`}
+          placeholder={t("rolePlaceholder", { role: tRoles(character.role) })}
           className="w-full bg-transparent text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none"
         />
       </div>
@@ -521,12 +525,11 @@ function AdditionalCharacterCard({
   );
 }
 
-const PHOTO_SUB_STEPS = [
-  { label: "Upload Photos", hint: "We'll transform them into illustrated characters" },
-  { label: "Additional Characters", hint: "Add family members, friends, or pets" },
-];
-
 export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
+  const t = useTranslations("Wizard.photos");
+  const tc = useTranslations("Common");
+  const tRoles = useTranslations("Constants.roles");
+
   const [subStep, setSubStep] = useState(0);
   const [noFacePreview, setNoFacePreview] = useState<string | null>(null);
   const [showIncomplete, setShowIncomplete] = useState(false);
@@ -549,6 +552,9 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
   const [error, setError] = useState("");
 
   const hasPhotos = childPhotos.length > 0 || photoPreview;
+
+  const subStepLabels = [t("substep1Label"), t("substep2Label")];
+  const subStepHints = [t("substep1Hint"), t("substep2Hint")];
 
   async function handleUploadAndContinue() {
     setUploading(true);
@@ -663,7 +669,7 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
       setShowPhotoRequired(true);
       return;
     }
-    if (subStep < PHOTO_SUB_STEPS.length - 1) {
+    if (subStep < subStepLabels.length - 1) {
       setSubStep(subStep + 1);
     } else if (subStep === 1 && additionalCharacters.length > 0 && !allCharactersComplete) {
       setShowIncomplete(true);
@@ -683,12 +689,16 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
   const allCharactersComplete = additionalCharacters.length > 0 &&
     additionalCharacters.every((c) => c.name.trim() && c.photoPreview);
 
-  function nextButtonLabel() {
-    if (uploading) return "Uploading...";
-    if (subStep === 0) return "Continue";
-    if (additionalCharacters.length === 0) return "Skip";
-    return "Continue";
+  function nextButtonLabel(): string {
+    if (uploading) return t("uploading");
+    if (subStep === 0) return tc("continue");
+    if (additionalCharacters.length === 0) return tc("skip");
+    return tc("continue");
   }
+
+  const heading = subStep === 0
+    ? (childName ? t("headingWithName", { childName }) : t("headingDefault"))
+    : subStepLabels[subStep];
 
   return (
     <NoFaceContext.Provider value={setNoFacePreview}>
@@ -701,16 +711,14 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
       {/* Header */}
       <div className="text-center">
         <h2 className="font-display text-3xl font-bold">
-          {subStep === 0
-            ? `Upload ${childName ? `${childName}'s` : "Your Child's"} Photos`
-            : PHOTO_SUB_STEPS[subStep].label}
+          {heading}
         </h2>
-        <p className="text-muted-foreground mt-2">{PHOTO_SUB_STEPS[subStep].hint}</p>
+        <p className="text-muted-foreground mt-2">{subStepHints[subStep]}</p>
       </div>
 
       {/* Sub-step dots */}
       <div className="flex items-center justify-center gap-2">
-        {PHOTO_SUB_STEPS.map((_, i) => (
+        {subStepLabels.map((_, i) => (
           <div
             key={i}
             className={cn(
@@ -766,18 +774,18 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
               <div className="space-y-3">
                 <p className="text-sm font-medium text-muted-foreground text-center">
                   {additionalCharacters.length === 0
-                    ? "Who else should appear in the story?"
-                    : "Add another character"}
+                    ? t("whoElse")
+                    : t("addAnother")}
                 </p>
                 <div className="flex flex-wrap justify-center gap-2">
-                  {CHARACTER_ROLE_OPTIONS.map((role) => (
+                  {CHARACTER_ROLE_OPTIONS.map((option) => (
                     <button
-                      key={role}
+                      key={option.id}
                       type="button"
                       onClick={() =>
                         addAdditionalCharacter({
                           name: "",
-                          role,
+                          role: option.id,
                           photoFile: null,
                           photoPreview: null,
                           photoKey: null,
@@ -785,8 +793,8 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
                       }
                       className="flex items-center gap-1.5 px-3 py-2 rounded-full border border-border bg-background text-sm font-medium hover:border-primary/50 hover:bg-primary/5 transition-colors"
                     >
-                      <span>{ROLE_EMOJIS[role] || "👤"}</span>
-                      <span>{role}</span>
+                      <span>{option.emoji}</span>
+                      <span>{tRoles(option.id)}</span>
                     </button>
                   ))}
                 </div>
@@ -795,7 +803,7 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
 
             {additionalCharacters.length === 0 && (
               <p className="text-sm text-muted-foreground text-center">
-                This is optional — you can skip if the story is just about your child
+                {t("optionalHint")}
               </p>
             )}
           </motion.div>
@@ -809,7 +817,7 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
       {/* Navigation */}
       <div className="flex gap-3">
         <Button onClick={handleBack} variant="outline" size="lg" className="flex-1">
-          Back
+          {tc("back")}
         </Button>
         <Button
           onClick={handleNext}

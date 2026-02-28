@@ -1,6 +1,27 @@
 import OpenAI from "openai";
 import type { GeneratedStory, StoryStyle, IllustrationStyle } from "@/types";
 import { THEMES, PERSONALITY_TRAITS, ILLUSTRATION_STYLES } from "@/constants";
+import { getThemeName, getTraitLabel, getStyleName, getStyleDescription } from "@/lib/constant-labels";
+
+// Language display names keyed by ISO 639-1 code
+export const LANGUAGE_NAMES: Record<string, string> = {
+  en: "English",
+  he: "Hebrew (עברית)",
+  es: "Spanish (Español)",
+  fr: "French (Français)",
+  de: "German (Deutsch)",
+  ar: "Arabic (العربية)",
+  ru: "Russian (Русский)",
+  pt: "Portuguese (Português)",
+  zh: "Chinese (中文)",
+  ja: "Japanese (日本語)",
+  ko: "Korean (한국어)",
+};
+
+// Pronoun overrides per language, keyed by gender
+const PRONOUN_OVERRIDES: Record<string, Record<string, string>> = {
+  he: { boy: "הוא", girl: "היא", "non-binary": "הם" },
+};
 
 export function getClient() {
   return new OpenAI({
@@ -34,6 +55,7 @@ interface StoryGenerationInput {
   favoriteAnimal?: string[];
   additionalCharacters?: AdditionalCharacterInput[];
   title?: string;
+  language?: string;
 }
 
 export async function generateStory(input: StoryGenerationInput): Promise<GeneratedStory> {
@@ -41,11 +63,15 @@ export async function generateStory(input: StoryGenerationInput): Promise<Genera
   const traitDescriptions = input.personalityTraits
     .map((id) => {
       const preset = PERSONALITY_TRAITS.find((t) => t.id === id);
-      return preset ? `${preset.label} (${preset.storyHint})` : id;
+      return preset ? `${getTraitLabel(preset.id)} (${preset.storyHint})` : id;
     })
     .join(", ");
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === input.illustrationStyle);
-  const pronouns = input.childGender === "girl" ? "she/her" : input.childGender === "boy" ? "he/him" : "they/them";
+  const lang = input.language || "en";
+  const langOverrides = PRONOUN_OVERRIDES[lang];
+  const pronouns = langOverrides
+    ? langOverrides[input.childGender] || "they/them"
+    : input.childGender === "girl" ? "she/her" : input.childGender === "boy" ? "he/him" : "they/them";
 
   // Build additional characters section
   let additionalCharactersPrompt = "";
@@ -90,7 +116,7 @@ CRITICAL RULES:
 - Incorporate at least 2-3 of the child's favorite things naturally into the plot
 - The child's personality traits should be evident in how they act in the story
 - NO scary content, violence, or anything inappropriate for young children
-- DO NOT be preachy or overly moralistic — let lessons emerge naturally from the story${titleInstruction}${occasionContext}${interestsContext}${additionalCharactersPrompt}
+- DO NOT be preachy or overly moralistic — let lessons emerge naturally from the story${titleInstruction}${occasionContext}${interestsContext}${additionalCharactersPrompt}${lang !== "en" ? `\nIMPORTANT: Write the ENTIRE story in ${LANGUAGE_NAMES[lang] || lang}. All page text, dialogue, and narration must be in ${LANGUAGE_NAMES[lang] || lang}. The title must also be in ${LANGUAGE_NAMES[lang] || lang}. However, keep all illustrationDescription values in English — they are used by an image generator that only understands English.` : ""}
 
 NARRATIVE STRUCTURE:
 Use a cumulative or circular structure (common in the best children's books):
@@ -142,7 +168,7 @@ ILLUSTRATION DESCRIPTIONS:
 Each illustrationDescription must be detailed enough for an AI image generator to produce a consistent scene:
 - Always mention ${input.childName} by describing their appearance in the scene
 - Specify the setting, lighting, mood, and key objects
-- Reference the illustration style: ${styleConfig?.name}
+- Reference the illustration style: ${styleConfig ? getStyleName(styleConfig.id) : ""}
 - Include the hidden motif somewhere in each scene
 - Describe character expressions and body language
 - Keep scenes visually diverse — vary settings, compositions, and color palettes`;
@@ -152,9 +178,9 @@ Each illustrationDescription must be detailed enough for an AI image generator t
 Child: ${input.childName}, age ${input.childAge}, ${input.childGender}
 Personality: ${traitDescriptions}
 Favorite things: ${input.favoriteThings.join(", ")}
-Theme: ${themeConfig?.name} — ${themeConfig?.storyPromptHint}
+Theme: ${themeConfig ? getThemeName(themeConfig.id) : input.theme} — ${themeConfig?.storyPromptHint}
 Story style: ${input.storyStyle === "RHYME" ? "Rhyming verse" : "Prose"}
-Illustration style: ${styleConfig?.name} — ${styleConfig?.description}
+Illustration style: ${styleConfig ? `${getStyleName(styleConfig.id)} — ${getStyleDescription(styleConfig.id)}` : ""}
 ${input.occasion ? `Occasion: ${input.occasion}` : ""}
 ${input.hobbies?.length ? `Hobbies: ${input.hobbies.join(", ")}` : ""}
 ${input.favoriteCharacters?.length ? `Favorite characters: ${input.favoriteCharacters.join(", ")}` : ""}
@@ -197,10 +223,15 @@ Write the complete 32-page book now.`;
   return story;
 }
 
-export async function reviewStorySafety(story: GeneratedStory): Promise<{
+export async function reviewStorySafety(story: GeneratedStory, language?: string): Promise<{
   approved: boolean;
   issues: string[];
 }> {
+  const lang = language || "en";
+  const langNote = lang !== "en"
+    ? `\nNote: This story is written in ${LANGUAGE_NAMES[lang] || lang}. Review it in that language — do not flag non-English text as an issue.`
+    : "";
+
   const client = getClient();
   const response = await client.chat.completions.create({
     model: REVIEW_MODEL,
@@ -218,7 +249,7 @@ export async function reviewStorySafety(story: GeneratedStory): Promise<{
 Respond with JSON only:
 { "approved": true/false, "issues": ["issue1", "issue2"] }
 
-Be strict on safety but reasonable on creative quality. Minor imperfections in writing are acceptable. Only flag genuine safety or quality concerns.`,
+Be strict on safety but reasonable on creative quality. Minor imperfections in writing are acceptable. Only flag genuine safety or quality concerns.${langNote}`,
       },
       {
         role: "user",

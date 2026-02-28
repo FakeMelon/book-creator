@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { ILLUSTRATION_STYLES } from "@/constants";
 import type { IllustrationStyle } from "@/types";
+import { getStyleName } from "@/lib/constant-labels";
 
 const IMAGE_MODEL = process.env.IMAGE_MODEL!;
 const IMAGE_SIZE = process.env.IMAGE_SIZE || "1K"; // 1K, 2K, or 4K — use 1K for testing, 4K for print
@@ -73,7 +74,8 @@ export async function generateCharacterReference(
 ): Promise<string> {
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === illustrationStyle);
 
-  const prompt = `Transform this child's photo into a ${styleConfig?.name} children's book illustration style character reference sheet. Show the character in 4 different poses: standing front view, side profile walking, sitting, and a happy jumping pose. ${styleConfig?.fluxStylePrompt}. The character should be clearly recognizable as the child in the photo but rendered in the illustration style. Clean white background, character sheet layout.`;
+  const styleName = styleConfig ? getStyleName(styleConfig.id) : "whimsical";
+  const prompt = `Transform this child's photo into a ${styleName} children's book illustration style character reference sheet. Show the character in 4 different poses: standing front view, side profile walking, sitting, and a happy jumping pose. ${styleConfig?.fluxStylePrompt}. The character should be clearly recognizable as the child in the photo but rendered in the illustration style. Clean white background, character sheet layout.`;
 
   return generateImage(prompt, photoUrl);
 }

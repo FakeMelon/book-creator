@@ -2,19 +2,16 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Button } from "@/components/ui/button";
 import {
   THEMES,
   PERSONALITY_TRAITS,
   OCCASION_OPTIONS,
-  OCCASION_EMOJIS,
   HOBBY_OPTIONS,
-  HOBBY_EMOJIS,
   ANIMAL_OPTIONS,
-  ANIMAL_EMOJIS,
   FOOD_OPTIONS,
-  FOOD_EMOJIS,
 } from "@/constants";
 import { cn } from "@/lib/utils";
 
@@ -24,7 +21,6 @@ function detectMultiConcept(text: string): string[] | null {
   const trimmed = text.trim();
   if (!trimmed) return null;
 
-  // Split by common separators: ", " / " and " / " or " / " & " / ";" / "/"
   const parts = trimmed
     .split(/\s+(?:and|or|&)\s+|[,;\/]/i)
     .map((s) => s.trim())
@@ -37,15 +33,21 @@ function AddCustomInput({
   placeholder,
   onAdd,
   disabled,
+  addLabel,
+  addAllLabel,
+  multipleItemsSuggestion,
 }: {
   placeholder: string;
   onAdd: (value: string) => void;
   disabled?: boolean;
+  addLabel: string;
+  addAllLabel: string;
+  multipleItemsSuggestion: string;
 }) {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState<string[] | null>(null);
 
-  function handleChange(text: string) {
+  function handleChange(text: string): void {
     setValue(text);
     if (MULTI_CONCEPT_PATTERN.test(text)) {
       setSuggestions(detectMultiConcept(text));
@@ -54,7 +56,7 @@ function AddCustomInput({
     }
   }
 
-  function handleAdd() {
+  function handleAdd(): void {
     const trimmed = value.trim();
     if (trimmed) {
       onAdd(trimmed);
@@ -63,7 +65,7 @@ function AddCustomInput({
     }
   }
 
-  function handleAddAll(parts: string[]) {
+  function handleAddAll(parts: string[]): void {
     for (const part of parts) {
       onAdd(part);
     }
@@ -94,14 +96,14 @@ function AddCustomInput({
           disabled={disabled || !value.trim()}
           className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-sm font-medium disabled:opacity-50 hover:bg-primary/90 transition-colors"
         >
-          Add
+          {addLabel}
         </button>
       </div>
 
       {suggestions && suggestions.length > 1 && (
         <div className="rounded-lg bg-primary/5 border border-primary/20 px-3 py-2.5 text-sm animate-in fade-in slide-in-from-top-1 duration-200">
           <p className="text-muted-foreground font-medium">
-            Looks like you have multiple items — add them separately for best results!
+            {multipleItemsSuggestion}
           </p>
           <div className="flex flex-wrap gap-1.5 mt-2">
             {suggestions.map((part, i) => (
@@ -131,7 +133,7 @@ function AddCustomInput({
               disabled={disabled}
               className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
-              Add all
+              {addAllLabel}
             </button>
           </div>
         </div>
@@ -147,7 +149,7 @@ function CustomBadge({ label, onRemove }: { label: string; onRemove: () => void 
       <button
         type="button"
         onClick={onRemove}
-        className="ml-0.5 hover:bg-primary-foreground/20 rounded-full w-4 h-4 flex items-center justify-center text-xs"
+        className="ms-0.5 hover:bg-primary-foreground/20 rounded-full w-4 h-4 flex items-center justify-center text-xs"
       >
         x
       </button>
@@ -155,14 +157,11 @@ function CustomBadge({ label, onRemove }: { label: string; onRemove: () => void 
   );
 }
 
-const SUB_STEPS = [
-  { label: "Occasion & Theme", hint: "What's the story about?" },
-  { label: "About the Child", hint: "Tell us what makes them special" },
-  { label: "Extras", hint: "Optional details for a richer story" },
-];
-
 export function StepCreativeDirection() {
   const [subStep, setSubStep] = useState(0);
+  const t = useTranslations("Wizard.creative");
+  const tc = useTranslations("Common");
+  const tConst = useTranslations("Constants");
 
   const {
     occasion,
@@ -198,28 +197,35 @@ export function StepCreativeDirection() {
   const totalFoods = favoriteFoods.length + customFavoriteFoods.length;
   const totalAnimals = favoriteAnimal.length + customFavoriteAnimals.length;
 
-  // Validation per sub-step
-  const subStepValid = [
-    occasion !== "" && theme !== "",                  // Sub-step 0: Occasion + Theme
-    totalHobbies >= 1 && totalTraits >= 1,              // Sub-step 1: Hobbies + Traits
-    true,                                              // Sub-step 2: Optional extras (always valid)
+  const subSteps = [
+    { label: t("substep1Label"), hint: t("substep1Hint") },
+    { label: t("substep2Label"), hint: t("substep2Hint") },
+    { label: t("substep3Label"), hint: t("substep3Hint") },
   ];
 
-  function handleNext() {
-    if (subStep < SUB_STEPS.length - 1) {
+  const subStepValid = [
+    occasion !== "" && theme !== "",
+    totalHobbies >= 1 && totalTraits >= 1,
+    true,
+  ];
+
+  function handleNext(): void {
+    if (subStep < subSteps.length - 1) {
       setSubStep(subStep + 1);
     } else {
       nextStep();
     }
   }
 
-  function handleBack() {
+  function handleBack(): void {
     if (subStep > 0) {
       setSubStep(subStep - 1);
     } else {
       prevStep();
     }
   }
+
+  const isKnownOccasion = OCCASION_OPTIONS.some((o) => o.id === occasion);
 
   return (
     <motion.div
@@ -230,13 +236,13 @@ export function StepCreativeDirection() {
     >
       {/* Header */}
       <div className="text-center">
-        <h2 className="font-display text-3xl font-bold">{SUB_STEPS[subStep].label}</h2>
-        <p className="text-muted-foreground mt-2">{SUB_STEPS[subStep].hint}</p>
+        <h2 className="font-display text-3xl font-bold">{subSteps[subStep].label}</h2>
+        <p className="text-muted-foreground mt-2">{subSteps[subStep].hint}</p>
       </div>
 
       {/* Sub-step dots */}
       <div className="flex items-center justify-center gap-2">
-        {SUB_STEPS.map((_, i) => (
+        {subSteps.map((_, i) => (
           <div
             key={i}
             className={cn(
@@ -244,8 +250,8 @@ export function StepCreativeDirection() {
               i === subStep
                 ? "bg-primary w-6"
                 : i < subStep
-                ? "bg-primary"
-                : "bg-muted"
+                  ? "bg-primary"
+                  : "bg-muted"
             )}
           />
         ))}
@@ -264,31 +270,31 @@ export function StepCreativeDirection() {
             {/* Occasion */}
             <div>
               <label className="block text-sm font-semibold mb-2">
-                What&apos;s the occasion? <span className="text-destructive">*</span>
+                {t("occasionLabel")} <span className="text-destructive">*</span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {OCCASION_OPTIONS.map((occ) => (
                   <button
-                    key={occ}
-                    onClick={() => setOccasion(occ)}
+                    key={occ.id}
+                    onClick={() => setOccasion(occ.id)}
                     className={cn(
                       "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
-                      occasion === occ
+                      occasion === occ.id
                         ? "bg-primary text-primary-foreground shadow"
                         : "bg-muted hover:bg-muted/80 text-foreground"
                     )}
                   >
-                    {OCCASION_EMOJIS[occ] && <span>{OCCASION_EMOJIS[occ]}</span>}
-                    <span>{occ}</span>
+                    <span>{occ.emoji}</span>
+                    <span>{tConst(`occasions.${occ.id}`)}</span>
                   </button>
                 ))}
-                {occasion && !OCCASION_OPTIONS.includes(occasion) && (
+                {occasion && !isKnownOccasion && (
                   <span className="inline-flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium bg-primary text-primary-foreground shadow">
                     {occasion}
                     <button
                       type="button"
                       onClick={() => setOccasion("")}
-                      className="ml-0.5 hover:bg-primary-foreground/20 rounded-full w-4 h-4 flex items-center justify-center text-xs"
+                      className="ms-0.5 hover:bg-primary-foreground/20 rounded-full w-4 h-4 flex items-center justify-center text-xs"
                     >
                       x
                     </button>
@@ -296,32 +302,39 @@ export function StepCreativeDirection() {
                 )}
               </div>
               <AddCustomInput
-                placeholder="Or type your own occasion..."
+                placeholder={t("occasionPlaceholder")}
                 onAdd={(val) => setOccasion(val)}
                 disabled={false}
+                addLabel={tc("add")}
+                addAllLabel={tc("addAll")}
+                multipleItemsSuggestion={t("multipleItemsSuggestion")}
               />
             </div>
 
             {/* Theme */}
             <div>
               <label className="block text-sm font-semibold mb-3">
-                Pick a story theme <span className="text-destructive">*</span>
+                {t("themeLabel")} <span className="text-destructive">*</span>
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {THEMES.map((t) => (
+                {THEMES.map((themeOption) => (
                   <button
-                    key={t.id}
-                    onClick={() => setTheme(t.id)}
+                    key={themeOption.id}
+                    onClick={() => setTheme(themeOption.id)}
                     className={cn(
                       "flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-200 border-2",
-                      theme === t.id
+                      theme === themeOption.id
                         ? "border-primary bg-primary/5 shadow-lg scale-105"
                         : "border-transparent bg-muted hover:bg-muted/80"
                     )}
                   >
-                    <span className="text-3xl">{t.icon}</span>
-                    <span className="text-sm font-semibold">{t.name}</span>
-                    <span className="text-xs text-muted-foreground text-center">{t.description}</span>
+                    <span className="text-3xl">{themeOption.icon}</span>
+                    <span className="text-sm font-semibold">
+                      {tConst(`themes.${themeOption.id}.name`)}
+                    </span>
+                    <span className="text-xs text-muted-foreground text-center">
+                      {tConst(`themes.${themeOption.id}.description`)}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -340,8 +353,10 @@ export function StepCreativeDirection() {
             {/* Personality Traits */}
             <div>
               <label className="block text-sm font-semibold mb-2">
-                Personality Traits <span className="text-destructive">*</span>{" "}
-                <span className="text-muted-foreground font-normal">({totalTraits}/3)</span>
+                {t("traitsLabel")} <span className="text-destructive">*</span>{" "}
+                <span className="text-muted-foreground font-normal">
+                  {t("traitsCounter", { count: totalTraits })}
+                </span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {PERSONALITY_TRAITS.map((trait) => (
@@ -356,7 +371,7 @@ export function StepCreativeDirection() {
                     )}
                   >
                     <span>{trait.emoji}</span>
-                    <span>{trait.label}</span>
+                    <span>{tConst(`traits.${trait.id}`)}</span>
                   </button>
                 ))}
                 {customPersonalityTraits.map((trait) => (
@@ -368,32 +383,37 @@ export function StepCreativeDirection() {
                 ))}
               </div>
               <AddCustomInput
-                placeholder="Add your own..."
+                placeholder={t("traitsPlaceholder")}
                 onAdd={addCustomPersonalityTrait}
                 disabled={totalTraits >= 3}
+                addLabel={tc("add")}
+                addAllLabel={tc("addAll")}
+                multipleItemsSuggestion={t("multipleItemsSuggestion")}
               />
             </div>
 
             {/* Hobbies */}
             <div>
               <label className="block text-sm font-semibold mb-2">
-                Hobbies <span className="text-destructive">*</span>{" "}
-                <span className="text-muted-foreground font-normal">({totalHobbies}/5)</span>
+                {t("hobbiesLabel")} <span className="text-destructive">*</span>{" "}
+                <span className="text-muted-foreground font-normal">
+                  {t("hobbiesCounter", { count: totalHobbies })}
+                </span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {HOBBY_OPTIONS.map((hobby) => (
                   <button
-                    key={hobby}
-                    onClick={() => toggleHobby(hobby)}
+                    key={hobby.id}
+                    onClick={() => toggleHobby(hobby.id)}
                     className={cn(
                       "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200",
-                      hobbies.includes(hobby)
+                      hobbies.includes(hobby.id)
                         ? "bg-primary text-primary-foreground shadow-lg scale-105"
                         : "bg-muted hover:bg-muted/80 text-foreground"
                     )}
                   >
-                    {HOBBY_EMOJIS[hobby] && <span>{HOBBY_EMOJIS[hobby]}</span>}
-                    <span>{hobby}</span>
+                    <span>{hobby.emoji}</span>
+                    <span>{tConst(`hobbies.${hobby.id}`)}</span>
                   </button>
                 ))}
                 {customHobbies.map((hobby) => (
@@ -405,9 +425,12 @@ export function StepCreativeDirection() {
                 ))}
               </div>
               <AddCustomInput
-                placeholder="Add your own..."
+                placeholder={t("hobbiesPlaceholder")}
                 onAdd={addCustomHobby}
                 disabled={totalHobbies >= 5}
+                addLabel={tc("add")}
+                addAllLabel={tc("addAll")}
+                multipleItemsSuggestion={t("multipleItemsSuggestion")}
               />
             </div>
           </motion.div>
@@ -422,29 +445,31 @@ export function StepCreativeDirection() {
             className="space-y-8"
           >
             <p className="text-sm text-muted-foreground text-center">
-              These are optional but help us make the story even more personal.
+              {t("optionalInfo")}
             </p>
 
-            {/* Favorite Animal */}
+            {/* Favorite Animals */}
             <div>
               <label className="block text-sm font-semibold mb-2">
-                Favorite Animals{" "}
-                <span className="text-muted-foreground font-normal">({totalAnimals}/3)</span>
+                {t("animalsLabel")}{" "}
+                <span className="text-muted-foreground font-normal">
+                  {t("animalsCounter", { count: totalAnimals })}
+                </span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {ANIMAL_OPTIONS.map((animal) => (
                   <button
-                    key={animal}
-                    onClick={() => toggleFavoriteAnimal(animal)}
+                    key={animal.id}
+                    onClick={() => toggleFavoriteAnimal(animal.id)}
                     className={cn(
                       "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200",
-                      favoriteAnimal.includes(animal)
+                      favoriteAnimal.includes(animal.id)
                         ? "bg-primary text-primary-foreground shadow-lg scale-105"
                         : "bg-muted hover:bg-muted/80 text-foreground"
                     )}
                   >
-                    {ANIMAL_EMOJIS[animal] && <span>{ANIMAL_EMOJIS[animal]}</span>}
-                    <span>{animal}</span>
+                    <span>{animal.emoji}</span>
+                    <span>{tConst(`animals.${animal.id}`)}</span>
                   </button>
                 ))}
                 {customFavoriteAnimals.map((animal) => (
@@ -456,32 +481,37 @@ export function StepCreativeDirection() {
                 ))}
               </div>
               <AddCustomInput
-                placeholder="Add your own..."
+                placeholder={t("animalsPlaceholder")}
                 onAdd={addCustomFavoriteAnimal}
                 disabled={totalAnimals >= 3}
+                addLabel={tc("add")}
+                addAllLabel={tc("addAll")}
+                multipleItemsSuggestion={t("multipleItemsSuggestion")}
               />
             </div>
 
             {/* Favorite Foods */}
             <div>
               <label className="block text-sm font-semibold mb-2">
-                Favorite Foods{" "}
-                <span className="text-muted-foreground font-normal">({totalFoods}/3)</span>
+                {t("foodsLabel")}{" "}
+                <span className="text-muted-foreground font-normal">
+                  {t("foodsCounter", { count: totalFoods })}
+                </span>
               </label>
               <div className="flex flex-wrap gap-2">
                 {FOOD_OPTIONS.map((food) => (
                   <button
-                    key={food}
-                    onClick={() => toggleFavoriteFood(food)}
+                    key={food.id}
+                    onClick={() => toggleFavoriteFood(food.id)}
                     className={cn(
                       "flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200",
-                      favoriteFoods.includes(food)
+                      favoriteFoods.includes(food.id)
                         ? "bg-primary text-primary-foreground shadow-lg scale-105"
                         : "bg-muted hover:bg-muted/80 text-foreground"
                     )}
                   >
-                    {FOOD_EMOJIS[food] && <span>{FOOD_EMOJIS[food]}</span>}
-                    <span>{food}</span>
+                    <span>{food.emoji}</span>
+                    <span>{tConst(`foods.${food.id}`)}</span>
                   </button>
                 ))}
                 {customFavoriteFoods.map((food) => (
@@ -493,9 +523,12 @@ export function StepCreativeDirection() {
                 ))}
               </div>
               <AddCustomInput
-                placeholder="Add your own..."
+                placeholder={t("foodsPlaceholder")}
                 onAdd={addCustomFavoriteFood}
                 disabled={totalFoods >= 3}
+                addLabel={tc("add")}
+                addAllLabel={tc("addAll")}
+                multipleItemsSuggestion={t("multipleItemsSuggestion")}
               />
             </div>
           </motion.div>
@@ -505,7 +538,7 @@ export function StepCreativeDirection() {
       {/* Navigation */}
       <div className="flex gap-3">
         <Button onClick={handleBack} variant="outline" size="lg" className="flex-1">
-          Back
+          {tc("back")}
         </Button>
         <Button
           onClick={handleNext}
@@ -513,7 +546,7 @@ export function StepCreativeDirection() {
           size="lg"
           className="flex-[2]"
         >
-          {subStep < SUB_STEPS.length - 1 ? "Continue" : "Next Step"}
+          {subStep < subSteps.length - 1 ? tc("continue") : tc("nextStep")}
         </Button>
       </div>
     </motion.div>

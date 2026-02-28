@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { THEMES } from "@/constants";
 
@@ -36,6 +37,7 @@ export function useDemoCoverGeneration(enabled: boolean): DemoCoverGeneration | 
   const [phase, setPhase] = useState<CoverPhase>("idle");
   const [coverData, setCoverData] = useState<DemoCoverData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const tConst = useTranslations("Constants");
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -53,10 +55,11 @@ export function useDemoCoverGeneration(enabled: boolean): DemoCoverGeneration | 
     const themeConfig = THEMES.find((t) => t.id === store.theme);
 
     // Build cover scene description from wizard data
-    const coverScene = `A vibrant children's book cover. The main character is ${store.childName}, age ${store.childAge}. The theme is ${themeConfig?.name || store.theme} — ${themeConfig?.storyPromptHint || ""}. ${store.selectedBookIdea?.description || ""} The scene should be inviting, magical, and capture the essence of the story.`;
+    const themeName = tConst(`themes.${store.theme}.name`);
+    const coverScene = `A vibrant children's book cover. The main character is ${store.childName}, age ${store.childAge}. The theme is ${themeName} — ${themeConfig?.storyPromptHint || ""}. ${store.selectedBookIdea?.description || ""} The scene should be inviting, magical, and capture the essence of the story.`;
 
-    const backCoverMotif = themeConfig?.name
-      ? `${themeConfig.name.toLowerCase()}-themed decorative elements`
+    const backCoverMotif = themeName
+      ? `${themeName.toLowerCase()}-themed decorative elements`
       : "stars and magical swirls";
 
     try {
@@ -113,7 +116,7 @@ export function useDemoCoverGeneration(enabled: boolean): DemoCoverGeneration | 
       setError(err instanceof Error ? err.message : "Cover generation failed");
       setPhase("idle");
     }
-  }, []);
+  }, [tConst]);
 
   return useMemo(() => {
     if (!enabled) return null;

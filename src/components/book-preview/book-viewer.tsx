@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import type { BookPageView } from "@/types";
@@ -13,6 +14,7 @@ interface BookViewerProps {
 }
 
 export function BookViewer({ pages, title, childName, coverImageUrl }: BookViewerProps) {
+  const t = useTranslations("BookViewer");
   const [currentPage, setCurrentPage] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -44,7 +46,7 @@ export function BookViewer({ pages, title, childName, coverImageUrl }: BookViewe
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={page.illustrationUrl}
-              alt={`Page ${page.pageNumber}`}
+              alt={t("pageAlt", { pageNumber: page.pageNumber })}
               className="absolute inset-0 w-full h-full object-cover"
             />
           )}
@@ -81,7 +83,7 @@ export function BookViewer({ pages, title, childName, coverImageUrl }: BookViewe
 
           {/* Page number */}
           {page?.type === "ILLUSTRATION" && (
-            <div className="absolute bottom-2 right-4 text-xs text-white/60 font-medium">
+            <div className="absolute bottom-2 end-4 text-xs text-white/60 font-medium">
               {page.pageNumber}
             </div>
           )}
@@ -91,7 +93,7 @@ export function BookViewer({ pages, title, childName, coverImageUrl }: BookViewe
         <button
           onClick={goPrev}
           disabled={currentPage === 0}
-          className="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 shadow-lg flex items-center justify-center disabled:opacity-30 hover:bg-white transition-colors"
+          className="absolute start-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 shadow-lg flex items-center justify-center disabled:opacity-30 hover:bg-white transition-colors"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -100,7 +102,7 @@ export function BookViewer({ pages, title, childName, coverImageUrl }: BookViewe
         <button
           onClick={goNext}
           disabled={currentPage === totalPages - 1}
-          className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 shadow-lg flex items-center justify-center disabled:opacity-30 hover:bg-white transition-colors"
+          className="absolute end-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 shadow-lg flex items-center justify-center disabled:opacity-30 hover:bg-white transition-colors"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -113,7 +115,7 @@ export function BookViewer({ pages, title, childName, coverImageUrl }: BookViewe
         {/* Page indicator */}
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            Page {currentPage + 1} of {totalPages}
+            {t("pageOf", { current: currentPage + 1, total: totalPages })}
           </span>
         </div>
 

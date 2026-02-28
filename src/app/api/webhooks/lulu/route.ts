@@ -54,6 +54,8 @@ export async function POST(req: Request) {
           trackingUrl,
           trackingNumber: trackingId || "N/A",
           carrier: carrier || "Standard Shipping",
+          // Only "he" has translated email templates; all others fall back to English
+          locale: (order.book.language === "he" ? "he" : "en") as "en" | "he",
         }).catch(console.error);
       }
     }

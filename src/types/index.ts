@@ -188,8 +188,6 @@ export interface ApiResponse<T = unknown> {
 
 export interface ThemeConfig {
   id: string;
-  name: string;
-  description: string;
   icon: string;
   color: string;
   storyPromptHint: string;
@@ -197,15 +195,12 @@ export interface ThemeConfig {
 
 export interface IllustrationStyleConfig {
   id: IllustrationStyle;
-  name: string;
-  description: string;
   previewImage: string;
   fluxStylePrompt: string;
 }
 
 export interface PersonalityTrait {
   id: string;
-  label: string;
   emoji: string;
   storyHint: string;
 }

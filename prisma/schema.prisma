@@ -17,6 +17,7 @@ model User {
   passwordHash  String?
   image         String?
   referralSource String?
+  locale         String   @default("en")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -102,6 +103,9 @@ model Book {
   id     String     @id @default(cuid())
   userId String
   status BookStatus @default(DRAFT)
+
+  // Language
+  language String @default("en")
 
   // Child info
   childName   String

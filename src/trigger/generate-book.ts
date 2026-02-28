@@ -22,6 +22,7 @@ export const generateBookTask = task({
 
     // Parse additional characters from JSON field
     const additionalChars = (book.additionalCharacters as any[]) || [];
+    const language = book.language || "en";
 
     let story: GeneratedStory;
     try {
@@ -41,6 +42,7 @@ export const generateBookTask = task({
         favoriteAnimal: book.favoriteAnimal.length > 0 ? book.favoriteAnimal : undefined,
         additionalCharacters: additionalChars.length > 0 ? additionalChars : undefined,
         title: book.title || undefined,
+        language,
       });
 
       await db.book.update({
@@ -57,7 +59,7 @@ export const generateBookTask = task({
     logger.info("Stage 2: Safety review");
     await logStage(bookId, "SAFETY_REVIEW", "IN_PROGRESS");
     try {
-      const review = await reviewStorySafety(story);
+      const review = await reviewStorySafety(story, language);
       if (!review.approved) {
         logger.warn("Safety review flagged issues, regenerating", { issues: review.issues });
         story = await generateStory({
@@ -76,6 +78,7 @@ export const generateBookTask = task({
           favoriteAnimal: book.favoriteAnimal.length > 0 ? book.favoriteAnimal : undefined,
           additionalCharacters: additionalChars.length > 0 ? additionalChars : undefined,
           title: book.title || undefined,
+          language,
         });
         await db.book.update({
           where: { id: bookId },
@@ -83,8 +86,10 @@ export const generateBookTask = task({
         });
       }
       await logStage(bookId, "SAFETY_REVIEW", "COMPLETED");
-    } catch {
-      await logStage(bookId, "SAFETY_REVIEW", "COMPLETED");
+    } catch (error) {
+      logger.error("Safety review failed", { bookId, error: String(error) });
+      await logStage(bookId, "SAFETY_REVIEW", "FAILED", String(error));
+      throw error;
     }
 
     // Stage 3: Character Design

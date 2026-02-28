@@ -8,6 +8,7 @@ import {
 } from "@/lib/image-gen";
 import { uploadToR2, getPublicUrl, generateIllustrationKey } from "@/lib/r2";
 import { THEMES } from "@/constants";
+import { getThemeName } from "@/lib/constant-labels";
 import type { GenerationStage, GenerationStatus } from "@prisma/client";
 
 async function updateGenerationLog(
@@ -70,10 +71,11 @@ export async function POST(
     const photoUrl = book.childPhotoUrl || "";
 
     // Build cover scene description from book data
-    const coverScene = `A vibrant children's book cover. The main character is ${book.childName}, age ${book.childAge}. The theme is ${themeConfig?.name || book.theme} — ${themeConfig?.storyPromptHint || ""}. The scene should be inviting, magical, and capture the essence of the story.`;
+    const themeName = getThemeName(book.theme);
+    const coverScene = `A vibrant children's book cover. The main character is ${book.childName}, age ${book.childAge}. The theme is ${themeName} — ${themeConfig?.storyPromptHint || ""}. The scene should be inviting, magical, and capture the essence of the story.`;
 
-    const backCoverMotif = themeConfig?.name
-      ? `${themeConfig.name.toLowerCase()}-themed decorative elements`
+    const backCoverMotif = themeName
+      ? `${themeName.toLowerCase()}-themed decorative elements`
       : "stars and magical swirls";
 
     // Front Cover

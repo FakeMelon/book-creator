@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
+import { useTranslations, useLocale } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -53,6 +54,10 @@ export function StepTitleSelection() {
     prevStep,
   } = store;
 
+  const t = useTranslations("Wizard.titles");
+  const tc = useTranslations("Common");
+  const locale = useLocale();
+
   const [loading, setLoading] = useState(() => {
     const currentFingerprint = computeFingerprint(store);
     return bookIdeas.length === 0 || ideasInputFingerprint !== currentFingerprint;
@@ -89,6 +94,7 @@ export function StepTitleSelection() {
           favoriteFoods: allFoods.length > 0 ? allFoods : undefined,
           storyStyle: current.storyStyle,
           illustrationStyle: current.illustrationStyle,
+          language: locale,
         }),
       });
 
@@ -106,7 +112,7 @@ export function StepTitleSelection() {
       const responseData = await res.json();
       const ideas = responseData?.ideas;
       if (!Array.isArray(ideas) || ideas.length === 0) {
-        throw new Error("No book ideas were returned. Please try again.");
+        throw new Error(t("noIdeasError"));
       }
 
       current.setBookIdeas(ideas, computeFingerprint(current));
@@ -115,7 +121,7 @@ export function StepTitleSelection() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const currentFingerprint = computeFingerprint(store);
@@ -132,9 +138,9 @@ export function StepTitleSelection() {
         className="space-y-8 max-w-lg mx-auto text-center"
       >
         <div>
-          <h2 className="font-display text-3xl font-bold">Brainstorming Ideas...</h2>
+          <h2 className="font-display text-3xl font-bold">{t("loadingHeading")}</h2>
           <p className="text-muted-foreground mt-2">
-            Our AI author is crafting unique book ideas for {childName}
+            {t("loadingMessage", { childName })}
           </p>
         </div>
 
@@ -143,7 +149,7 @@ export function StepTitleSelection() {
         </div>
 
         <Button onClick={prevStep} variant="outline" size="lg" className="w-full">
-          Back
+          {tc("back")}
         </Button>
       </motion.div>
     );
@@ -156,8 +162,8 @@ export function StepTitleSelection() {
         className="space-y-8 max-w-lg mx-auto text-center"
       >
         <div>
-          <h2 className="font-display text-3xl font-bold">Oops!</h2>
-          <p className="text-muted-foreground mt-2">We couldn&apos;t generate book ideas</p>
+          <h2 className="font-display text-3xl font-bold">{t("errorHeading")}</h2>
+          <p className="text-muted-foreground mt-2">{t("errorSubheading")}</p>
         </div>
 
         <div className="p-4 rounded-lg bg-destructive/10 text-destructive text-sm">
@@ -166,10 +172,10 @@ export function StepTitleSelection() {
 
         <div className="flex gap-3">
           <Button onClick={prevStep} variant="outline" size="lg" className="flex-1">
-            Back
+            {tc("back")}
           </Button>
           <Button onClick={fetchIdeas} size="lg" className="flex-[2]">
-            Try Again
+            {tc("tryAgain")}
           </Button>
         </div>
       </motion.div>
@@ -182,9 +188,9 @@ export function StepTitleSelection() {
       className="space-y-8 max-w-lg mx-auto"
     >
       <div className="text-center">
-        <h2 className="font-display text-3xl font-bold">Choose a Book Idea</h2>
+        <h2 className="font-display text-3xl font-bold">{t("mainHeading")}</h2>
         <p className="text-muted-foreground mt-2">
-          Pick the perfect story for {childName}&apos;s book
+          {t("subtitle", { childName })}
         </p>
       </div>
 
@@ -194,7 +200,7 @@ export function StepTitleSelection() {
             key={index}
             onClick={() => store.setSelectedBookIdea(idea)}
             className={cn(
-              "w-full p-5 rounded-2xl text-left transition-all duration-200 border-2",
+              "w-full p-5 rounded-2xl text-start transition-all duration-200 border-2",
               selectedBookIdea?.title === idea.title
                 ? "border-primary bg-primary/5 shadow-lg"
                 : "border-transparent bg-muted hover:bg-muted/80"
@@ -211,15 +217,15 @@ export function StepTitleSelection() {
         onClick={fetchIdeas}
         className="text-sm text-primary hover:underline w-full text-center"
       >
-        Generate new ideas
+        {t("generateNew")}
       </button>
 
       <div className="flex gap-3">
         <Button onClick={prevStep} variant="outline" size="lg" className="flex-1">
-          Back
+          {tc("back")}
         </Button>
         <Button onClick={nextStep} disabled={!selectedBookIdea} size="lg" className="flex-[2]">
-          Continue
+          {tc("continue")}
         </Button>
       </div>
     </motion.div>

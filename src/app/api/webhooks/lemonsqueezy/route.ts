@@ -98,6 +98,8 @@ export async function POST(req: Request) {
         childName: order.book.childName,
         bookTitle: order.book.title || "Your Custom Book",
         total: formatPrice(order.total),
+        // Only "he" has translated email templates; all others fall back to English
+        locale: (order.book.language === "he" ? "he" : "en") as "en" | "he",
       }).catch(console.error);
     }
   }

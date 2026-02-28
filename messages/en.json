@@ -1,0 +1,781 @@
+{
+  "Common": {
+    "back": "Back",
+    "continue": "Continue",
+    "skip": "Skip",
+    "loading": "Loading...",
+    "tryAgain": "Try Again",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "createBook": "Create a Book",
+    "getStarted": "Get Started",
+    "goBack": "Go back",
+    "add": "Add",
+    "addAll": "Add all",
+    "nextStep": "Next Step",
+    "dashboard": "Dashboard",
+    "or": "or",
+    "littletales": "Littletales",
+    "goToDashboard": "Go to Dashboard",
+    "pageOf": "Page {current} of {total}"
+  },
+  "Header": {
+    "brand": "Littletales",
+    "goBack": "Go back",
+    "signIn": "Sign In",
+    "dashboard": "Dashboard"
+  },
+  "Landing": {
+    "nav": {
+      "signIn": "Sign In",
+      "createBook": "Create a Book"
+    },
+    "hero": {
+      "badge": "AI-Powered Personalized Books",
+      "titleStart": "Your Child as the",
+      "titleHighlight": "Star",
+      "titleEnd": "of Their Own Book",
+      "description": "Upload a photo, choose a theme, and get a beautifully illustrated 32-page hardcover book delivered to your door. Created in under 5 minutes.",
+      "cta": "Create Your Book — $24.99",
+      "seeExamples": "See Examples",
+      "disclaimer": "Free to create. Only pay when you order a printed copy.",
+      "bookShowcaseAlt": "Animated book showcase"
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "From photo to printed book in 4 simple steps",
+      "step1": {
+        "title": "Tell Us About Your Child",
+        "description": "Name, age, personality, and favorite things — just 60 seconds."
+      },
+      "step2": {
+        "title": "Upload a Photo",
+        "description": "One clear face photo. We'll transform it into an illustrated character."
+      },
+      "step3": {
+        "title": "Choose Your Style",
+        "description": "Pick from 4 gorgeous illustration styles and prose or rhyme."
+      },
+      "step4": {
+        "title": "AI Creates Your Book",
+        "description": "In under 5 minutes, get a complete 32-page illustrated story."
+      }
+    },
+    "features": {
+      "title": "Why Parents Love Littletales",
+      "looksLikeChild": {
+        "title": "It Looks Like YOUR Child",
+        "description": "Our AI transforms their photo into an illustrated character that's recognizably them — not a generic avatar."
+      },
+      "storyQuality": {
+        "title": "Story Quality That Surprises",
+        "description": "Written by Claude AI with the craft of a real children's book author. Parents say they genuinely enjoy reading it aloud."
+      },
+      "readyFast": {
+        "title": "Ready in Under 5 Minutes",
+        "description": "No waiting days or weeks. Answer a few questions, upload a photo, and watch your book come to life in real-time."
+      },
+      "artStyles": {
+        "title": "4 Gorgeous Art Styles",
+        "description": "From dreamy watercolors to bold modern illustrations. Each style is consistent across all 32 pages."
+      },
+      "printQuality": {
+        "title": "Premium Print Quality",
+        "description": "Professional hardcover or softcover, printed at 300 DPI with vibrant colors. Ships worldwide."
+      },
+      "perfectGift": {
+        "title": "The Perfect Gift",
+        "description": "Grandparents, aunts, uncles — everyone wants to give the child they love their very own book."
+      }
+    },
+    "testimonials": {
+      "title": "What Parents Are Saying",
+      "items": {
+        "sarah": {
+          "quote": "My daughter screamed 'THAT'S ME!' when she saw herself in the book. Worth every penny.",
+          "name": "Sarah M.",
+          "role": "Mom of a 5-year-old"
+        },
+        "david": {
+          "quote": "The story quality blew me away. It doesn't read like AI — it reads like a real children's book.",
+          "name": "David K.",
+          "role": "Dad of twins, age 4"
+        },
+        "linda": {
+          "quote": "I ordered one for each grandchild. They absolutely LOVE seeing themselves as the hero.",
+          "name": "Linda R.",
+          "role": "Proud grandma"
+        }
+      }
+    },
+    "pricing": {
+      "title": "Simple Pricing",
+      "subtitle": "Free to create and preview. Only pay when you order a printed copy.",
+      "softcover": "Softcover",
+      "softcoverPrice": "$24.99",
+      "hardcover": "Hardcover",
+      "hardcoverPrice": "$34.99",
+      "mostPopular": "Most Popular",
+      "fullColorPages": "32 full-color pages",
+      "premiumPaper": "Premium paper",
+      "worldwideShipping": "Worldwide shipping",
+      "durableHardcover": "Durable hardcover",
+      "getStarted": "Get Started"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "How long does it take to create a book?",
+        "answer": "The wizard takes about 2 minutes. AI generation takes 3-5 minutes. You'll have a complete book preview in under 10 minutes total."
+      },
+      "q2": {
+        "question": "How accurate is the character to my child's photo?",
+        "answer": "Our AI creates an illustrated version that is clearly recognizable as your child — same face shape, hair, and features — but rendered in a beautiful illustration style."
+      },
+      "q3": {
+        "question": "How long does shipping take?",
+        "answer": "Standard shipping is 7-10 business days. We print and ship from the nearest fulfillment center worldwide."
+      },
+      "q4": {
+        "question": "Can I edit the story after it's generated?",
+        "answer": "Yes! You can edit the text on any page and regenerate illustrations before ordering."
+      },
+      "q5": {
+        "question": "Is it safe for kids? What about content moderation?",
+        "answer": "Every story goes through an AI safety review to ensure age-appropriate content. All illustrations are checked for quality and appropriateness."
+      }
+    },
+    "cta": {
+      "title": "Create a Book They'll Treasure Forever",
+      "subtitle": "It takes less than 5 minutes. Start for free.",
+      "button": "Create Your Book Now"
+    },
+    "footer": {
+      "tagline": "AI-powered personalized children's books that make your child the star.",
+      "product": "Product",
+      "createBook": "Create a Book",
+      "examples": "Examples",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "company": "Company",
+      "about": "About",
+      "contact": "Contact",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service",
+      "support": "Support"
+    }
+  },
+  "Auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to create magical books",
+      "google": "Continue with Google",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "submit": "Sign In",
+      "error": "Invalid email or password",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Start creating personalized books in minutes",
+      "google": "Continue with Google",
+      "namePlaceholder": "Full name",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password (min 8 characters)",
+      "submit": "Create Account",
+      "genericError": "Something went wrong. Please try again.",
+      "signInFailed": "Account created but sign-in failed. Please try logging in.",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
+  },
+  "GetStarted": {
+    "step1": {
+      "title": "Let's get to know you",
+      "subtitle": "First, what should we call you?",
+      "placeholder": "Your first name",
+      "continue": "Continue"
+    },
+    "step2": {
+      "titleWithName": "Hey there, {name}! 👋",
+      "subtitle": "Where should we send your book updates?",
+      "placeholder": "your@email.com",
+      "continue": "Continue",
+      "agreement": "By continuing, you agree to our",
+      "terms": "Terms of Use",
+      "and": "and",
+      "privacy": "Privacy Policy"
+    },
+    "step3": {
+      "title": "Where did you hear about us?",
+      "subtitle": "This helps us reach more families like yours",
+      "skip": "Skip"
+    },
+    "step4": {
+      "title": "The perfect gift for your child",
+      "subtitle": "A one-of-a-kind storybook where your child is the hero",
+      "theAmazing": "The Amazing",
+      "adventure": "Adventure",
+      "storyAbout": "A story about your child",
+      "start": "Start Creating"
+    }
+  },
+  "Wizard": {
+    "progress": {
+      "step1": "Child Info",
+      "step2": "Creative",
+      "step3": "Photos",
+      "step4": "Style",
+      "step5": "Book Idea",
+      "step6": "Cover Preview"
+    },
+    "childInfo": {
+      "heading": "Who is this book for?",
+      "subtitle": "Tell us about the little star of the story",
+      "nameLabel": "Child's First Name",
+      "namePlaceholder": "Enter their name...",
+      "ageLabel": "Age",
+      "pronounsLabel": "Pronouns",
+      "genderBoy": "Boy",
+      "genderGirl": "Girl",
+      "genderNonBinary": "They/Them"
+    },
+    "creative": {
+      "substep1Label": "Occasion & Theme",
+      "substep1Hint": "What's the story about?",
+      "substep2Label": "About the Child",
+      "substep2Hint": "Tell us what makes them special",
+      "substep3Label": "Extras",
+      "substep3Hint": "Optional details for a richer story",
+      "occasionLabel": "What's the occasion?",
+      "occasionPlaceholder": "Or type your own occasion...",
+      "themeLabel": "Pick a story theme",
+      "traitsLabel": "Personality Traits",
+      "traitsCounter": "({count}/3)",
+      "traitsPlaceholder": "Add your own...",
+      "hobbiesLabel": "Hobbies",
+      "hobbiesCounter": "({count}/5)",
+      "hobbiesPlaceholder": "Add your own...",
+      "optionalInfo": "These are optional but help us make the story even more personal.",
+      "animalsLabel": "Favorite Animals",
+      "animalsCounter": "({count}/3)",
+      "animalsPlaceholder": "Add your own...",
+      "foodsLabel": "Favorite Foods",
+      "foodsCounter": "({count}/3)",
+      "foodsPlaceholder": "Add your own...",
+      "multipleItemsSuggestion": "Looks like you have multiple items — add them separately for best results!"
+    },
+    "photos": {
+      "substep1Label": "Upload Photos",
+      "substep1Hint": "We'll transform them into illustrated characters",
+      "substep2Label": "Additional Characters",
+      "substep2Hint": "Add family members, friends, or pets",
+      "headingWithName": "Upload {childName}'s Photos",
+      "headingDefault": "Upload Your Child's Photos",
+      "slotLabel1": "Best photo",
+      "slotLabel2": "Different angle",
+      "slotLabel3": "Full body",
+      "slotLabel4": "Another angle",
+      "photoAlt": "Photo {index}",
+      "checking": "Checking...",
+      "errorTooLarge": "Each photo must be under 10MB",
+      "errorMaxPhotos": "Maximum 4 photos",
+      "multipleAnglesInfo": "Multiple angles help us create a more accurate character",
+      "noFaceHeading": "We couldn't detect a face",
+      "noFaceMessage": "This photo doesn't seem to contain a visible face. For the best illustrated characters, please use a photo where your child's face is clear and easy to see.",
+      "quickTipsHeading": "Quick tips",
+      "tip1": "Use a close-up or half-body shot",
+      "tip2": "Make sure the face is well-lit and not blurry",
+      "tip3": "Avoid sunglasses, masks, or heavy shadows",
+      "noFaceDismiss": "Got it, I'll try another photo",
+      "incompleteHeading": "Almost there!",
+      "incompleteSingular": "One of your characters is missing a name or photo.",
+      "incompletePlural": "{count} characters are missing a name or photo.",
+      "incompleteNeedsBoth": "Each character needs both to appear in the story.",
+      "incompleteGoBack": "Go back and complete",
+      "incompleteRemove": "Remove incomplete and continue",
+      "requiredHeading": "We need a photo!",
+      "requiredMessage": "Please upload at least one photo of your child so we can create their illustrated character for the book.",
+      "requiredDismiss": "Got it",
+      "whoElse": "Who else should appear in the story?",
+      "addAnother": "Add another character",
+      "optionalHint": "This is optional — you can skip if the story is just about your child",
+      "tapPhotoToAdd": "tap photo to add",
+      "rolePlaceholder": "{role}'s name",
+      "uploading": "Uploading..."
+    },
+    "style": {
+      "heading": "Story Style",
+      "subtitle": "Choose how your book looks and reads",
+      "writingLabel": "Writing Style",
+      "proseLabel": "Prose",
+      "proseDesc": "Flowing narrative with beautiful descriptions",
+      "proseExample": "\"Luna tiptoed through the garden, her heart racing with excitement...\"",
+      "rhymeLabel": "Rhyme",
+      "rhymeDesc": "Fun rhyming verse with playful rhythm",
+      "rhymeExample": "\"Through the garden, Luna crept / While the little flowers slept...\"",
+      "illustrationLabel": "Illustration Style",
+      "dedicationLabel": "Dedication",
+      "optional": "(optional)",
+      "dedicationPlaceholder": "e.g. \"For our little explorer — Love, Mom & Dad\"",
+      "charCounter": "{count}/200 characters"
+    },
+    "titles": {
+      "loadingHeading": "Brainstorming Ideas...",
+      "loadingMessage": "Our AI author is crafting unique book ideas for {childName}",
+      "errorHeading": "Oops!",
+      "errorSubheading": "We couldn't generate book ideas",
+      "mainHeading": "Choose a Book Idea",
+      "subtitle": "Pick the perfect story for {childName}'s book",
+      "generateNew": "Generate new ideas",
+      "noIdeasError": "No book ideas were returned. Please try again."
+    },
+    "review": {
+      "readyHeading": "Ready to Create!",
+      "readySubtext": "Review your choices, then generate a free cover preview",
+      "bookIdeaLabel": "Book Idea",
+      "ageDisplay": "Age {age}",
+      "pronounHeHim": "He/Him",
+      "pronounSheHer": "She/Her",
+      "pronounTheyThem": "They/Them",
+      "photoCount": "{count, plural, one {# photo} other {# photos}} uploaded",
+      "occasionLabel": "Occasion",
+      "themeLabel": "Theme",
+      "personalityLabel": "Personality",
+      "foodsLabel": "Favorite Foods",
+      "hobbiesLabel": "Hobbies",
+      "charactersLabel": "Favorite Characters",
+      "animalsLabel": "Favorite Animals",
+      "additionalCharsLabel": "Additional Characters",
+      "unnamed": "Unnamed",
+      "writingLabel": "Writing",
+      "styleProse": "Prose",
+      "styleRhyme": "Rhyme",
+      "artStyleLabel": "Art Style",
+      "dedicationLabel": "Dedication",
+      "generateCoverPreview": "Generate Cover Preview",
+      "freePreview": "Free preview — see your book covers before committing",
+      "creatingCovers": "Creating Your Covers",
+      "generatingTime": "This usually takes 1-2 minutes",
+      "frontCover": "Front Cover",
+      "backCover": "Back Cover",
+      "errorHeading": "Cover Generation Failed",
+      "errorDefault": "Something went wrong while generating your covers. Please try again.",
+      "goBackEdit": "Go Back & Edit",
+      "coversReady": "Your Covers Are Ready!",
+      "sneakPeek": "Here's a sneak peek of",
+      "loading": "Loading...",
+      "signUpButton": "Sign Up to Generate Full Book",
+      "demoInfo": "Create an account to generate the complete illustrated book",
+      "generateFullBook": "Generate Full Book",
+      "generateInfo": "Generate the complete illustrated book with all pages",
+      "generatingMsg1": "Crafting the story...",
+      "generatingMsg2": "Imagining the characters...",
+      "generatingMsg3": "Painting the scenes...",
+      "generatingMsg4": "Adding a sprinkle of magic...",
+      "generatingMsg5": "Mixing the colors...",
+      "generatingMsg6": "Writing the adventure...",
+      "generatingMsg7": "Polishing the details...",
+      "generatingMsg8": "Almost there..."
+    }
+  },
+  "Dashboard": {
+    "createNew": "Create New Book",
+    "orderSuccess": "Order #{orderNumber} confirmed!",
+    "orderShipping": "Your book is being printed and will ship in 7-10 business days.",
+    "title": "My Books",
+    "emptyTitle": "No books yet",
+    "emptyDescription": "Create your first personalized children's book in under 5 minutes!",
+    "emptyButton": "Create Your First Book",
+    "statusDraft": "Draft",
+    "statusGenerating": "Creating...",
+    "statusCoverReady": "Preview Ready",
+    "statusPreviewReady": "Preview Ready",
+    "statusApproved": "Approved",
+    "statusOrdered": "Ordered",
+    "bookFor": "For"
+  },
+  "Generate": {
+    "title": "Creating Your Book",
+    "funMessages": {
+      "msg1": "Mixing the perfect colors...",
+      "msg2": "Adding a sprinkle of magic...",
+      "msg3": "Teaching the characters to smile...",
+      "msg4": "Hiding a secret on every page...",
+      "msg5": "Making sure the story has a happy ending..."
+    },
+    "percentComplete": "{percent}% complete",
+    "sneakPeek": "Sneak peek",
+    "readyTitle": "Your Book is Ready!",
+    "readySubtitle": "{childName} is waiting for you",
+    "previewButton": "Preview My Book",
+    "errorTitle": "Something went wrong",
+    "stages": {
+      "STORY_GENERATION": {
+        "label": "Writing the Story",
+        "description": "Claude is crafting a magical tale just for {childName}..."
+      },
+      "SAFETY_REVIEW": {
+        "label": "Quality Review",
+        "description": "Making sure everything is perfect and age-appropriate..."
+      },
+      "CHARACTER_DESIGN": {
+        "label": "Designing the Character",
+        "description": "Transforming {childName}'s photo into a storybook character..."
+      },
+      "PAGE_ILLUSTRATIONS": {
+        "label": "Illustrating Pages",
+        "description": "Painting beautiful illustrations for each page..."
+      },
+      "PDF_ASSEMBLY": {
+        "label": "Assembling the Book",
+        "description": "Putting all the pages together into a beautiful book..."
+      },
+      "QUALITY_CHECK": {
+        "label": "Final Check",
+        "description": "One last look to make sure everything is perfect..."
+      }
+    }
+  },
+  "Preview": {
+    "myBooks": "My Books",
+    "notFound": "Book not found",
+    "loadError": "Failed to load book preview",
+    "bookFor": "A personalized book for",
+    "orderButton": "Order My Book — From $24.99",
+    "editText": "Edit Text",
+    "freePreview": "Free preview — only pay when you order a printed copy"
+  },
+  "Checkout": {
+    "backToPreview": "Back to Preview",
+    "title": "Order Your Book",
+    "chooseFormat": "Choose Format",
+    "hardcover": "Hardcover",
+    "premiumQuality": "Premium quality",
+    "softcover": "Softcover",
+    "greatValue": "Great value",
+    "shippingAddress": "Shipping Address",
+    "fullName": "Full name",
+    "address1": "Address line 1",
+    "address2": "Address line 2 (optional)",
+    "city": "City",
+    "state": "State/Province",
+    "postalCode": "Postal code",
+    "country": {
+      "US": "United States",
+      "CA": "Canada",
+      "GB": "United Kingdom",
+      "AU": "Australia",
+      "DE": "Germany",
+      "FR": "France",
+      "IL": "Israel"
+    },
+    "proceedToPayment": "Proceed to Payment",
+    "shipping": "Shipping",
+    "calculatedAtCheckout": "Calculated at checkout",
+    "total": "Total",
+    "shipsIn": "Ships in 7-10 business days"
+  },
+  "Marketing": {
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "stillHaveQuestions": "Still have questions?",
+      "loveToHelp": "We'd love to help!",
+      "contactUs": "Contact Us",
+      "categories": {
+        "creating": {
+          "title": "Creating Your Book",
+          "q1": {
+            "question": "How long does it take to create a book?",
+            "answer": "The creation wizard takes about 2 minutes. AI generation takes 3-5 minutes. You'll have a complete book preview in under 10 minutes total."
+          },
+          "q2": {
+            "question": "What age range are the books designed for?",
+            "answer": "Our books are designed for children ages 3-8, the picture book sweet spot. The AI adjusts vocabulary and story complexity based on the child's age."
+          },
+          "q3": {
+            "question": "What photo should I use?",
+            "answer": "A clear, front-facing photo with good lighting works best. Avoid heavy shadows, sunglasses, or photos where the face is partially hidden."
+          },
+          "q4": {
+            "question": "Can I include multiple children in one book?",
+            "answer": "This feature is coming soon! Currently, each book features one child as the main character."
+          }
+        },
+        "quality": {
+          "title": "Quality & Content",
+          "q1": {
+            "question": "How accurate is the illustrated character?",
+            "answer": "Our AI creates a character that is clearly recognizable as your child — same face shape, hair color, and features — but beautifully rendered in your chosen illustration style."
+          },
+          "q2": {
+            "question": "Is the content safe and age-appropriate?",
+            "answer": "Absolutely. Every story goes through an automated safety review checking for age-appropriateness, bias, and content quality before you see it."
+          },
+          "q3": {
+            "question": "Can I edit the story?",
+            "answer": "Yes! After generation, you can edit the text on any page and regenerate illustrations (up to 3 times per page) before ordering."
+          }
+        },
+        "ordering": {
+          "title": "Ordering & Shipping",
+          "q1": {
+            "question": "What's the print quality like?",
+            "answer": "We use professional print-on-demand with 300 DPI printing, vibrant colors, and premium paper. Hardcovers are built to last through many bedtime readings."
+          },
+          "q2": {
+            "question": "Where do you ship?",
+            "answer": "We ship to over 150 countries worldwide through our printing partner's global fulfillment network."
+          },
+          "q3": {
+            "question": "How long does shipping take?",
+            "answer": "Standard shipping is 7-10 business days to most locations. Books are printed at the nearest fulfillment center to minimize transit time."
+          },
+          "q4": {
+            "question": "What's your return policy?",
+            "answer": "If there's a print quality issue, we'll reprint and ship a replacement at no cost. Contact us within 30 days of delivery."
+          }
+        }
+      }
+    },
+    "pricing": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Free to create and preview. Only pay for printed copies.",
+      "softcover8x8": "Softcover 8x8",
+      "hardcover8x8": "Hardcover 8x8",
+      "hardcover8x10": "Hardcover 8x10",
+      "mostPopular": "Most Popular",
+      "fullColorPages": "32 full-color pages",
+      "highQualityPaper": "High-quality paper",
+      "standardShipping": "Standard shipping",
+      "durableHardcover": "Durable hardcover",
+      "premiumPaper": "Premium paper",
+      "largerFormat": "Larger format",
+      "premiumQuality": "Premium quality",
+      "addOns": "Add-Ons",
+      "rushProcessing": "Rush Processing",
+      "rushProcessingDesc": "Priority generation & printing",
+      "giftWrapping": "Gift Wrapping",
+      "giftWrappingDesc": "Beautiful gift-ready packaging",
+      "audioNarration": "Audio Narration",
+      "audioNarrationDesc": "QR code on book links to narration",
+      "getStarted": "Get Started"
+    },
+    "examples": {
+      "title": "Example Books",
+      "subtitle": "See what Littletales can create. Every book is unique!",
+      "readyTitle": "Ready to Create Your Own?",
+      "createButton": "Create Your Book Now",
+      "books": {
+        "luna": {
+          "title": "Luna's Enchanted Garden",
+          "child": "Luna, age 5",
+          "description": "Luna discovers a hidden garden where flowers sing and butterflies tell stories."
+        },
+        "max": {
+          "title": "Captain Max and the Star Map",
+          "child": "Max, age 7",
+          "description": "Max pilots a rocket ship through the solar system, making friends on every planet."
+        },
+        "mia": {
+          "title": "Mia's Underwater Orchestra",
+          "child": "Mia, age 4",
+          "description": "Mia dives beneath the waves to conduct a concert with her sea creature friends."
+        },
+        "ethan": {
+          "title": "The Brave Adventures of Ethan",
+          "child": "Ethan, age 6",
+          "description": "Ethan climbs the tallest mountain, crosses the widest river, and discovers the greatest treasure of all."
+        },
+        "sophie": {
+          "title": "Sophie and the Dragon's Secret",
+          "child": "Sophie, age 5",
+          "description": "Sophie befriends a shy dragon who needs help finding his voice."
+        },
+        "daniel": {
+          "title": "Dino Day with Daniel",
+          "child": "Daniel, age 3",
+          "description": "Daniel wakes up to find a friendly dinosaur in his backyard — and the adventure begins!"
+        }
+      }
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: February 24, 2026"
+    },
+    "terms": {
+      "title": "Terms of Use",
+      "lastUpdated": "Last updated: February 24, 2026"
+    }
+  },
+  "Constants": {
+    "themes": {
+      "adventure": {
+        "name": "Adventure",
+        "description": "Epic quests and brave discoveries"
+      },
+      "friendship": {
+        "name": "Friendship",
+        "description": "Making friends and working together"
+      },
+      "space": {
+        "name": "Space",
+        "description": "Rockets, planets, and cosmic wonders"
+      },
+      "enchanted-forest": {
+        "name": "Enchanted Forest",
+        "description": "Magical woods full of wonder"
+      },
+      "superheroes": {
+        "name": "Superheroes",
+        "description": "Discover your special powers"
+      },
+      "fairy-tale": {
+        "name": "Fairy Tale",
+        "description": "Once upon a time magic"
+      },
+      "robots": {
+        "name": "Robots",
+        "description": "Friendly bots and cool inventions"
+      },
+      "underwater": {
+        "name": "Underwater",
+        "description": "Deep sea adventures and ocean friends"
+      },
+      "dinosaurs": {
+        "name": "Dinosaurs",
+        "description": "Roaring fun in prehistoric times"
+      }
+    },
+    "styles": {
+      "WATERCOLOR_WHIMSY": {
+        "name": "Watercolor Whimsy",
+        "description": "Soft, dreamy watercolor textures with gentle color blending"
+      },
+      "BRIGHT_AND_BOLD": {
+        "name": "Bright & Bold",
+        "description": "Vivid colors and strong outlines, modern and energetic"
+      },
+      "STORYBOOK_CLASSIC": {
+        "name": "Storybook Classic",
+        "description": "Timeless hand-drawn feel, warm and nostalgic"
+      },
+      "COZY_AND_WARM": {
+        "name": "Cozy & Warm",
+        "description": "Soft lighting, rounded shapes, comforting atmosphere"
+      }
+    },
+    "traits": {
+      "brave": "Brave",
+      "curious": "Curious",
+      "kind": "Kind",
+      "funny": "Funny",
+      "creative": "Creative"
+    },
+    "occasions": {
+      "birthday": "Birthday",
+      "holiday": "Holiday",
+      "just-because": "Just Because",
+      "achievement": "Achievement",
+      "new-sibling": "New Sibling"
+    },
+    "hobbies": {
+      "drawing": "Drawing",
+      "sports": "Sports",
+      "music": "Music",
+      "building": "Building",
+      "outdoor-play": "Outdoor Play"
+    },
+    "animals": {
+      "dog": "Dog",
+      "cat": "Cat",
+      "bunny": "Bunny",
+      "horse": "Horse",
+      "dolphin": "Dolphin"
+    },
+    "foods": {
+      "pizza": "Pizza",
+      "ice-cream": "Ice Cream",
+      "pasta": "Pasta",
+      "chocolate": "Chocolate",
+      "pancakes": "Pancakes"
+    },
+    "characters": {
+      "superheroes": "Superheroes",
+      "princesses": "Princesses",
+      "dinosaurs": "Dinosaurs",
+      "animals": "Animals",
+      "robots": "Robots"
+    },
+    "favoriteThings": {
+      "animals": "Animals",
+      "dinosaurs": "Dinosaurs",
+      "space": "Space",
+      "music": "Music",
+      "art": "Art"
+    },
+    "roles": {
+      "mom": "Mom",
+      "dad": "Dad",
+      "sister": "Sister",
+      "brother": "Brother",
+      "pet": "Pet",
+      "friend": "Friend",
+      "grandparent": "Grandparent"
+    }
+  },
+  "Validation": {
+    "nameRequired": "Name is required",
+    "nameMaxLength": "Name must be 30 characters or less",
+    "namePattern": "Name can only contain letters, spaces, hyphens, and apostrophes",
+    "selectOption": "Please select an option",
+    "ageRange": "Age must be between 3 and 8",
+    "selectOccasion": "Please select an occasion",
+    "pickFavoriteThing": "Pick at least one favorite thing",
+    "maxFavoriteThings": "Pick up to 5 favorite things",
+    "pickTrait": "Pick at least one trait",
+    "maxTraits": "Pick up to 3 traits",
+    "chooseTheme": "Please choose a theme",
+    "uploadPhoto": "Please upload a photo",
+    "dedicationMaxLength": "Dedication must be 200 characters or less",
+    "addressRequired": "Address is required",
+    "cityRequired": "City is required",
+    "postalCodeRequired": "Postal code is required",
+    "selectStoryStyle": "Please select a story style",
+    "selectIllustrationStyle": "Please select an illustration style"
+  },
+  "Create": {
+    "generatingTitle": "Generating Story...",
+    "generatingTime": "This may take 30-60 seconds",
+    "startOver": "Start Over",
+    "storyFor": "A story for {childName}",
+    "generatingCharRef": "Generating character reference...",
+    "generatingIllustrations": "Generating illustrations: {done} of {total}",
+    "allIllustrationsGenerated": "All illustrations generated",
+    "preparingIllustrations": "Preparing illustrations...",
+    "textOnlyNoPhoto": "Text only — no photo uploaded for illustrations"
+  },
+  "BookViewer": {
+    "pageOf": "Page {current} of {total}",
+    "pageAlt": "Page {pageNumber}"
+  },
+  "LanguageSwitcher": {
+    "english": "English",
+    "hebrew": "עברית"
+  },
+  "ReferralSources": {
+    "google": "Google",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "youtube": "YouTube",
+    "friend": "Friend",
+    "tv": "TV",
+    "pinterest": "Pinterest",
+    "email": "Email",
+    "podcast": "Podcast",
+    "other": "Other"
+  }
+}

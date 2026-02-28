@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { ChevronLeft } from "lucide-react";
+import { Link, usePathname } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import { LanguageSwitcher } from "@/components/shared/language-switcher";
 
 interface HeaderProps {
   rightContent?: React.ReactNode;
@@ -12,6 +13,7 @@ interface HeaderProps {
 }
 
 export function Header({ rightContent, onBack }: HeaderProps) {
+  const t = useTranslations("Header");
   const pathname = usePathname();
   const { data: session } = useSession();
 
@@ -22,26 +24,27 @@ export function Header({ rightContent, onBack }: HeaderProps) {
           {onBack && (
             <button
               onClick={onBack}
-              className="p-1 -ml-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
-              aria-label="Go back"
+              className="p-1 -ms-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+              aria-label={t("goBack")}
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-5 h-5 rtl:rotate-180" />
             </button>
           )}
         </div>
         <Link href="/" className="font-display text-xl font-bold text-primary text-center">
-          Littletales
+          {t("brand")}
         </Link>
         <div className="flex items-center justify-end gap-4">
           {rightContent}
+          <LanguageSwitcher />
           {session?.user ? (
             <Link href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-              {session.user.name || "Dashboard"}
+              {session.user.name || t("dashboard")}
             </Link>
           ) : (
             <Link href={`/login?callbackUrl=${encodeURIComponent(pathname)}`}>
               <Button variant="outline" size="sm">
-                Sign In
+                {t("signIn")}
               </Button>
             </Link>
           )}

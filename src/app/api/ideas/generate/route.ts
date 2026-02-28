@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { isDemoMode } from "@/lib/config";
 import { auth } from "@/lib/auth";
-import { getClient, STORY_MODEL } from "@/lib/claude";
+import { getClient, STORY_MODEL, LANGUAGE_NAMES } from "@/lib/claude";
 import { generateIdeasSchema } from "@/validators";
 import { THEMES, PERSONALITY_TRAITS } from "@/constants";
+import { getThemeName, getTraitLabel } from "@/lib/constant-labels";
 import type { BookIdea } from "@/types";
 
 export async function POST(req: Request) {
@@ -29,11 +30,16 @@ export async function POST(req: Request) {
     const traitDescriptions = data.personalityTraits
       .map((id) => {
         const preset = PERSONALITY_TRAITS.find((t) => t.id === id);
-        return preset ? `${preset.label} (${preset.storyHint})` : id;
+        return preset ? `${getTraitLabel(preset.id)} (${preset.storyHint})` : id;
       })
       .join(", ");
     const pronouns =
       data.childGender === "girl" ? "she/her" : data.childGender === "boy" ? "he/him" : "they/them";
+
+    const lang = data.language || "en";
+    const langInstruction = lang !== "en"
+      ? `\nIMPORTANT: Write all titles and descriptions in ${LANGUAGE_NAMES[lang] || lang}. The child's name should remain as-is.`
+      : "";
 
     const systemPrompt = `You are a children's book author who brainstorms creative book concepts for ages 3-8. Given details about a child, generate exactly 3 unique book ideas. Each idea should have a catchy, age-appropriate title and a 1-2 sentence description of what the story is about.
 
@@ -45,11 +51,11 @@ Rules:
 - Each description should be 15-30 words
 - Make each idea distinctly different in plot and tone
 - Descriptions should excite both the child and their parents
-- NO scary or inappropriate content`;
+- NO scary or inappropriate content${langInstruction}`;
 
     const userPrompt = `Child: ${data.childName}, age ${data.childAge}, ${data.childGender} (${pronouns})
 Personality: ${traitDescriptions}
-Theme: ${themeConfig.name} — ${themeConfig.storyPromptHint}
+Theme: ${getThemeName(themeConfig.id)} — ${themeConfig.storyPromptHint}
 Story style: ${data.storyStyle === "RHYME" ? "Rhyming verse" : "Prose"}
 Occasion: ${data.occasion}
 ${data.hobbies?.length ? `Hobbies: ${data.hobbies.join(", ")}` : ""}

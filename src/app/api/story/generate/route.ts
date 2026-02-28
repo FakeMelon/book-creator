@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { isDemoMode } from "@/lib/config";
 import { THEMES, PERSONALITY_TRAITS, ILLUSTRATION_STYLES } from "@/constants";
+import { getThemeName, getTraitLabel, getStyleName, getStyleDescription } from "@/lib/constant-labels";
 
 export async function POST(req: Request) {
   if (!isDemoMode) {
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
   const traitDescriptions = (input.personalityTraits as string[])
     .map((id) => PERSONALITY_TRAITS.find((t) => t.id === id))
     .filter(Boolean)
-    .map((t) => `${t!.label} (${t!.storyHint})`)
+    .map((t) => `${getTraitLabel(t!.id)} (${t!.storyHint})`)
     .join(", ");
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === input.illustrationStyle);
   const pronouns =
@@ -94,7 +95,7 @@ ILLUSTRATION DESCRIPTIONS:
 Each illustrationDescription must be detailed enough for an AI image generator:
 - Always describe ${input.childName}'s appearance in the scene
 - Specify setting, lighting, mood, key objects
-- Reference the illustration style: ${styleConfig?.name}
+- Reference the illustration style: ${styleConfig ? getStyleName(styleConfig.id) : ""}
 - Include the hidden motif in each scene
 - Describe character expressions and body language`;
 
@@ -103,9 +104,9 @@ Each illustrationDescription must be detailed enough for an AI image generator:
 Child: ${input.childName}, age ${input.childAge}, ${input.childGender}
 Personality: ${traitDescriptions}
 Favorite things: ${(input.favoriteThings as string[]).join(", ")}
-Theme: ${themeConfig?.name} — ${themeConfig?.storyPromptHint}
+Theme: ${themeConfig ? getThemeName(themeConfig.id) : input.theme} — ${themeConfig?.storyPromptHint}
 Story style: ${input.storyStyle === "RHYME" ? "Rhyming verse" : "Prose"}
-Illustration style: ${styleConfig?.name} — ${styleConfig?.description}
+Illustration style: ${styleConfig ? `${getStyleName(styleConfig.id)} — ${getStyleDescription(styleConfig.id)}` : ""}
 ${input.dedication ? `Dedication: "${input.dedication}"` : "No dedication page"}
 
 Write the complete 32-page book now.`;

@@ -1,13 +1,77 @@
 import { z } from "zod";
+import { routing } from "@/i18n/routing";
+
+const supportedLocales = routing.locales as readonly [string, ...string[]];
 
 // ─── Wizard Step Validators ───
+
+export function createChildInfoSchema(t: (key: string) => string) {
+  return z.object({
+    childName: z
+      .string()
+      .min(1, t("nameRequired"))
+      .max(30, t("nameMaxLength"))
+      .regex(/^[\p{L}\s'-]+$/u, t("namePattern")),
+    childAge: z
+      .number()
+      .int()
+      .min(3, t("ageRange"))
+      .max(8, t("ageRange")),
+    childGender: z.enum(["boy", "girl", "non-binary"], {
+      message: t("selectOption"),
+    }),
+  });
+}
+
+export function createCreativeDirectionSchema(t: (key: string) => string) {
+  return z.object({
+    occasion: z.string().min(1, t("selectOccasion")),
+    favoriteThings: z
+      .array(z.string())
+      .min(1, t("pickFavoriteThing"))
+      .max(5, t("maxFavoriteThings")),
+    personalityTraits: z
+      .array(z.string())
+      .min(1, t("pickTrait"))
+      .max(3, t("maxTraits")),
+    theme: z.string().min(1, t("chooseTheme")),
+    hobbies: z.array(z.string()).max(5).optional(),
+    favoriteCharacters: z.array(z.string()).max(3).optional(),
+    favoriteAnimal: z.array(z.string()).max(3).optional(),
+  });
+}
+
+export function createPhotoUploadSchema(t: (key: string) => string) {
+  return z.object({
+    photoFile: z.any().refine((file) => file !== null, t("uploadPhoto")),
+  });
+}
+
+export const photoUploadSchema = z.object({
+  photoFile: z.any().refine((file) => file !== null, "Please upload a photo"),
+});
+
+export function createStoryStyleSchema(t: (key: string) => string) {
+  return z.object({
+    storyStyle: z.enum(["PROSE", "RHYME"]),
+    illustrationStyle: z.enum([
+      "WATERCOLOR_WHIMSY",
+      "BRIGHT_AND_BOLD",
+      "STORYBOOK_CLASSIC",
+      "COZY_AND_WARM",
+    ]),
+    dedication: z.string().max(200, t("dedicationMaxLength")).optional(),
+  });
+}
+
+// Static schemas (used by API routes — no translated messages needed)
 
 export const childInfoSchema = z.object({
   childName: z
     .string()
     .min(1, "Name is required")
     .max(30, "Name must be 30 characters or less")
-    .regex(/^[a-zA-Z\s'-]+$/, "Name can only contain letters, spaces, hyphens, and apostrophes"),
+    .regex(/^[\p{L}\s'-]+$/u, "Name can only contain letters, spaces, hyphens, and apostrophes"),
   childAge: z
     .number()
     .int()
@@ -32,10 +96,6 @@ export const creativeDirectionSchema = z.object({
   hobbies: z.array(z.string()).max(5).optional(),
   favoriteCharacters: z.array(z.string()).max(3).optional(),
   favoriteAnimal: z.array(z.string()).max(3).optional(),
-});
-
-export const photoUploadSchema = z.object({
-  photoFile: z.any().refine((file) => file !== null, "Please upload a photo"),
 });
 
 export const storyStyleSchema = z.object({
@@ -87,6 +147,7 @@ export const createBookSchema = z.object({
   childPhotoKeys: z.array(z.string()).optional(),
   additionalCharacters: z.array(additionalCharacterSchema).max(4).optional(),
   selectedTitle: z.string().min(1),
+  language: z.enum(supportedLocales, { message: "Unsupported language" }).optional(),
 });
 
 export const checkoutSchema = z.object({
@@ -136,6 +197,7 @@ export const generateIdeasSchema = z.object({
   ], {
     message: "Please select an illustration style",
   }),
+  language: z.enum(supportedLocales, { message: "Unsupported language" }).optional(),
 });
 
 export type GenerateIdeasInput = z.infer<typeof generateIdeasSchema>;

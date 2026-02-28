@@ -18,7 +18,7 @@ No test runner is configured.
 
 ## Tech Stack
 
-Next.js 16 (App Router) + React 19 + TypeScript 5.9 + Tailwind CSS v4 + Prisma 6 (Neon PostgreSQL). AI via OpenRouter (Claude for stories, Flux for images). Background jobs via Trigger.dev v3. Auth via NextAuth.js v5 (JWT strategy). Payments via LemonSqueezy, print fulfillment via Lulu API.
+Next.js 16 (App Router) + React 19 + TypeScript 5.9 + Tailwind CSS v4 + Prisma 6 (Neon PostgreSQL). AI via OpenRouter (Claude for stories, Flux for images). Background jobs via Trigger.dev v3. Auth via NextAuth.js v5 (JWT strategy). Payments via LemonSqueezy, print fulfillment via Lulu API. Internationalization via `next-intl` (en, he).
 
 ## Architecture
 
@@ -32,7 +32,11 @@ Both story generation (`src/lib/claude.ts`) and image generation (`src/lib/image
 
 ### Auth & Route Protection
 
-NextAuth.js v5 with JWT strategy (`src/lib/auth.ts`). Middleware (`src/middleware.ts`) runs at the edge — it only checks for session cookies (no Prisma). Protected paths: `/dashboard`, `/create`, `/preview`, `/checkout`, `/generate`. API routes check `session?.user?.id` from `auth()` and return 401 if missing.
+NextAuth.js v5 with JWT strategy (`src/lib/auth.ts`). Middleware (`src/proxy.ts`) runs at the edge — it wraps `next-intl/middleware` for locale detection and checks session cookies for auth (no Prisma). Protected paths: `/dashboard`, `/create`, `/preview`, `/checkout`, `/generate`. API routes check `session?.user?.id` from `auth()` and return 401 if missing.
+
+### Internationalization
+
+`next-intl` with `[locale]` route segment (`src/app/[locale]/`). Supported locales defined in `src/i18n/routing.ts` (currently `en`, `he`). Translation files in `messages/{locale}.json`. Two label systems: `src/lib/constant-labels.ts` (server-side, always English for AI prompts) and inline `useTranslations("Constants")` calls (client-side, localized). User locale preference persisted in `User.locale` field via `PUT /api/user/locale`. Hebrew uses RTL layout with dedicated fonts (Rubik, Heebo) swapped via CSS `[lang="he"]` selectors in `globals.css`.
 
 ### State Management
 
@@ -44,7 +48,7 @@ Cloudflare R2 via AWS S3 SDK (`src/lib/r2.ts`). Client uploads use presigned URL
 
 ### Styling
 
-Tailwind CSS v4 using `@import "tailwindcss"` + `@theme` in `globals.css`. Custom design tokens (colors, radii) defined in `@theme` block. Three font families: `--font-sans` (Quicksand), `--font-display` (Fredoka), `--font-story` (Baloo 2). UI components in `src/components/ui/` follow shadcn patterns using `class-variance-authority` + `clsx` + `tailwind-merge`.
+Tailwind CSS v4 using `@import "tailwindcss"` + `@theme` in `globals.css`. Custom design tokens (colors, radii) defined in `@theme` block. Five font families: `--font-sans` (Quicksand), `--font-display` (Fredoka), `--font-story` (Baloo 2), `--font-sans-he` (Rubik), `--font-story-he` (Heebo). Hebrew fonts override `--font-sans` and `--font-story` via `[lang="he"]` in `globals.css`. UI components in `src/components/ui/` follow shadcn patterns using `class-variance-authority` + `clsx` + `tailwind-merge`.
 
 ## Key Conventions
 
@@ -54,6 +58,7 @@ Tailwind CSS v4 using `@import "tailwindcss"` + `@theme` in `globals.css`. Custo
 - **Zod v4**: Use `{ message: "..." }` for enum params, not `{ required_error: "..." }`
 - **Prisma JSON fields**: Cast with `as any` for TypeScript compatibility
 - **`useSearchParams()`**: Must wrap in `<Suspense>` for static generation compatibility
-- **Middleware is edge-only**: No Prisma or Node.js APIs in `src/middleware.ts`
-- **Book status flow**: `DRAFT → GENERATING → PREVIEW_READY → APPROVED → ORDERED`
+- **Middleware is edge-only**: No Prisma or Node.js APIs in `src/proxy.ts`
+- **Book status flow**: `DRAFT → GENERATING → COVER_READY → PREVIEW_READY → APPROVED → ORDERED`
+- **Locale source of truth**: `src/i18n/routing.ts` — all locale lists (validators, middleware regex, etc.) derive from `routing.locales`
 - **API route pattern**: Validate with Zod, check auth via `auth()`, try/catch with descriptive errors

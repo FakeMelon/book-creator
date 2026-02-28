@@ -1,0 +1,781 @@
+{
+  "Common": {
+    "back": "חזרה",
+    "continue": "המשך",
+    "skip": "דלג",
+    "loading": "טוען...",
+    "tryAgain": "נסה שוב",
+    "signIn": "התחבר",
+    "signUp": "הרשמה",
+    "createBook": "צור ספר",
+    "getStarted": "התחל",
+    "goBack": "חזור",
+    "add": "הוסף",
+    "addAll": "הוסף הכל",
+    "nextStep": "שלב הבא",
+    "dashboard": "לוח בקרה",
+    "or": "או",
+    "littletales": "Littletales",
+    "goToDashboard": "עבור ללוח בקרה",
+    "pageOf": "עמוד {current} מתוך {total}"
+  },
+  "Header": {
+    "brand": "Littletales",
+    "goBack": "חזור",
+    "signIn": "התחבר",
+    "dashboard": "לוח בקרה"
+  },
+  "Landing": {
+    "nav": {
+      "signIn": "התחבר",
+      "createBook": "צור ספר"
+    },
+    "hero": {
+      "badge": "ספרים מותאמים אישית בעזרת AI",
+      "titleStart": "הילד שלך בתפקיד",
+      "titleHighlight": "הכוכב",
+      "titleEnd": "של הספר שלו",
+      "description": "העלו תמונה, בחרו נושא, וקבלו ספר כריכה קשה מאויר בן 32 עמודים עד הדלת. נוצר תוך פחות מ-5 דקות.",
+      "cta": "צור את הספר שלך — $24.99",
+      "seeExamples": "ראו דוגמאות",
+      "disclaimer": "יצירה בחינם. תשלום רק בהזמנת עותק מודפס.",
+      "bookShowcaseAlt": "תצוגת ספרים מונפשת"
+    },
+    "howItWorks": {
+      "title": "איך זה עובד",
+      "subtitle": "מתמונה לספר מודפס ב-4 שלבים פשוטים",
+      "step1": {
+        "title": "ספרו לנו על הילד שלכם",
+        "description": "שם, גיל, אישיות ודברים אהובים — רק 60 שניות."
+      },
+      "step2": {
+        "title": "העלו תמונה",
+        "description": "תמונת פנים ברורה אחת. אנחנו נהפוך אותה לדמות מאוירת."
+      },
+      "step3": {
+        "title": "בחרו סגנון",
+        "description": "בחרו מתוך 4 סגנונות איור מרהיבים ופרוזה או חרוזים."
+      },
+      "step4": {
+        "title": "ה-AI יוצר את הספר",
+        "description": "תוך פחות מ-5 דקות, קבלו סיפור מאויר שלם בן 32 עמודים."
+      }
+    },
+    "features": {
+      "title": "למה הורים אוהבים את Littletales",
+      "looksLikeChild": {
+        "title": "זה נראה כמו הילד שלכם",
+        "description": "ה-AI שלנו הופך את התמונה לדמות מאוירת שניתן לזהות בבירור — לא אווטאר גנרי."
+      },
+      "storyQuality": {
+        "title": "איכות סיפור שמפתיעה",
+        "description": "נכתב על ידי Claude AI ברמה של סופר ילדים אמיתי. הורים אומרים שהם באמת נהנים לקרוא אותו בקול."
+      },
+      "readyFast": {
+        "title": "מוכן תוך פחות מ-5 דקות",
+        "description": "בלי לחכות ימים או שבועות. ענו על כמה שאלות, העלו תמונה, וצפו בספר שלכם נוצר בזמן אמת."
+      },
+      "artStyles": {
+        "title": "4 סגנונות איור מרהיבים",
+        "description": "מצבעי מים חלומיים ועד איורים מודרניים ונועזים. כל סגנון אחיד לאורך כל 32 העמודים."
+      },
+      "printQuality": {
+        "title": "איכות הדפסה מעולה",
+        "description": "כריכה קשה או רכה מקצועית, מודפס ב-300 DPI עם צבעים מרהיבים. משלוח לכל העולם."
+      },
+      "perfectGift": {
+        "title": "המתנה המושלמת",
+        "description": "סבא וסבתא, דודים ודודות — כולם רוצים לתת לילד שהם אוהבים ספר משלו."
+      }
+    },
+    "testimonials": {
+      "title": "מה הורים אומרים",
+      "items": {
+        "sarah": {
+          "quote": "הבת שלי צרחה 'זו אני!' כשראתה את עצמה בספר. שווה כל שקל.",
+          "name": "שרה מ.",
+          "role": "אמא לילדה בת 5"
+        },
+        "david": {
+          "quote": "איכות הסיפור הדהימה אותי. זה לא נקרא כמו AI — זה נקרא כמו ספר ילדים אמיתי.",
+          "name": "דוד כ.",
+          "role": "אבא לתאומים בני 4"
+        },
+        "linda": {
+          "quote": "הזמנתי אחד לכל נכד. הם פשוט אוהבים לראות את עצמם כגיבור הסיפור.",
+          "name": "לינדה ר.",
+          "role": "סבתא גאה"
+        }
+      }
+    },
+    "pricing": {
+      "title": "תמחור פשוט",
+      "subtitle": "יצירה ותצוגה מקדימה בחינם. תשלום רק בהזמנת עותק מודפס.",
+      "softcover": "כריכה רכה",
+      "softcoverPrice": "$24.99",
+      "hardcover": "כריכה קשה",
+      "hardcoverPrice": "$34.99",
+      "mostPopular": "הכי פופולרי",
+      "fullColorPages": "32 עמודים צבעוניים",
+      "premiumPaper": "נייר איכותי",
+      "worldwideShipping": "משלוח לכל העולם",
+      "durableHardcover": "כריכה קשה עמידה",
+      "getStarted": "התחל"
+    },
+    "faq": {
+      "title": "שאלות נפוצות",
+      "q1": {
+        "question": "כמה זמן לוקח ליצור ספר?",
+        "answer": "האשף לוקח כ-2 דקות. יצירת ה-AI לוקחת 3-5 דקות. תקבלו תצוגה מקדימה מלאה של הספר תוך פחות מ-10 דקות סך הכל."
+      },
+      "q2": {
+        "question": "כמה הדמות דומה לתמונת הילד שלי?",
+        "answer": "ה-AI שלנו יוצר גרסה מאוירת שניתן לזהות בבירור כילד שלכם — אותו מבנה פנים, שיער ומאפיינים — אך מעובד בסגנון איור יפהפה."
+      },
+      "q3": {
+        "question": "כמה זמן לוקח המשלוח?",
+        "answer": "משלוח רגיל הוא 7-10 ימי עסקים. אנחנו מדפיסים ושולחים ממרכז ההפצה הקרוב ביותר ברחבי העולם."
+      },
+      "q4": {
+        "question": "אפשר לערוך את הסיפור אחרי שנוצר?",
+        "answer": "כן! אפשר לערוך את הטקסט בכל עמוד וליצור מחדש איורים לפני ההזמנה."
+      },
+      "q5": {
+        "question": "האם זה בטוח לילדים? מה לגבי בקרת תוכן?",
+        "answer": "כל סיפור עובר בדיקת בטיחות של AI כדי להבטיח תוכן מותאם גיל. כל האיורים נבדקים לאיכות ולהתאמה."
+      }
+    },
+    "cta": {
+      "title": "צרו ספר שיאהבו לתמיד",
+      "subtitle": "לוקח פחות מ-5 דקות. התחילו בחינם.",
+      "button": "צור את הספר שלך עכשיו"
+    },
+    "footer": {
+      "tagline": "ספרי ילדים מותאמים אישית בעזרת AI שהופכים את הילד שלכם לכוכב.",
+      "product": "מוצר",
+      "createBook": "צור ספר",
+      "examples": "דוגמאות",
+      "pricing": "תמחור",
+      "faq": "שאלות נפוצות",
+      "company": "חברה",
+      "about": "אודות",
+      "contact": "צור קשר",
+      "privacyPolicy": "מדיניות פרטיות",
+      "termsOfService": "תנאי שימוש",
+      "support": "תמיכה"
+    }
+  },
+  "Auth": {
+    "login": {
+      "title": "ברוכים השבים",
+      "subtitle": "התחברו כדי ליצור ספרים קסומים",
+      "google": "המשך עם Google",
+      "emailPlaceholder": "אימייל",
+      "passwordPlaceholder": "סיסמה",
+      "submit": "התחבר",
+      "error": "אימייל או סיסמה שגויים",
+      "noAccount": "אין לך חשבון?",
+      "signUp": "הרשמה"
+    },
+    "register": {
+      "title": "צור חשבון",
+      "subtitle": "התחילו ליצור ספרים מותאמים אישית תוך דקות",
+      "google": "המשך עם Google",
+      "namePlaceholder": "שם מלא",
+      "emailPlaceholder": "אימייל",
+      "passwordPlaceholder": "סיסמה (לפחות 8 תווים)",
+      "submit": "צור חשבון",
+      "genericError": "משהו השתבש. אנא נסו שוב.",
+      "signInFailed": "החשבון נוצר אך ההתחברות נכשלה. אנא נסו להתחבר.",
+      "hasAccount": "כבר יש לך חשבון?",
+      "signIn": "התחבר"
+    }
+  },
+  "GetStarted": {
+    "step1": {
+      "title": "בואו נכיר אתכם",
+      "subtitle": "קודם כל, איך קוראים לכם?",
+      "placeholder": "השם הפרטי שלך",
+      "continue": "המשך"
+    },
+    "step2": {
+      "titleWithName": "היי, {name}! 👋",
+      "subtitle": "לאן לשלוח עדכונים על הספר?",
+      "placeholder": "your@email.com",
+      "continue": "המשך",
+      "agreement": "בהמשך, את/ה מסכים/ה ל",
+      "terms": "תנאי שימוש",
+      "and": "ול",
+      "privacy": "מדיניות פרטיות"
+    },
+    "step3": {
+      "title": "איפה שמעתם עלינו?",
+      "subtitle": "זה עוזר לנו להגיע למשפחות נוספות כמו שלכם",
+      "skip": "דלג"
+    },
+    "step4": {
+      "title": "המתנה המושלמת לילד שלכם",
+      "subtitle": "ספר סיפורים ייחודי שבו הילד שלכם הוא הגיבור",
+      "theAmazing": "המדהים",
+      "adventure": "הרפתקה",
+      "storyAbout": "סיפור על הילד שלכם",
+      "start": "התחילו ליצור"
+    }
+  },
+  "Wizard": {
+    "progress": {
+      "step1": "פרטי הילד",
+      "step2": "יצירתיות",
+      "step3": "תמונות",
+      "step4": "סגנון",
+      "step5": "רעיון לספר",
+      "step6": "תצוגת כריכה"
+    },
+    "childInfo": {
+      "heading": "למי הספר הזה?",
+      "subtitle": "ספרו לנו על כוכב הסיפור",
+      "nameLabel": "שם פרטי של הילד/ה",
+      "namePlaceholder": "הכניסו את שמם...",
+      "ageLabel": "גיל",
+      "pronounsLabel": "מגדר",
+      "genderBoy": "בן",
+      "genderGirl": "בת",
+      "genderNonBinary": "לא בינארי"
+    },
+    "creative": {
+      "substep1Label": "אירוע ונושא",
+      "substep1Hint": "על מה הסיפור?",
+      "substep2Label": "על הילד/ה",
+      "substep2Hint": "ספרו לנו מה מיוחד בהם",
+      "substep3Label": "תוספות",
+      "substep3Hint": "פרטים אופציונליים לסיפור עשיר יותר",
+      "occasionLabel": "מה האירוע?",
+      "occasionPlaceholder": "או הקלידו אירוע משלכם...",
+      "themeLabel": "בחרו נושא לסיפור",
+      "traitsLabel": "תכונות אישיות",
+      "traitsCounter": "({count}/3)",
+      "traitsPlaceholder": "הוסיפו משלכם...",
+      "hobbiesLabel": "תחביבים",
+      "hobbiesCounter": "({count}/5)",
+      "hobbiesPlaceholder": "הוסיפו משלכם...",
+      "optionalInfo": "אלו אופציונליים אך עוזרים לנו להפוך את הסיפור לאישי עוד יותר.",
+      "animalsLabel": "חיות אהובות",
+      "animalsCounter": "({count}/3)",
+      "animalsPlaceholder": "הוסיפו משלכם...",
+      "foodsLabel": "אוכל אהוב",
+      "foodsCounter": "({count}/3)",
+      "foodsPlaceholder": "הוסיפו משלכם...",
+      "multipleItemsSuggestion": "נראה שיש לכם מספר פריטים — הוסיפו אותם בנפרד לתוצאות הטובות ביותר!"
+    },
+    "photos": {
+      "substep1Label": "העלאת תמונות",
+      "substep1Hint": "נהפוך אותן לדמויות מאוירות",
+      "substep2Label": "דמויות נוספות",
+      "substep2Hint": "הוסיפו בני משפחה, חברים או חיות מחמד",
+      "headingWithName": "העלו תמונות של {childName}",
+      "headingDefault": "העלו תמונות של ילדכם",
+      "slotLabel1": "התמונה הטובה ביותר",
+      "slotLabel2": "זווית שונה",
+      "slotLabel3": "גוף מלא",
+      "slotLabel4": "זווית נוספת",
+      "photoAlt": "תמונה {index}",
+      "checking": "בודק...",
+      "errorTooLarge": "כל תמונה חייבת להיות עד 10MB",
+      "errorMaxPhotos": "מקסימום 4 תמונות",
+      "multipleAnglesInfo": "מספר זוויות עוזרות לנו ליצור דמות מדויקת יותר",
+      "noFaceHeading": "לא הצלחנו לזהות פנים",
+      "noFaceMessage": "נראה שהתמונה הזו לא מכילה פנים גלויות. לדמויות מאוירות מיטביות, אנא השתמשו בתמונה שבה פני הילד ברורים וקלים לזיהוי.",
+      "quickTipsHeading": "טיפים מהירים",
+      "tip1": "השתמשו בתמונת תקריב או חצי גוף",
+      "tip2": "וודאו שהפנים מוארים היטב ולא מטושטשים",
+      "tip3": "הימנעו ממשקפי שמש, מסכות או צללים כבדים",
+      "noFaceDismiss": "הבנתי, אנסה תמונה אחרת",
+      "incompleteHeading": "כמעט שם!",
+      "incompleteSingular": "לאחת מהדמויות חסר שם או תמונה.",
+      "incompletePlural": "ל-{count} דמויות חסר שם או תמונה.",
+      "incompleteNeedsBoth": "כל דמות צריכה את שניהם כדי להופיע בסיפור.",
+      "incompleteGoBack": "חזרו והשלימו",
+      "incompleteRemove": "הסירו חסרות והמשיכו",
+      "requiredHeading": "אנחנו צריכים תמונה!",
+      "requiredMessage": "אנא העלו לפחות תמונה אחת של ילדכם כדי שנוכל ליצור את הדמות המאוירת שלו לספר.",
+      "requiredDismiss": "הבנתי",
+      "whoElse": "מי עוד צריך להופיע בסיפור?",
+      "addAnother": "הוסיפו דמות נוספת",
+      "optionalHint": "זה אופציונלי — אפשר לדלג אם הסיפור הוא רק על ילדכם",
+      "tapPhotoToAdd": "לחצו להוספת תמונה",
+      "rolePlaceholder": "השם של {role}",
+      "uploading": "מעלה..."
+    },
+    "style": {
+      "heading": "סגנון הסיפור",
+      "subtitle": "בחרו איך הספר ייראה וייקרא",
+      "writingLabel": "סגנון כתיבה",
+      "proseLabel": "פרוזה",
+      "proseDesc": "סיפור זורם עם תיאורים יפהפיים",
+      "proseExample": "\"לונה התגנבה על קצות אצבעותיה דרך הגינה, ליבה פועם מהתרגשות...\"",
+      "rhymeLabel": "חרוזים",
+      "rhymeDesc": "חרוזים משעשעים עם קצב שובב",
+      "rhymeExample": "\"דרך הגינה לונה צעדה / בעוד כל פרח לישון שכב...\"",
+      "illustrationLabel": "סגנון איור",
+      "dedicationLabel": "הקדשה",
+      "optional": "(אופציונלי)",
+      "dedicationPlaceholder": "למשל \"לחוקר הקטן שלנו — באהבה, אמא ואבא\"",
+      "charCounter": "{count}/200 תווים"
+    },
+    "titles": {
+      "loadingHeading": "חושבים על רעיונות...",
+      "loadingMessage": "הסופר שלנו בעזרת AI מחבר רעיונות ייחודיים לספר של {childName}",
+      "errorHeading": "אופס!",
+      "errorSubheading": "לא הצלחנו ליצור רעיונות לספר",
+      "mainHeading": "בחרו רעיון לספר",
+      "subtitle": "בחרו את הסיפור המושלם לספר של {childName}",
+      "generateNew": "צרו רעיונות חדשים",
+      "noIdeasError": "לא התקבלו רעיונות לספר. אנא נסו שוב."
+    },
+    "review": {
+      "readyHeading": "מוכנים ליצור!",
+      "readySubtext": "בדקו את הבחירות שלכם, ואז צרו תצוגה מקדימה חינמית של הכריכה",
+      "bookIdeaLabel": "רעיון הספר",
+      "ageDisplay": "בן/בת {age}",
+      "pronounHeHim": "בן",
+      "pronounSheHer": "בת",
+      "pronounTheyThem": "לא בינארי",
+      "photoCount": "{count, plural, one {תמונה #} other {# תמונות}} הועלו",
+      "occasionLabel": "אירוע",
+      "themeLabel": "נושא",
+      "personalityLabel": "אישיות",
+      "foodsLabel": "אוכל אהוב",
+      "hobbiesLabel": "תחביבים",
+      "charactersLabel": "דמויות אהובות",
+      "animalsLabel": "חיות אהובות",
+      "additionalCharsLabel": "דמויות נוספות",
+      "unnamed": "ללא שם",
+      "writingLabel": "כתיבה",
+      "styleProse": "פרוזה",
+      "styleRhyme": "חרוזים",
+      "artStyleLabel": "סגנון איור",
+      "dedicationLabel": "הקדשה",
+      "generateCoverPreview": "צרו תצוגת כריכה מקדימה",
+      "freePreview": "תצוגה מקדימה חינמית — ראו את כריכות הספר לפני שמתחייבים",
+      "creatingCovers": "יוצרים את הכריכות שלכם",
+      "generatingTime": "זה בדרך כלל לוקח 1-2 דקות",
+      "frontCover": "כריכה קדמית",
+      "backCover": "כריכה אחורית",
+      "errorHeading": "יצירת הכריכה נכשלה",
+      "errorDefault": "משהו השתבש בזמן יצירת הכריכות. אנא נסו שוב.",
+      "goBackEdit": "חזרו וערכו",
+      "coversReady": "הכריכות שלכם מוכנות!",
+      "sneakPeek": "הצצה ראשונה ל",
+      "loading": "טוען...",
+      "signUpButton": "הירשמו כדי ליצור ספר מלא",
+      "demoInfo": "צרו חשבון כדי ליצור את הספר המאויר המלא",
+      "generateFullBook": "צרו ספר מלא",
+      "generateInfo": "צרו את הספר המאויר המלא עם כל העמודים",
+      "generatingMsg1": "מחברים את הסיפור...",
+      "generatingMsg2": "מדמיינים את הדמויות...",
+      "generatingMsg3": "מציירים את הסצנות...",
+      "generatingMsg4": "מוסיפים קצת קסם...",
+      "generatingMsg5": "מערבבים את הצבעים...",
+      "generatingMsg6": "כותבים את ההרפתקה...",
+      "generatingMsg7": "מלטשים את הפרטים...",
+      "generatingMsg8": "כמעט שם..."
+    }
+  },
+  "Dashboard": {
+    "createNew": "צור ספר חדש",
+    "orderSuccess": "הזמנה #{orderNumber} אושרה!",
+    "orderShipping": "הספר שלכם בדפוס ויישלח תוך 7-10 ימי עסקים.",
+    "title": "הספרים שלי",
+    "emptyTitle": "עדיין אין ספרים",
+    "emptyDescription": "צרו את ספר הילדים המותאם אישית הראשון שלכם תוך פחות מ-5 דקות!",
+    "emptyButton": "צור את הספר הראשון",
+    "statusDraft": "טיוטה",
+    "statusGenerating": "נוצר...",
+    "statusCoverReady": "תצוגה מוכנה",
+    "statusPreviewReady": "תצוגה מוכנה",
+    "statusApproved": "אושר",
+    "statusOrdered": "הוזמן",
+    "bookFor": "עבור"
+  },
+  "Generate": {
+    "title": "יוצרים את הספר שלכם",
+    "funMessages": {
+      "msg1": "מערבבים את הצבעים המושלמים...",
+      "msg2": "מוסיפים קצת קסם...",
+      "msg3": "מלמדים את הדמויות לחייך...",
+      "msg4": "מחביאים סוד בכל עמוד...",
+      "msg5": "מוודאים שלסיפור יש סוף טוב..."
+    },
+    "percentComplete": "{percent}% הושלם",
+    "sneakPeek": "הצצה ראשונה",
+    "readyTitle": "הספר שלכם מוכן!",
+    "readySubtitle": "{childName} מחכה לכם",
+    "previewButton": "צפו בספר שלי",
+    "errorTitle": "משהו השתבש",
+    "stages": {
+      "STORY_GENERATION": {
+        "label": "כותבים את הסיפור",
+        "description": "Claude מחבר סיפור קסום במיוחד עבור {childName}..."
+      },
+      "SAFETY_REVIEW": {
+        "label": "בדיקת איכות",
+        "description": "מוודאים שהכל מושלם ומותאם גיל..."
+      },
+      "CHARACTER_DESIGN": {
+        "label": "מעצבים את הדמות",
+        "description": "הופכים את התמונה של {childName} לדמות מספר סיפורים..."
+      },
+      "PAGE_ILLUSTRATIONS": {
+        "label": "מאיירים עמודים",
+        "description": "מציירים איורים יפהפיים לכל עמוד..."
+      },
+      "PDF_ASSEMBLY": {
+        "label": "מרכיבים את הספר",
+        "description": "משלבים את כל העמודים לספר יפהפה..."
+      },
+      "QUALITY_CHECK": {
+        "label": "בדיקה אחרונה",
+        "description": "מבט אחרון כדי לוודא שהכל מושלם..."
+      }
+    }
+  },
+  "Preview": {
+    "myBooks": "הספרים שלי",
+    "notFound": "הספר לא נמצא",
+    "loadError": "טעינת תצוגת הספר נכשלה",
+    "bookFor": "ספר מותאם אישית עבור",
+    "orderButton": "הזמינו את הספר — החל מ-$24.99",
+    "editText": "עריכת טקסט",
+    "freePreview": "תצוגה מקדימה חינמית — תשלום רק בהזמנת עותק מודפס"
+  },
+  "Checkout": {
+    "backToPreview": "חזרה לתצוגה מקדימה",
+    "title": "הזמנת הספר שלכם",
+    "chooseFormat": "בחרו פורמט",
+    "hardcover": "כריכה קשה",
+    "premiumQuality": "איכות מעולה",
+    "softcover": "כריכה רכה",
+    "greatValue": "תמורה מעולה",
+    "shippingAddress": "כתובת למשלוח",
+    "fullName": "שם מלא",
+    "address1": "שורת כתובת 1",
+    "address2": "שורת כתובת 2 (אופציונלי)",
+    "city": "עיר",
+    "state": "מדינה/מחוז",
+    "postalCode": "מיקוד",
+    "country": {
+      "US": "ארצות הברית",
+      "CA": "קנדה",
+      "GB": "בריטניה",
+      "AU": "אוסטרליה",
+      "DE": "גרמניה",
+      "FR": "צרפת",
+      "IL": "ישראל"
+    },
+    "proceedToPayment": "המשך לתשלום",
+    "shipping": "משלוח",
+    "calculatedAtCheckout": "יחושב בקופה",
+    "total": "סך הכל",
+    "shipsIn": "משלוח תוך 7-10 ימי עסקים"
+  },
+  "Marketing": {
+    "faq": {
+      "title": "שאלות נפוצות",
+      "stillHaveQuestions": "עדיין יש לכם שאלות?",
+      "loveToHelp": "נשמח לעזור!",
+      "contactUs": "צרו קשר",
+      "categories": {
+        "creating": {
+          "title": "יצירת הספר שלכם",
+          "q1": {
+            "question": "כמה זמן לוקח ליצור ספר?",
+            "answer": "אשף היצירה לוקח כ-2 דקות. יצירת ה-AI לוקחת 3-5 דקות. תקבלו תצוגה מקדימה מלאה של הספר תוך פחות מ-10 דקות סך הכל."
+          },
+          "q2": {
+            "question": "לאיזה טווח גילאים הספרים מיועדים?",
+            "answer": "הספרים שלנו מיועדים לילדים בגילאי 3-8, הגיל האידיאלי לספרי תמונות. ה-AI מתאים את אוצר המילים ומורכבות הסיפור לפי גיל הילד."
+          },
+          "q3": {
+            "question": "איזו תמונה כדאי להשתמש?",
+            "answer": "תמונה ברורה, חזיתית, עם תאורה טובה עובדת הכי טוב. הימנעו מצללים כבדים, משקפי שמש, או תמונות שבהן הפנים מוסתרים חלקית."
+          },
+          "q4": {
+            "question": "אפשר לכלול מספר ילדים בספר אחד?",
+            "answer": "תכונה זו בקרוב! כרגע, כל ספר מציג ילד אחד כדמות הראשית."
+          }
+        },
+        "quality": {
+          "title": "איכות ותוכן",
+          "q1": {
+            "question": "כמה מדויקת הדמות המאוירת?",
+            "answer": "ה-AI שלנו יוצר דמות שניתן לזהות בבירור כילד שלכם — אותו מבנה פנים, צבע שיער ומאפיינים — אך מעובד בצורה יפהפייה בסגנון האיור שבחרתם."
+          },
+          "q2": {
+            "question": "האם התוכן בטוח ומותאם גיל?",
+            "answer": "בהחלט. כל סיפור עובר בדיקת בטיחות אוטומטית הבודקת התאמה לגיל, הטיות ואיכות תוכן לפני שאתם רואים אותו."
+          },
+          "q3": {
+            "question": "אפשר לערוך את הסיפור?",
+            "answer": "כן! לאחר היצירה, אפשר לערוך את הטקסט בכל עמוד וליצור מחדש איורים (עד 3 פעמים לעמוד) לפני ההזמנה."
+          }
+        },
+        "ordering": {
+          "title": "הזמנה ומשלוח",
+          "q1": {
+            "question": "מה איכות ההדפסה?",
+            "answer": "אנחנו משתמשים בהדפסה מקצועית לפי דרישה ב-300 DPI, צבעים מרהיבים ונייר איכותי. כריכות קשות בנויות להחזיק מעמד לאורך קריאות רבות לפני השינה."
+          },
+          "q2": {
+            "question": "לאן אתם שולחים?",
+            "answer": "אנחנו שולחים ליותר מ-150 מדינות ברחבי העולם דרך רשת ההפצה הגלובלית של שותף ההדפסה שלנו."
+          },
+          "q3": {
+            "question": "כמה זמן לוקח המשלוח?",
+            "answer": "משלוח רגיל הוא 7-10 ימי עסקים לרוב המיקומים. ספרים מודפסים במרכז ההפצה הקרוב ביותר כדי למזער את זמן המשלוח."
+          },
+          "q4": {
+            "question": "מה מדיניות ההחזרות שלכם?",
+            "answer": "אם יש בעיית איכות הדפסה, נדפיס ונשלח מחדש ללא עלות. צרו קשר תוך 30 יום מקבלת המשלוח."
+          }
+        }
+      }
+    },
+    "pricing": {
+      "title": "תמחור פשוט ושקוף",
+      "subtitle": "יצירה ותצוגה מקדימה בחינם. תשלום רק עבור עותקים מודפסים.",
+      "softcover8x8": "כריכה רכה 8x8",
+      "hardcover8x8": "כריכה קשה 8x8",
+      "hardcover8x10": "כריכה קשה 8x10",
+      "mostPopular": "הכי פופולרי",
+      "fullColorPages": "32 עמודים צבעוניים",
+      "highQualityPaper": "נייר באיכות גבוהה",
+      "standardShipping": "משלוח רגיל",
+      "durableHardcover": "כריכה קשה עמידה",
+      "premiumPaper": "נייר איכותי",
+      "largerFormat": "פורמט גדול יותר",
+      "premiumQuality": "איכות מעולה",
+      "addOns": "תוספות",
+      "rushProcessing": "עיבוד מהיר",
+      "rushProcessingDesc": "יצירה והדפסה בעדיפות",
+      "giftWrapping": "אריזת מתנה",
+      "giftWrappingDesc": "אריזה מהודרת ומוכנה למתנה",
+      "audioNarration": "קריינות שמע",
+      "audioNarrationDesc": "קוד QR בספר מקשר לקריינות",
+      "getStarted": "התחל"
+    },
+    "examples": {
+      "title": "ספרים לדוגמה",
+      "subtitle": "ראו מה Littletales יכול ליצור. כל ספר הוא ייחודי!",
+      "readyTitle": "מוכנים ליצור ספר משלכם?",
+      "createButton": "צור את הספר שלך עכשיו",
+      "books": {
+        "luna": {
+          "title": "הגינה הקסומה של לונה",
+          "child": "לונה, בת 5",
+          "description": "לונה מגלה גינה נסתרת שבה פרחים שרים ופרפרים מספרים סיפורים."
+        },
+        "max": {
+          "title": "קפטן מקס ומפת הכוכבים",
+          "child": "מקס, בן 7",
+          "description": "מקס טס בספינת חלל דרך מערכת השמש, ומתחבר עם חברים בכל כוכב לכת."
+        },
+        "mia": {
+          "title": "התזמורת התת-ימית של מיה",
+          "child": "מיה, בת 4",
+          "description": "מיה צוללת מתחת לגלים כדי לנצח על קונצרט עם חברותיה יצורות הים."
+        },
+        "ethan": {
+          "title": "ההרפתקאות האמיצות של איתן",
+          "child": "איתן, בן 6",
+          "description": "איתן מטפס על ההר הגבוה ביותר, חוצה את הנהר הרחב ביותר, ומגלה את האוצר הגדול מכולם."
+        },
+        "sophie": {
+          "title": "סופי והסוד של הדרקון",
+          "child": "סופי, בת 5",
+          "description": "סופי מתיידדת עם דרקון ביישן שצריך עזרה למצוא את הקול שלו."
+        },
+        "daniel": {
+          "title": "יום דינוזאורים עם דניאל",
+          "child": "דניאל, בן 3",
+          "description": "דניאל מתעורר ומגלה דינוזאור חברותי בחצר האחורית — וההרפתקה מתחילה!"
+        }
+      }
+    },
+    "privacy": {
+      "title": "מדיניות פרטיות",
+      "lastUpdated": "עדכון אחרון: 24 בפברואר 2026"
+    },
+    "terms": {
+      "title": "תנאי שימוש",
+      "lastUpdated": "עדכון אחרון: 24 בפברואר 2026"
+    }
+  },
+  "Constants": {
+    "themes": {
+      "adventure": {
+        "name": "הרפתקה",
+        "description": "משימות אפיות ותגליות אמיצות"
+      },
+      "friendship": {
+        "name": "חברות",
+        "description": "ליצור חברויות ולעבוד יחד"
+      },
+      "space": {
+        "name": "חלל",
+        "description": "רקטות, כוכבי לכת ופלאים קוסמיים"
+      },
+      "enchanted-forest": {
+        "name": "יער קסום",
+        "description": "יערות קסומים מלאי פלאים"
+      },
+      "superheroes": {
+        "name": "גיבורי על",
+        "description": "גלו את הכוחות המיוחדים שלכם"
+      },
+      "fairy-tale": {
+        "name": "אגדה",
+        "description": "קסם של היו היה"
+      },
+      "robots": {
+        "name": "רובוטים",
+        "description": "רובוטים חברותיים והמצאות מגניבות"
+      },
+      "underwater": {
+        "name": "מתחת למים",
+        "description": "הרפתקאות בים העמוק וחברים מהאוקיינוס"
+      },
+      "dinosaurs": {
+        "name": "דינוזאורים",
+        "description": "כיף שאגני בימים הפרהיסטוריים"
+      }
+    },
+    "styles": {
+      "WATERCOLOR_WHIMSY": {
+        "name": "מימי צבעוניים",
+        "description": "מרקמי צבעי מים רכים וחלומיים עם מיזוג צבעים עדין"
+      },
+      "BRIGHT_AND_BOLD": {
+        "name": "בהיר ונועז",
+        "description": "צבעים חיים וקווי מתאר חזקים, מודרני ואנרגטי"
+      },
+      "STORYBOOK_CLASSIC": {
+        "name": "קלאסי מספר סיפורים",
+        "description": "מראה ציור יד נצחי, חם ונוסטלגי"
+      },
+      "COZY_AND_WARM": {
+        "name": "חמים ונעים",
+        "description": "תאורה רכה, צורות מעוגלות, אווירה מנחמת"
+      }
+    },
+    "traits": {
+      "brave": "אמיץ",
+      "curious": "סקרן",
+      "kind": "חביב",
+      "funny": "מצחיק",
+      "creative": "יצירתי"
+    },
+    "occasions": {
+      "birthday": "יום הולדת",
+      "holiday": "חג",
+      "just-because": "סתם ככה",
+      "achievement": "הישג",
+      "new-sibling": "אח/ות חדש/ה"
+    },
+    "hobbies": {
+      "drawing": "ציור",
+      "sports": "ספורט",
+      "music": "מוזיקה",
+      "building": "בנייה",
+      "outdoor-play": "משחק בחוץ"
+    },
+    "animals": {
+      "dog": "כלב",
+      "cat": "חתול",
+      "bunny": "ארנב",
+      "horse": "סוס",
+      "dolphin": "דולפין"
+    },
+    "foods": {
+      "pizza": "פיצה",
+      "ice-cream": "גלידה",
+      "pasta": "פסטה",
+      "chocolate": "שוקולד",
+      "pancakes": "פנקייקים"
+    },
+    "characters": {
+      "superheroes": "גיבורי על",
+      "princesses": "נסיכות",
+      "dinosaurs": "דינוזאורים",
+      "animals": "חיות",
+      "robots": "רובוטים"
+    },
+    "favoriteThings": {
+      "animals": "חיות",
+      "dinosaurs": "דינוזאורים",
+      "space": "חלל",
+      "music": "מוזיקה",
+      "art": "אמנות"
+    },
+    "roles": {
+      "mom": "אמא",
+      "dad": "אבא",
+      "sister": "אחות",
+      "brother": "אח",
+      "pet": "חיית מחמד",
+      "friend": "חבר/ה",
+      "grandparent": "סבא/סבתא"
+    }
+  },
+  "Validation": {
+    "nameRequired": "שם הוא שדה חובה",
+    "nameMaxLength": "השם חייב להיות עד 30 תווים",
+    "namePattern": "השם יכול להכיל רק אותיות, רווחים, מקפים וגרשיים",
+    "selectOption": "אנא בחרו אפשרות",
+    "ageRange": "הגיל חייב להיות בין 3 ל-8",
+    "selectOccasion": "אנא בחרו אירוע",
+    "pickFavoriteThing": "בחרו לפחות דבר אהוב אחד",
+    "maxFavoriteThings": "בחרו עד 5 דברים אהובים",
+    "pickTrait": "בחרו לפחות תכונה אחת",
+    "maxTraits": "בחרו עד 3 תכונות",
+    "chooseTheme": "אנא בחרו נושא",
+    "uploadPhoto": "אנא העלו תמונה",
+    "dedicationMaxLength": "ההקדשה חייבת להיות עד 200 תווים",
+    "addressRequired": "כתובת היא שדה חובה",
+    "cityRequired": "עיר היא שדה חובה",
+    "postalCodeRequired": "מיקוד הוא שדה חובה",
+    "selectStoryStyle": "אנא בחרו סגנון סיפור",
+    "selectIllustrationStyle": "אנא בחרו סגנון איור"
+  },
+  "Create": {
+    "generatingTitle": "יוצרים סיפור...",
+    "generatingTime": "זה עשוי לקחת 30-60 שניות",
+    "startOver": "התחל מחדש",
+    "storyFor": "סיפור עבור {childName}",
+    "generatingCharRef": "יוצרים דמות ייחוס...",
+    "generatingIllustrations": "יוצרים איורים: {done} מתוך {total}",
+    "allIllustrationsGenerated": "כל האיורים נוצרו",
+    "preparingIllustrations": "מכינים איורים...",
+    "textOnlyNoPhoto": "טקסט בלבד — לא הועלתה תמונה לאיורים"
+  },
+  "BookViewer": {
+    "pageOf": "עמוד {current} מתוך {total}",
+    "pageAlt": "עמוד {pageNumber}"
+  },
+  "LanguageSwitcher": {
+    "english": "English",
+    "hebrew": "עברית"
+  },
+  "ReferralSources": {
+    "google": "Google",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "youtube": "YouTube",
+    "friend": "חבר/ה",
+    "tv": "טלוויזיה",
+    "pinterest": "Pinterest",
+    "email": "אימייל",
+    "podcast": "פודקאסט",
+    "other": "אחר"
+  }
+}

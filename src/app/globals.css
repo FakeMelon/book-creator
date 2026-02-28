@@ -51,6 +51,12 @@
   margin: 0 auto;
 }
 
+/* Hebrew font overrides */
+[lang="he"] {
+  --font-sans: "Rubik", ui-sans-serif, system-ui, sans-serif;
+  --font-story: "Heebo", ui-sans-serif, system-ui, sans-serif;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;

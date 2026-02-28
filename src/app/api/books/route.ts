@@ -46,6 +46,7 @@ export async function POST(req: Request) {
           : undefined,
         // Use user-selected title
         title: data.selectedTitle,
+        language: data.language || "en",
         status: "DRAFT",
       },
     });

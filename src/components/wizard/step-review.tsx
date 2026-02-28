@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations, useLocale } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { useCoverPolling } from "@/hooks/use-cover-polling";
 import { useDemoCoverGeneration } from "@/hooks/use-demo-cover-generation";
@@ -9,24 +10,12 @@ import { isDemoMode } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { THEMES, PERSONALITY_TRAITS, ILLUSTRATION_STYLES } from "@/constants";
+import { THEMES, PERSONALITY_TRAITS, OCCASION_OPTIONS } from "@/constants";
 import { cn } from "@/lib/utils";
 
-const GENERATING_MESSAGES = [
-  "Crafting the story...",
-  "Imagining the characters...",
-  "Painting the scenes...",
-  "Adding a sprinkle of magic...",
-  "Mixing the colors...",
-  "Writing the adventure...",
-  "Polishing the details...",
-  "Almost there...",
-];
+const GENERATING_MESSAGE_COUNT = 8;
 
-const COVER_STAGES = [
-  { key: "FRONT_COVER", label: "Front Cover" },
-  { key: "BACK_COVER", label: "Back Cover" },
-];
+const COVER_STAGE_KEYS = ["FRONT_COVER", "BACK_COVER"] as const;
 
 type WizardCoverPhase = "review" | "generating" | "ready" | "error";
 
@@ -58,9 +47,20 @@ function ReviewSubStepDots({ phase }: { phase: WizardCoverPhase }) {
   );
 }
 
+function getPronounKey(gender: string): string {
+  if (gender === "boy") return "pronounHeHim";
+  if (gender === "girl") return "pronounSheHer";
+  return "pronounTheyThem";
+}
+
 export function StepReview() {
   const store = useWizardStore();
   const demoCover = useDemoCoverGeneration(isDemoMode);
+  const locale = useLocale();
+  const t = useTranslations("Wizard.review");
+  const tc = useTranslations("Common");
+  const tConst = useTranslations("Constants");
+
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
   const [coverData, setCoverData] = useState<{
@@ -78,7 +78,7 @@ export function StepReview() {
   useEffect(() => {
     if (coverPhase !== "generating") return;
     const timer = setInterval(() => {
-      setRotatingMsg((prev) => (prev + 1) % GENERATING_MESSAGES.length);
+      setRotatingMsg((prev) => (prev + 1) % GENERATING_MESSAGE_COUNT);
     }, 4000);
     return () => clearInterval(timer);
   }, [coverPhase]);
@@ -173,11 +173,10 @@ export function StepReview() {
     }
   }, [demoCover, demoCoverPhase, demoCoverProgress, demoCoverError, demoCoverData]);
 
-  const themeConfig = THEMES.find((t) => t.id === store.theme);
-  const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === store.illustrationStyle);
-  const selectedTraits = store.personalityTraits
-    .map((id) => PERSONALITY_TRAITS.find((t) => t.id === id))
-    .filter(Boolean);
+  const themeConfig = THEMES.find((th) => th.id === store.theme);
+  const isKnownOccasion = OCCASION_OPTIONS.some((o) => o.id === store.occasion);
+  const selectedTraitIds = store.personalityTraits
+    .filter((id) => PERSONALITY_TRAITS.some((pt) => pt.id === id));
 
   const allFoods = [...store.favoriteFoods, ...store.customFavoriteFoods];
   const allHobbies = [...store.hobbies, ...store.customHobbies];
@@ -230,6 +229,7 @@ export function StepReview() {
                 }))
               : undefined,
           selectedTitle: store.selectedTitle,
+          language: locale,
         }),
       });
 
@@ -241,7 +241,7 @@ export function StepReview() {
       const { bookId: newBookId } = await res.json();
       store.setBookId(newBookId);
 
-      // Step 2: Trigger cover generation — await to detect network/server failures
+      // Step 2: Trigger cover generation -- await to detect network/server failures
       const coverRes = await fetch(`/api/books/${newBookId}/generate-cover`, {
         method: "POST",
       });
@@ -288,16 +288,16 @@ export function StepReview() {
           </svg>
         </div>
         <ReviewSubStepDots phase={coverPhase} />
-        <h2 className="font-display text-2xl font-bold">Cover Generation Failed</h2>
+        <h2 className="font-display text-2xl font-bold">{t("errorHeading")}</h2>
         <p className="text-muted-foreground">
-          {store.coverError || "Something went wrong while generating your covers. Please try again."}
+          {store.coverError || t("errorDefault")}
         </p>
         <div className="space-y-3">
           <Button onClick={handleRetry} size="xl" className="w-full">
-            Try Again
+            {tc("tryAgain")}
           </Button>
           <Button onClick={handleGoBackFromCovers} variant="ghost" className="w-full">
-            Go Back & Edit
+            {t("goBackEdit")}
           </Button>
         </div>
       </motion.div>
@@ -306,6 +306,8 @@ export function StepReview() {
 
   // ── Phase: Generating ──
   if (coverPhase === "generating") {
+    const generatingMessageKey = `generatingMsg${rotatingMsg + 1}` as const;
+
     return (
       <motion.div
         initial={{ opacity: 0, x: 20 }}
@@ -313,8 +315,8 @@ export function StepReview() {
         className="space-y-8 max-w-lg mx-auto text-center"
       >
         <div>
-          <h2 className="font-display text-3xl font-bold">Creating Your Covers</h2>
-          <p className="text-muted-foreground mt-2">This usually takes 1-2 minutes</p>
+          <h2 className="font-display text-3xl font-bold">{t("creatingCovers")}</h2>
+          <p className="text-muted-foreground mt-2">{t("generatingTime")}</p>
         </div>
 
         <ReviewSubStepDots phase={coverPhase} />
@@ -330,28 +332,31 @@ export function StepReview() {
               exit={{ opacity: 0, y: -10 }}
               className="text-sm text-muted-foreground font-medium"
             >
-              {GENERATING_MESSAGES[rotatingMsg]}
+              {t(generatingMessageKey)}
             </motion.p>
           </AnimatePresence>
         </div>
 
         {/* Stage indicators */}
         <div className="space-y-2">
-          {COVER_STAGES.map((stage, i) => {
-            const stageProgress = (generationProgress / 100) * COVER_STAGES.length;
-            const currentStageIndex = Math.min(Math.floor(stageProgress), COVER_STAGES.length - 1);
+          {COVER_STAGE_KEYS.map((stageKey, i) => {
+            const stageProgress = (generationProgress / 100) * COVER_STAGE_KEYS.length;
+            const currentStageIndex = Math.min(Math.floor(stageProgress), COVER_STAGE_KEYS.length - 1);
             const isComplete = generationProgress >= 100 || i < currentStageIndex;
             const isActive = !isComplete && i === currentStageIndex;
+            const stageLabel = stageKey === "FRONT_COVER" ? t("frontCover") : t("backCover");
+
             return (
-              <div key={stage.key} className="flex items-center gap-3 text-left">
+              <div key={stageKey} className="flex items-center gap-3 text-start">
                 <div
-                  className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                  className={cn(
+                    "w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-300",
                     isComplete
                       ? "bg-primary text-primary-foreground"
                       : isActive
                       ? "bg-primary/20 text-primary ring-2 ring-primary/30"
                       : "bg-muted text-muted-foreground"
-                  }`}
+                  )}
                 >
                   {isComplete ? (
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -362,14 +367,19 @@ export function StepReview() {
                   )}
                 </div>
                 <span
-                  className={`text-sm font-medium ${
-                    isComplete ? "text-foreground" : isActive ? "text-primary" : "text-muted-foreground"
-                  }`}
+                  className={cn(
+                    "text-sm font-medium",
+                    isComplete
+                      ? "text-foreground"
+                      : isActive
+                      ? "text-primary"
+                      : "text-muted-foreground"
+                  )}
                 >
-                  {stage.label}
+                  {stageLabel}
                 </span>
                 {isActive && (
-                  <div className="ml-auto">
+                  <div className="ms-auto">
                     <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                   </div>
                 )}
@@ -392,9 +402,10 @@ export function StepReview() {
         <ReviewSubStepDots phase={coverPhase} />
 
         <div className="text-center">
-          <h2 className="font-display text-3xl font-bold">Your Covers Are Ready!</h2>
+          <h2 className="font-display text-3xl font-bold">{t("coversReady")}</h2>
           <p className="text-muted-foreground mt-2">
-            Here&apos;s a sneak peek of <span className="font-semibold">{coverData?.title || store.selectedTitle}</span>
+            {t("sneakPeek")}{" "}
+            <span className="font-semibold">{coverData?.title || store.selectedTitle}</span>
           </p>
         </div>
 
@@ -402,7 +413,7 @@ export function StepReview() {
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <p className="text-xs font-semibold text-muted-foreground text-center uppercase tracking-wide">
-              Front Cover
+              {t("frontCover")}
             </p>
             <div className="aspect-square rounded-xl overflow-hidden shadow-lg border relative">
               {coverData?.coverImageUrl ? (
@@ -410,7 +421,7 @@ export function StepReview() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={coverData.coverImageUrl}
-                    alt="Front cover"
+                    alt={t("frontCover")}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-x-0 top-0 p-3 pt-4 text-center">
@@ -427,26 +438,26 @@ export function StepReview() {
                 </>
               ) : (
                 <div className="w-full h-full bg-muted flex items-center justify-center">
-                  <span className="text-muted-foreground text-sm">Loading...</span>
+                  <span className="text-muted-foreground text-sm">{t("loading")}</span>
                 </div>
               )}
             </div>
           </div>
           <div className="space-y-2">
             <p className="text-xs font-semibold text-muted-foreground text-center uppercase tracking-wide">
-              Back Cover
+              {t("backCover")}
             </p>
             <div className="aspect-square rounded-xl overflow-hidden shadow-lg border">
               {coverData?.backCoverImageUrl ? (
                 /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={coverData.backCoverImageUrl}
-                  alt="Back cover"
+                  alt={t("backCover")}
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <div className="w-full h-full bg-muted flex items-center justify-center">
-                  <span className="text-muted-foreground text-sm">Loading...</span>
+                  <span className="text-muted-foreground text-sm">{t("loading")}</span>
                 </div>
               )}
             </div>
@@ -462,10 +473,10 @@ export function StepReview() {
                 className="w-full"
                 onClick={() => { window.location.href = "/register"; }}
               >
-                Sign Up to Generate Full Book
+                {t("signUpButton")}
               </Button>
               <p className="text-center text-xs text-muted-foreground">
-                Create an account to generate the complete illustrated book
+                {t("demoInfo")}
               </p>
             </>
           ) : (
@@ -477,15 +488,15 @@ export function StepReview() {
                   window.location.href = `/generate/${bookId}`;
                 }}
               >
-                Generate Full Book
+                {t("generateFullBook")}
               </Button>
               <p className="text-center text-xs text-muted-foreground">
-                Generate the complete illustrated book with all pages
+                {t("generateInfo")}
               </p>
             </>
           )}
           <Button onClick={handleGoBackFromCovers} variant="ghost" className="w-full">
-            Go Back & Edit
+            {t("goBackEdit")}
           </Button>
         </div>
       </motion.div>
@@ -503,15 +514,15 @@ export function StepReview() {
       <ReviewSubStepDots phase={coverPhase} />
 
       <div className="text-center">
-        <h2 className="font-display text-3xl font-bold">Ready to Create!</h2>
-        <p className="text-muted-foreground mt-2">Review your choices, then generate a free cover preview</p>
+        <h2 className="font-display text-3xl font-bold">{t("readyHeading")}</h2>
+        <p className="text-muted-foreground mt-2">{t("readySubtext")}</p>
       </div>
 
       <div className="bg-muted/30 rounded-2xl p-6 space-y-6">
         {/* Selected Book Idea */}
         {store.selectedTitle && (
           <div className="text-center pb-2">
-            <p className="text-sm font-semibold text-muted-foreground">Book Idea</p>
+            <p className="text-sm font-semibold text-muted-foreground">{t("bookIdeaLabel")}</p>
             <p className="font-display text-2xl font-bold text-primary">{store.selectedTitle}</p>
             {store.selectedBookIdea?.description && (
               <p className="text-muted-foreground text-sm mt-1">{store.selectedBookIdea.description}</p>
@@ -536,12 +547,12 @@ export function StepReview() {
           <div>
             <h3 className="font-bold text-lg">{store.childName}</h3>
             <p className="text-sm text-muted-foreground">
-              Age {store.childAge} &middot;{" "}
-              {store.childGender === "boy" ? "He/Him" : store.childGender === "girl" ? "She/Her" : "They/Them"}
+              {t("ageDisplay", { age: store.childAge ?? 0 })} &middot;{" "}
+              {t(getPronounKey(store.childGender))}
             </p>
             {photoCount > 0 && (
               <p className="text-xs text-muted-foreground mt-1">
-                {photoCount} photo{photoCount > 1 ? "s" : ""} uploaded
+                {t("photoCount", { count: photoCount })}
               </p>
             )}
           </div>
@@ -553,24 +564,29 @@ export function StepReview() {
         <div className="space-y-3">
           {store.occasion && (
             <div>
-              <p className="text-sm font-semibold text-muted-foreground">Occasion</p>
-              <p className="font-bold">{store.occasion}</p>
+              <p className="text-sm font-semibold text-muted-foreground">{t("occasionLabel")}</p>
+              <p className="font-bold">
+                {isKnownOccasion ? tConst(`occasions.${store.occasion}`) : store.occasion}
+              </p>
             </div>
           )}
           <div>
-            <p className="text-sm font-semibold text-muted-foreground">Theme</p>
+            <p className="text-sm font-semibold text-muted-foreground">{t("themeLabel")}</p>
             <p className="font-bold">
-              {themeConfig?.icon} {themeConfig?.name}
+              {themeConfig?.icon} {tConst(`themes.${store.theme}.name`)}
             </p>
           </div>
           <div>
-            <p className="text-sm font-semibold text-muted-foreground mb-1">Personality</p>
+            <p className="text-sm font-semibold text-muted-foreground mb-1">{t("personalityLabel")}</p>
             <div className="flex flex-wrap gap-2">
-              {selectedTraits.map((trait) => (
-                <Badge key={trait!.id} variant="secondary">
-                  {trait!.emoji} {trait!.label}
-                </Badge>
-              ))}
+              {selectedTraitIds.map((traitId) => {
+                const trait = PERSONALITY_TRAITS.find((pt) => pt.id === traitId);
+                return (
+                  <Badge key={traitId} variant="secondary">
+                    {trait?.emoji} {tConst(`traits.${traitId}`)}
+                  </Badge>
+                );
+              })}
               {store.customPersonalityTraits.map((trait) => (
                 <Badge key={trait} variant="secondary">
                   {trait}
@@ -580,7 +596,7 @@ export function StepReview() {
           </div>
           {allFoods.length > 0 && (
             <div>
-              <p className="text-sm font-semibold text-muted-foreground mb-1">Favorite Foods</p>
+              <p className="text-sm font-semibold text-muted-foreground mb-1">{t("foodsLabel")}</p>
               <div className="flex flex-wrap gap-1.5">
                 {allFoods.map((food) => (
                   <Badge key={food} variant="outline">
@@ -593,7 +609,7 @@ export function StepReview() {
 
           {allHobbies.length > 0 && (
             <div>
-              <p className="text-sm font-semibold text-muted-foreground mb-1">Hobbies</p>
+              <p className="text-sm font-semibold text-muted-foreground mb-1">{t("hobbiesLabel")}</p>
               <div className="flex flex-wrap gap-1.5">
                 {allHobbies.map((hobby) => (
                   <Badge key={hobby} variant="outline">
@@ -606,7 +622,7 @@ export function StepReview() {
 
           {allCharacters.length > 0 && (
             <div>
-              <p className="text-sm font-semibold text-muted-foreground mb-1">Favorite Characters</p>
+              <p className="text-sm font-semibold text-muted-foreground mb-1">{t("charactersLabel")}</p>
               <div className="flex flex-wrap gap-1.5">
                 {allCharacters.map((char) => (
                   <Badge key={char} variant="outline">
@@ -619,7 +635,7 @@ export function StepReview() {
 
           {allAnimals.length > 0 && (
             <div>
-              <p className="text-sm font-semibold text-muted-foreground mb-1">Favorite Animals</p>
+              <p className="text-sm font-semibold text-muted-foreground mb-1">{t("animalsLabel")}</p>
               <div className="flex flex-wrap gap-1.5">
                 {allAnimals.map((animal) => (
                   <Badge key={animal} variant="outline">
@@ -636,7 +652,7 @@ export function StepReview() {
           <>
             <hr />
             <div>
-              <p className="text-sm font-semibold text-muted-foreground mb-2">Additional Characters</p>
+              <p className="text-sm font-semibold text-muted-foreground mb-2">{t("additionalCharsLabel")}</p>
               <div className="space-y-2">
                 {store.additionalCharacters.map((char, i) => (
                   <div key={i} className="flex items-center gap-3">
@@ -651,7 +667,7 @@ export function StepReview() {
                       </div>
                     )}
                     <div>
-                      <p className="text-sm font-medium">{char.name || "Unnamed"}</p>
+                      <p className="text-sm font-medium">{char.name || t("unnamed")}</p>
                       <p className="text-xs text-muted-foreground">{char.role}</p>
                     </div>
                   </div>
@@ -667,17 +683,19 @@ export function StepReview() {
         <div className="space-y-3">
           <div className="flex justify-between">
             <div>
-              <p className="text-sm font-semibold text-muted-foreground">Writing</p>
-              <p className="font-bold">{store.storyStyle === "PROSE" ? "Prose" : "Rhyme"}</p>
+              <p className="text-sm font-semibold text-muted-foreground">{t("writingLabel")}</p>
+              <p className="font-bold">
+                {store.storyStyle === "PROSE" ? t("styleProse") : t("styleRhyme")}
+              </p>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-semibold text-muted-foreground">Art Style</p>
-              <p className="font-bold">{styleConfig?.name}</p>
+            <div className="text-end">
+              <p className="text-sm font-semibold text-muted-foreground">{t("artStyleLabel")}</p>
+              <p className="font-bold">{tConst(`styles.${store.illustrationStyle}.name`)}</p>
             </div>
           </div>
           {store.dedication && (
             <div>
-              <p className="text-sm font-semibold text-muted-foreground">Dedication</p>
+              <p className="text-sm font-semibold text-muted-foreground">{t("dedicationLabel")}</p>
               <p className="italic text-sm">&ldquo;{store.dedication}&rdquo;</p>
             </div>
           )}
@@ -692,13 +710,13 @@ export function StepReview() {
 
       <div className="space-y-3">
         <Button onClick={handleGenerateCover} loading={creating} size="xl" className="w-full">
-          Generate Cover Preview
+          {t("generateCoverPreview")}
         </Button>
         <p className="text-center text-xs text-muted-foreground">
-          Free preview — see your book covers before committing
+          {t("freePreview")}
         </p>
         <Button onClick={store.prevStep} variant="ghost" className="w-full">
-          Go Back & Edit
+          {t("goBackEdit")}
         </Button>
       </div>
     </motion.div>
