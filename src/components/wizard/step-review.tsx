@@ -715,9 +715,6 @@ export function StepReview() {
         <p className="text-center text-xs text-muted-foreground">
           {t("freePreview")}
         </p>
-        <Button onClick={store.prevStep} variant="ghost" className="w-full">
-          {t("goBackEdit")}
-        </Button>
       </div>
     </motion.div>
   );

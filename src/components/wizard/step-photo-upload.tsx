@@ -545,7 +545,6 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
     setPhotoKey,
     setPhoto,
     nextStep,
-    prevStep,
     photoPreview,
   } = useWizardStore();
   const [uploading, setUploading] = useState(false);
@@ -675,14 +674,6 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
       setShowIncomplete(true);
     } else {
       handleUploadAndContinue();
-    }
-  }
-
-  function handleBack() {
-    if (subStep > 0) {
-      setSubStep(subStep - 1);
-    } else {
-      prevStep();
     }
   }
 
@@ -816,14 +807,16 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
 
       {/* Navigation */}
       <div className="flex gap-3">
-        <Button onClick={handleBack} variant="outline" size="lg" className="flex-1">
-          {tc("back")}
-        </Button>
+        {subStep > 0 && (
+          <Button onClick={() => setSubStep(subStep - 1)} variant="outline" size="lg" className="flex-1">
+            {tc("back")}
+          </Button>
+        )}
         <Button
           onClick={handleNext}
           loading={uploading}
           size="lg"
-          className="flex-[2]"
+          className={subStep > 0 ? "flex-[2]" : "w-full"}
         >
           {nextButtonLabel()}
         </Button>

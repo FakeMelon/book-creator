@@ -18,7 +18,7 @@ export default function CreatePage() {
   const router = useRouter();
   const hasHydrated = useWizardHydrated();
   const step = useWizardStore((s) => s.step);
-  const prevStep = useWizardStore((s) => s.prevStep);
+  const maxStepReached = useWizardStore((s) => s.maxStepReached);
   const onboardingComplete = useWizardStore((s) => s.onboardingComplete);
   const t = useTranslations("Create");
 
@@ -115,22 +115,21 @@ export default function CreatePage() {
 
   // ─── Wizard Phase (shared for both modes) ───
 
-  function handleBack() {
-    if (step > 1) {
-      prevStep();
-    } else if (!isDemoMode) {
-      router.push("/get-started");
-    }
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-white to-rose-50">
-      <Header
-        onBack={handleBack}
-      />
+      <Header />
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <WizardProgressBar currentStep={step} />
+        <WizardProgressBar
+          currentStep={step}
+          maxStepReached={maxStepReached}
+          onStepClick={(s) => {
+            const { step: currentStep, coverPhase, setStep } = useWizardStore.getState();
+            // Prevent navigation away from cover preview while generation is in progress
+            if (currentStep === 6 && coverPhase !== "review") return;
+            setStep(s);
+          }}
+        />
 
         {demo?.error && (
           <div className="mb-6 p-3 rounded-lg bg-destructive/10 text-destructive text-sm text-center">

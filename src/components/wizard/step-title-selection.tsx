@@ -51,7 +51,6 @@ export function StepTitleSelection() {
     ideasInputFingerprint,
     childName,
     nextStep,
-    prevStep,
   } = store;
 
   const t = useTranslations("Wizard.titles");
@@ -148,9 +147,6 @@ export function StepTitleSelection() {
           <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
 
-        <Button onClick={prevStep} variant="outline" size="lg" className="w-full">
-          {tc("back")}
-        </Button>
       </motion.div>
     );
   }
@@ -170,14 +166,9 @@ export function StepTitleSelection() {
           {error}
         </div>
 
-        <div className="flex gap-3">
-          <Button onClick={prevStep} variant="outline" size="lg" className="flex-1">
-            {tc("back")}
-          </Button>
-          <Button onClick={fetchIdeas} size="lg" className="flex-[2]">
-            {tc("tryAgain")}
-          </Button>
-        </div>
+        <Button onClick={fetchIdeas} size="lg" className="w-full">
+          {tc("tryAgain")}
+        </Button>
       </motion.div>
     );
   }
@@ -220,14 +211,9 @@ export function StepTitleSelection() {
         {t("generateNew")}
       </button>
 
-      <div className="flex gap-3">
-        <Button onClick={prevStep} variant="outline" size="lg" className="flex-1">
-          {tc("back")}
-        </Button>
-        <Button onClick={nextStep} disabled={!selectedBookIdea} size="lg" className="flex-[2]">
-          {tc("continue")}
-        </Button>
-      </div>
+      <Button onClick={nextStep} disabled={!selectedBookIdea} size="lg" className="w-full">
+        {tc("continue")}
+      </Button>
     </motion.div>
   );
 }

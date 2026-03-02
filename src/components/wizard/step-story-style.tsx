@@ -25,7 +25,6 @@ export function StepStoryStyle() {
     setIllustrationStyle,
     setDedication,
     nextStep,
-    prevStep,
   } = useWizardStore();
   const t = useTranslations("Wizard.style");
   const tc = useTranslations("Common");
@@ -123,14 +122,9 @@ export function StepStoryStyle() {
         </p>
       </div>
 
-      <div className="flex gap-3">
-        <Button onClick={prevStep} variant="outline" size="lg" className="flex-1">
-          {tc("back")}
-        </Button>
-        <Button onClick={nextStep} size="lg" className="flex-[2]">
-          {tc("continue")}
-        </Button>
-      </div>
+      <Button onClick={nextStep} size="lg" className="w-full">
+        {tc("continue")}
+      </Button>
     </motion.div>
   );
 }

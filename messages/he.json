@@ -12,6 +12,7 @@
     "goBack": "חזור",
     "add": "הוסף",
     "addAll": "הוסף הכל",
+    "invalidCustomTag": "יש להזין לפחות 2 אותיות",
     "nextStep": "שלב הבא",
     "dashboard": "לוח בקרה",
     "or": "או",
@@ -265,7 +266,22 @@
       "foodsLabel": "אוכל אהוב",
       "foodsCounter": "({count}/3)",
       "foodsPlaceholder": "הוסיפו משלכם...",
-      "multipleItemsSuggestion": "נראה שיש לכם מספר פריטים — הוסיפו אותם בנפרד לתוצאות הטובות ביותר!"
+      "multipleItemsSuggestion": "נראה שיש לכם מספר פריטים — הוסיפו אותם בנפרד לתוצאות הטובות ביותר!",
+      "sentences": {
+        "occasion": "הספר של {childName} הוא לרגל {blank}",
+        "theme": "הסיפור של {childName} יעסוק ב{blank}",
+        "traits": "{childName} הוא ילד {blank}",
+        "hobbies": "{pronoun} אוהב {blank}",
+        "animals": "החיה האהובה על {childName} היא {blank}",
+        "foods": "ו{pronoun} אף פעם לא אומר לא ל{blank}"
+      },
+      "pronouns": {
+        "boy": { "subject": "הוא", "possessive": "שלו" },
+        "girl": { "subject": "היא", "possessive": "שלה" },
+        "non-binary": { "subject": "הם", "possessive": "שלהם" }
+      },
+      "doneButton": "סיום",
+      "skipLink": "דלג"
     },
     "photos": {
       "substep1Label": "העלאת תמונות",

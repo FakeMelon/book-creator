@@ -7,6 +7,7 @@ import type { StoryStyle, IllustrationStyle, AdditionalCharacter, ChildPhoto, Bo
 
 interface WizardState {
   step: number;
+  maxStepReached: number;
   childName: string;
   childAge: number | null;
   childGender: string;
@@ -113,6 +114,7 @@ interface WizardActions {
 
 const initialState: WizardState = {
   step: 1,
+  maxStepReached: 1,
   childName: "",
   childAge: null,
   childGender: "",
@@ -157,8 +159,14 @@ export const useWizardStore = create<WizardState & WizardActions>()(
     (set, get) => ({
       ...initialState,
 
-      setStep: (step) => set({ step }),
-      nextStep: () => set({ step: Math.min(get().step + 1, 6) }),
+      setStep: (step) => {
+        const clamped = Math.max(1, Math.min(step, 6));
+        set({ step: clamped, maxStepReached: Math.max(get().maxStepReached, clamped) });
+      },
+      nextStep: () => {
+        const next = Math.min(get().step + 1, 6);
+        set({ step: next, maxStepReached: Math.max(get().maxStepReached, next) });
+      },
       prevStep: () => set({ step: Math.max(get().step - 1, 1) }),
 
       setChildName: (childName) =>
@@ -367,17 +375,22 @@ export const useWizardStore = create<WizardState & WizardActions>()(
     }),
     {
       name: "wizard-storage",
-      version: 1,
+      version: 2,
       migrate: (persisted: any, version: number) => {
         if (version === 0) {
           // Reset cover-related state added in v1
-          return { ...persisted, step: Math.min(persisted.step ?? 1, 5), bookId: null, coverPhase: "review", coverError: null };
+          return { ...persisted, step: Math.min(persisted.step ?? 1, 5), bookId: null, coverPhase: "review", coverError: null, maxStepReached: persisted.step ?? 1 };
+        }
+        if (version === 1) {
+          // Add maxStepReached field introduced in v2
+          return { ...persisted, maxStepReached: persisted.step ?? 1 };
         }
         return persisted as WizardState;
       },
       partialize: (state) => ({
         // Cap at step 5 so users re-enter the cover preview flow fresh
         step: Math.min(state.step, 5),
+        maxStepReached: Math.min(state.maxStepReached, 5),
         childName: state.childName,
         childAge: state.childAge,
         childGender: state.childGender,

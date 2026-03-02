@@ -12,6 +12,7 @@
     "goBack": "Go back",
     "add": "Add",
     "addAll": "Add all",
+    "invalidCustomTag": "Use at least 2 letters",
     "nextStep": "Next Step",
     "dashboard": "Dashboard",
     "or": "or",
@@ -265,7 +266,22 @@
       "foodsLabel": "Favorite Foods",
       "foodsCounter": "({count}/3)",
       "foodsPlaceholder": "Add your own...",
-      "multipleItemsSuggestion": "Looks like you have multiple items — add them separately for best results!"
+      "multipleItemsSuggestion": "Looks like you have multiple items — add them separately for best results!",
+      "sentences": {
+        "occasion": "The book for {childName} is for a {blank}",
+        "theme": "{childName}'s story will be about {blank}",
+        "traits": "{childName} is a {blank} kind of kid",
+        "hobbies": "{pronoun} loves {blank}",
+        "animals": "{possessive} favorite animal is {blank}",
+        "foods": "And {pronoun} can never say no to {blank}"
+      },
+      "pronouns": {
+        "boy": { "subject": "He", "possessive": "His" },
+        "girl": { "subject": "She", "possessive": "Her" },
+        "non-binary": { "subject": "They", "possessive": "Their" }
+      },
+      "doneButton": "Done",
+      "skipLink": "Skip"
     },
     "photos": {
       "substep1Label": "Upload Photos",
