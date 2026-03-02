@@ -26,6 +26,16 @@ export function detectMultiConcept(text: string): string[] | null {
   return parts.length > 1 ? parts : null;
 }
 
+export interface AddCustomInputProps {
+  placeholder: string;
+  onAdd: (value: string) => void;
+  disabled?: boolean;
+  addLabel: string;
+  addAllLabel: string;
+  multipleItemsSuggestion: string;
+  invalidHint: string;
+}
+
 export function AddCustomInput({
   placeholder,
   onAdd,
@@ -34,15 +44,7 @@ export function AddCustomInput({
   addAllLabel,
   multipleItemsSuggestion,
   invalidHint,
-}: {
-  placeholder: string;
-  onAdd: (value: string) => void;
-  disabled?: boolean;
-  addLabel: string;
-  addAllLabel: string;
-  multipleItemsSuggestion: string;
-  invalidHint: string;
-}) {
+}: AddCustomInputProps) {
   const [value, setValue] = useState("");
   const [suggestions, setSuggestions] = useState<string[] | null>(null);
 
@@ -148,7 +150,12 @@ export function AddCustomInput({
   );
 }
 
-export function CustomBadge({ label, onRemove }: { label: string; onRemove: () => void }) {
+export interface CustomBadgeProps {
+  label: string;
+  onRemove: () => void;
+}
+
+export function CustomBadge({ label, onRemove }: CustomBadgeProps) {
   return (
     <motion.span
       initial={{ opacity: 0, y: 4 }}

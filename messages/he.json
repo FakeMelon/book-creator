@@ -270,10 +270,10 @@
       "sentences": {
         "occasion": "הספר של {childName} הוא לרגל {blank}",
         "theme": "הסיפור של {childName} יעסוק ב{blank}",
-        "traits": "{childName} הוא ילד {blank}",
-        "hobbies": "{pronoun} אוהב {blank}",
+        "traits": "{gender, select, boy {{childName} הוא ילד {blank}} girl {{childName} היא ילדה {blank}} other {{childName} {blank}}}",
+        "hobbies": "{gender, select, boy {{pronoun} אוהב {blank}} girl {{pronoun} אוהבת {blank}} other {{pronoun} אוהבים {blank}}}",
         "animals": "החיה האהובה על {childName} היא {blank}",
-        "foods": "ו{pronoun} אף פעם לא אומר לא ל{blank}"
+        "foods": "{gender, select, boy {ו{pronoun} אף פעם לא אומר לא ל{blank}} girl {ו{pronoun} אף פעם לא אומרת לא ל{blank}} other {ו{pronoun} אף פעם לא אומרים לא ל{blank}}}"
       },
       "pronouns": {
         "boy": { "subject": "הוא", "possessive": "שלו" },

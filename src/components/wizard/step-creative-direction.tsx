@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
+import { useShallow } from "zustand/react/shallow";
 import { Button } from "@/components/ui/button";
 import {
   THEMES,
@@ -151,7 +152,35 @@ function computeInitialActiveSentence(
 // ─── Component ───
 
 export function StepCreativeDirection() {
-  const store = useWizardStore();
+  const store = useWizardStore(useShallow((s) => ({
+    childName: s.childName,
+    childGender: s.childGender,
+    occasion: s.occasion,
+    theme: s.theme,
+    personalityTraits: s.personalityTraits,
+    customPersonalityTraits: s.customPersonalityTraits,
+    hobbies: s.hobbies,
+    customHobbies: s.customHobbies,
+    favoriteAnimal: s.favoriteAnimal,
+    customFavoriteAnimals: s.customFavoriteAnimals,
+    favoriteFoods: s.favoriteFoods,
+    customFavoriteFoods: s.customFavoriteFoods,
+    nextStep: s.nextStep,
+    setOccasion: s.setOccasion,
+    setTheme: s.setTheme,
+    togglePersonalityTrait: s.togglePersonalityTrait,
+    addCustomPersonalityTrait: s.addCustomPersonalityTrait,
+    removeCustomPersonalityTrait: s.removeCustomPersonalityTrait,
+    toggleHobby: s.toggleHobby,
+    addCustomHobby: s.addCustomHobby,
+    removeCustomHobby: s.removeCustomHobby,
+    toggleFavoriteAnimal: s.toggleFavoriteAnimal,
+    addCustomFavoriteAnimal: s.addCustomFavoriteAnimal,
+    removeCustomFavoriteAnimal: s.removeCustomFavoriteAnimal,
+    toggleFavoriteFood: s.toggleFavoriteFood,
+    addCustomFavoriteFood: s.addCustomFavoriteFood,
+    removeCustomFavoriteFood: s.removeCustomFavoriteFood,
+  })));
   const t = useTranslations("Wizard.creative");
   const tc = useTranslations("Common");
   const tConst = useTranslations("Constants");
@@ -200,6 +229,8 @@ export function StepCreativeDirection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t]);
 
+  const genderKey = VALID_GENDERS.has(childGender) ? childGender : "non-binary";
+
   // Resolve sentence template text with interpolated names/pronouns
   const getSentenceTemplate = useCallback(
     (key: string) => {
@@ -208,9 +239,10 @@ export function StepCreativeDirection() {
         blank: "{blank}",
         pronoun,
         possessive,
+        gender: genderKey,
       });
     },
-    [t, childName, pronoun, possessive]
+    [t, childName, pronoun, possessive, genderKey]
   );
 
   // Advance to the next sentence with exit transition
