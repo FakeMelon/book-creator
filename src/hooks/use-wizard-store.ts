@@ -7,6 +7,8 @@ import type { StoryStyle, IllustrationStyle, AdditionalCharacter, ChildPhoto, Bo
 
 interface WizardState {
   step: number;
+  /** 1 = forward, -1 = backward — used for step transition animation direction */
+  direction: 1 | -1;
   maxStepReached: number;
   childName: string;
   childAge: number | null;
@@ -114,6 +116,7 @@ interface WizardActions {
 
 const initialState: WizardState = {
   step: 1,
+  direction: 1,
   maxStepReached: 1,
   childName: "",
   childAge: null,
@@ -160,14 +163,19 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       ...initialState,
 
       setStep: (step) => {
+        const current = get();
         const clamped = Math.max(1, Math.min(step, 6));
-        set({ step: clamped, maxStepReached: Math.max(get().maxStepReached, clamped) });
+        set({
+          step: clamped,
+          direction: clamped >= current.step ? 1 : -1,
+          maxStepReached: Math.max(current.maxStepReached, clamped),
+        });
       },
       nextStep: () => {
         const next = Math.min(get().step + 1, 6);
-        set({ step: next, maxStepReached: Math.max(get().maxStepReached, next) });
+        set({ step: next, direction: 1, maxStepReached: Math.max(get().maxStepReached, next) });
       },
-      prevStep: () => set({ step: Math.max(get().step - 1, 1) }),
+      prevStep: () => set({ step: Math.max(get().step - 1, 1), direction: -1 }),
 
       setChildName: (childName) =>
         set({
@@ -377,6 +385,9 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       name: "wizard-storage",
       version: 2,
       migrate: (persisted: any, version: number) => {
+        if (!persisted || typeof persisted !== "object") {
+          return initialState;
+        }
         if (version === 0) {
           // Reset cover-related state added in v1
           return { ...persisted, step: Math.min(persisted.step ?? 1, 5), bookId: null, coverPhase: "review", coverError: null, maxStepReached: persisted.step ?? 1 };

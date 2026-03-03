@@ -73,9 +73,12 @@ export async function generateCharacterReference(
   illustrationStyle: IllustrationStyle
 ): Promise<string> {
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === illustrationStyle);
+  if (!styleConfig) {
+    throw new Error(`Unknown illustration style "${illustrationStyle}". Valid styles: ${ILLUSTRATION_STYLES.map((s) => s.id).join(", ")}`);
+  }
 
-  const styleName = styleConfig ? getStyleName(styleConfig.id) : "whimsical";
-  const prompt = `Transform this child's photo into a ${styleName} children's book illustration style character reference sheet. Show the character in 4 different poses: standing front view, side profile walking, sitting, and a happy jumping pose. ${styleConfig?.fluxStylePrompt}. The character should be clearly recognizable as the child in the photo but rendered in the illustration style. Clean white background, character sheet layout.`;
+  const styleName = getStyleName(styleConfig.id);
+  const prompt = `Transform this child's photo into a ${styleName} children's book illustration style character reference sheet. Show the character in 4 different poses: standing front view, side profile walking, sitting, and a happy jumping pose. ${styleConfig.fluxStylePrompt}. The character should be clearly recognizable as the child in the photo but rendered in the illustration style. Clean white background, character sheet layout.`;
 
   return generateImage(prompt, photoUrl);
 }
@@ -88,8 +91,11 @@ export async function generatePageIllustration(
   _format: "SQUARE_8X8" | "LANDSCAPE_8X10" = "SQUARE_8X8"
 ): Promise<string> {
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === illustrationStyle);
+  if (!styleConfig) {
+    throw new Error(`Unknown illustration style "${illustrationStyle}". Valid styles: ${ILLUSTRATION_STYLES.map((s) => s.id).join(", ")}`);
+  }
 
-  const prompt = `${sceneDescription}. Rendered in ${styleConfig?.fluxStylePrompt}. Full bleed children's book illustration, professional quality, high detail, vibrant colors suitable for print at 300 DPI. STRICTLY FORBIDDEN: no text, no letters, no words, no numbers, no writing, no signs anywhere in the image. The main character should match the reference image exactly in appearance and style.`;
+  const prompt = `A full-bleed square illustration for a children's book page — the artwork must fill the entire canvas edge to edge with absolutely no borders, margins, or white space. ${sceneDescription}. Rendered in ${styleConfig.fluxStylePrompt}. Professional quality, high detail, vibrant colors suitable for print at 300 DPI. STRICTLY FORBIDDEN: no text, no letters, no words, no numbers, no writing, no signs anywhere in the image. The main character should match the reference image exactly in appearance and style. The background and scene must extend fully to every edge of the square canvas.`;
 
   return generateImage(prompt, characterRefUrl);
 }
@@ -99,8 +105,11 @@ export async function generateBackCoverIllustration(
   illustrationStyle: IllustrationStyle
 ): Promise<string> {
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === illustrationStyle);
+  if (!styleConfig) {
+    throw new Error(`Unknown illustration style "${illustrationStyle}". Valid styles: ${ILLUSTRATION_STYLES.map((s) => s.id).join(", ")}`);
+  }
 
-  const prompt = `Decorative children's book back cover illustration: a beautiful, whimsical seamless pattern featuring "${hiddenMotif}" motifs scattered across the design. Pure decorative pattern only — gentle colors, organic shapes, and playful motifs filling the entire image. STRICTLY FORBIDDEN: no text, no letters, no words, no numbers, no barcode, no ISBN, no price tag, no UPC code, no QR code, no characters, no people, no faces. ${styleConfig?.fluxStylePrompt}. Professional quality, suitable for print at 300 DPI.`;
+  const prompt = `A full-bleed square decorative pattern for a children's book back cover — the artwork must fill the entire canvas edge to edge with absolutely no borders, margins, or white space. A beautiful, whimsical seamless pattern featuring "${hiddenMotif}" motifs scattered across the design. Pure decorative pattern only — gentle colors, organic shapes, and playful motifs. STRICTLY FORBIDDEN: no text, no letters, no words, no numbers, no barcode, no ISBN, no price tag, no UPC code, no QR code, no characters, no people, no faces. ${styleConfig.fluxStylePrompt}. Professional quality, suitable for print at 300 DPI. The pattern must extend fully to every edge of the square canvas.`;
 
   // No character reference — back covers are decorative patterns with no characters
   return generateImage(prompt);
@@ -114,8 +123,11 @@ export async function generateCoverIllustration(
   _format: "SQUARE_8X8" | "LANDSCAPE_8X10" = "SQUARE_8X8"
 ): Promise<string> {
   const styleConfig = ILLUSTRATION_STYLES.find((s) => s.id === illustrationStyle);
+  if (!styleConfig) {
+    throw new Error(`Unknown illustration style "${illustrationStyle}". Valid styles: ${ILLUSTRATION_STYLES.map((s) => s.id).join(", ")}`);
+  }
 
-  const prompt = `Book cover illustration: ${sceneDescription}. Leave a clear, uncluttered area at the top ~25% of the image for title text overlay. STRICTLY FORBIDDEN: no text, no letters, no words, no numbers, no writing, no signs, no labels anywhere in the image — the title will be added digitally later. ${styleConfig?.fluxStylePrompt}. Eye-catching children's book cover, professional quality, vibrant and inviting. The main character should match the reference image exactly.`;
+  const prompt = `A vibrant full-bleed square illustration for a children's book cover — the artwork must fill the entire canvas edge to edge with absolutely no borders, margins, or white space. ${sceneDescription}. Leave a clear, uncluttered area at the top ~25% of the image for title text overlay. STRICTLY FORBIDDEN: no text, no letters, no words, no numbers, no writing, no signs, no labels anywhere in the image — the title will be added digitally later. ${styleConfig.fluxStylePrompt}. Eye-catching children's book cover, professional quality, vibrant and inviting. The main character should match the reference image exactly. The background and scene must extend fully to every edge of the square canvas.`;
 
   return generateImage(prompt, characterRefUrl);
 }

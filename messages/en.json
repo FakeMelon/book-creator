@@ -40,7 +40,15 @@
       "cta": "Create Your Book — $24.99",
       "seeExamples": "See Examples",
       "disclaimer": "Free to create. Only pay when you order a printed copy.",
-      "bookShowcaseAlt": "Animated book showcase"
+      "bookShowcaseAlt": "Animated book showcase",
+      "examples": {
+        "lunaCaption": "Luna, 5 — Space Adventure",
+        "marcusCaption": "Marcus, 7 — Enchanted Forest",
+        "riverCaption": "River, 4 — Underwater Discovery",
+        "lunaTitle": "Luna and the Stardust Rocket",
+        "marcusTitle": "Marcus and the Enchanted Forest",
+        "riverTitle": "River's Underwater Quest"
+      }
     },
     "howItWorks": {
       "title": "How It Works",

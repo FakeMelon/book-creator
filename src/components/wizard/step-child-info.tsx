@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Input } from "@/components/ui/input";
@@ -23,12 +22,7 @@ export function StepChildInfo() {
   const isValid = childName.trim().length > 0 && childAge !== null && childGender !== "";
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-8 max-w-lg mx-auto"
-    >
+    <div className="space-y-8 max-w-lg mx-auto">
       <div className="text-center">
         <h2 className="font-display text-3xl font-bold text-foreground">
           {t("heading")}
@@ -94,6 +88,6 @@ export function StepChildInfo() {
       <Button onClick={nextStep} disabled={!isValid} size="xl" className="w-full">
         {tc("continue")}
       </Button>
-    </motion.div>
+    </div>
   );
 }

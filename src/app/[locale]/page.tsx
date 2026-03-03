@@ -1,11 +1,18 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
+
+const EXAMPLE_BOOKS = [
+  { key: "luna", src: "/images/examples/luna-space.png" },
+  { key: "marcus", src: "/images/examples/marcus-forest.png" },
+  { key: "river", src: "/images/examples/river-underwater.png" },
+] as const;
 
 const STEP_KEYS = [
   { key: "step1", icon: "👶" },
@@ -86,25 +93,53 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          {/* Hero image placeholder */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-16 max-w-4xl mx-auto"
-          >
-            <div className="relative aspect-[16/9] rounded-2xl bg-gradient-to-br from-primary/5 to-rose-100 border shadow-2xl overflow-hidden flex items-center justify-center">
-              <div className="text-center p-8">
-                <div className="text-8xl mb-4">📖</div>
-                <p className="text-lg font-semibold text-muted-foreground">
-                  {t("hero.bookShowcaseAlt")}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  (Replace with actual book examples)
-                </p>
-              </div>
-            </div>
-          </motion.div>
+          {/* Example book covers */}
+          <div className="mt-16 max-w-4xl mx-auto flex items-end justify-center gap-4 sm:gap-8">
+            {EXAMPLE_BOOKS.map((book, i) => {
+              const isCenter = i === 1;
+              return (
+                <motion.div
+                  key={book.key}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
+                  className={`flex flex-col items-center ${isCenter ? "z-10" : ""}`}
+                >
+                  <div
+                    className={`aspect-square rounded-xl overflow-hidden shadow-xl border relative transition-transform hover:scale-105 ${
+                      isCenter
+                        ? "w-40 sm:w-56 md:w-64 -mb-2"
+                        : "w-32 sm:w-44 md:w-52"
+                    }`}
+                    style={{ containerType: "inline-size" }}
+                  >
+                    <Image
+                      src={book.src}
+                      alt={t(`hero.examples.${book.key}Caption`)}
+                      width={512}
+                      height={512}
+                      className="w-full h-full object-cover"
+                      priority={isCenter}
+                    />
+                    <div className="absolute inset-x-0 top-0 px-8 pt-4 text-center">
+                      <h3
+                        className="font-display font-bold text-white leading-tight line-clamp-2"
+                        style={{
+                          fontSize: "clamp(0.55rem, 3cqi, 1rem)",
+                          textShadow: "0 1px 4px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.3)",
+                        }}
+                      >
+                        {t(`hero.examples.${book.key}Title`)}
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="mt-3 text-xs sm:text-sm text-muted-foreground font-medium">
+                    {t(`hero.examples.${book.key}Caption`)}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </div>
         </div>
       </section>
 

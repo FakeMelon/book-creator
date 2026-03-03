@@ -49,5 +49,8 @@ prisma/*.db-journal
 *.swp
 *.swo
 
+# generated examples
+examples/covers/
+
 # claude code
 .claude/settings.local.json

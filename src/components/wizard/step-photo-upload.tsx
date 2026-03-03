@@ -340,9 +340,16 @@ function ChildPhotoDropzone() {
           setError(t("errorMaxPhotos"));
           return;
         }
-        const preview = await new Promise<string>((resolve) => {
+        const preview = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
+          reader.onloadend = () => {
+            if (reader.result && typeof reader.result === "string") {
+              resolve(reader.result);
+            } else {
+              reject(new Error("Failed to read file"));
+            }
+          };
+          reader.onerror = () => reject(new Error("Failed to read file"));
           reader.readAsDataURL(file);
         });
 
@@ -438,11 +445,21 @@ function AdditionalCharacterCard({
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (!file) return;
-      if (file.size > 10 * 1024 * 1024) return;
+      if (file.size > 10 * 1024 * 1024) {
+        // TODO: surface error to user via toast or parent state
+        return;
+      }
 
-      const preview = await new Promise<string>((resolve) => {
+      const preview = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
+        reader.onloadend = () => {
+          if (reader.result && typeof reader.result === "string") {
+            resolve(reader.result);
+          } else {
+            reject(new Error("Failed to read file"));
+          }
+        };
+        reader.onerror = () => reject(new Error("Failed to read file"));
         reader.readAsDataURL(file);
       });
 
@@ -693,12 +710,7 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
 
   return (
     <NoFaceContext.Provider value={setNoFacePreview}>
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-6 max-w-lg mx-auto"
-    >
+    <div className="space-y-6 max-w-lg mx-auto">
       {/* Header */}
       <div className="text-center">
         <h2 className="font-display text-3xl font-bold">
@@ -844,7 +856,7 @@ export function StepPhotoUpload({ uploadFile }: StepPhotoUploadProps = {}) {
         open={showPhotoRequired}
         onClose={() => setShowPhotoRequired(false)}
       />
-    </motion.div>
+    </div>
     </NoFaceContext.Provider>
   );
 }

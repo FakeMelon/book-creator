@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Button } from "@/components/ui/button";
@@ -31,12 +30,7 @@ export function StepStoryStyle() {
   const ts = useTranslations("Constants.styles");
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-8 max-w-2xl mx-auto"
-    >
+    <div className="space-y-8 max-w-2xl mx-auto">
       <div className="text-center">
         <h2 className="font-display text-3xl font-bold">{t("heading")}</h2>
         <p className="text-muted-foreground mt-2">{t("subtitle")}</p>
@@ -125,6 +119,6 @@ export function StepStoryStyle() {
       <Button onClick={nextStep} size="lg" className="w-full">
         {tc("continue")}
       </Button>
-    </motion.div>
+    </div>
   );
 }

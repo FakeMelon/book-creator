@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { motion } from "framer-motion";
 import { useTranslations, useLocale } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Button } from "@/components/ui/button";
@@ -36,12 +35,6 @@ function computeFingerprint(state: FingerprintFields): string {
     illustrationStyle: state.illustrationStyle,
   });
 }
-
-const stepTransition = {
-  initial: { opacity: 0, x: 20 },
-  animate: { opacity: 1, x: 0 },
-  exit: { opacity: 0, x: -20 },
-} as const;
 
 export function StepTitleSelection() {
   const store = useWizardStore();
@@ -132,10 +125,7 @@ export function StepTitleSelection() {
 
   if (loading) {
     return (
-      <motion.div
-        {...stepTransition}
-        className="space-y-8 max-w-lg mx-auto text-center"
-      >
+      <div className="space-y-8 max-w-lg mx-auto text-center">
         <div>
           <h2 className="font-display text-3xl font-bold">{t("loadingHeading")}</h2>
           <p className="text-muted-foreground mt-2">
@@ -147,16 +137,13 @@ export function StepTitleSelection() {
           <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
 
-      </motion.div>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <motion.div
-        {...stepTransition}
-        className="space-y-8 max-w-lg mx-auto text-center"
-      >
+      <div className="space-y-8 max-w-lg mx-auto text-center">
         <div>
           <h2 className="font-display text-3xl font-bold">{t("errorHeading")}</h2>
           <p className="text-muted-foreground mt-2">{t("errorSubheading")}</p>
@@ -169,15 +156,12 @@ export function StepTitleSelection() {
         <Button onClick={fetchIdeas} size="lg" className="w-full">
           {tc("tryAgain")}
         </Button>
-      </motion.div>
+      </div>
     );
   }
 
   return (
-    <motion.div
-      {...stepTransition}
-      className="space-y-8 max-w-lg mx-auto"
-    >
+    <div className="space-y-8 max-w-lg mx-auto">
       <div className="text-center">
         <h2 className="font-display text-3xl font-bold">{t("mainHeading")}</h2>
         <p className="text-muted-foreground mt-2">
@@ -214,6 +198,6 @@ export function StepTitleSelection() {
       <Button onClick={nextStep} disabled={!selectedBookIdea} size="lg" className="w-full">
         {tc("continue")}
       </Button>
-    </motion.div>
+    </div>
   );
 }

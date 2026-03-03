@@ -144,6 +144,9 @@ export function StepReview() {
         })
         .catch((err) => {
           console.error("Failed to refetch cover status:", err);
+          const s = useWizardStore.getState();
+          s.setCoverError("Failed to load cover images. Please try again.");
+          s.setCoverPhase("error");
         });
     }
   }, [coverPhase, coverData, bookId]);
@@ -234,7 +237,7 @@ export function StepReview() {
       });
 
       if (!res.ok) {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Failed to create book");
       }
 
@@ -277,11 +280,7 @@ export function StepReview() {
   // ── Phase: Error ──
   if (coverPhase === "error") {
     return (
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="space-y-6 max-w-lg mx-auto text-center"
-      >
+      <div className="space-y-6 max-w-lg mx-auto text-center">
         <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
           <svg className="w-8 h-8 text-destructive" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
@@ -300,7 +299,7 @@ export function StepReview() {
             {t("goBackEdit")}
           </Button>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
@@ -309,11 +308,7 @@ export function StepReview() {
     const generatingMessageKey = `generatingMsg${rotatingMsg + 1}` as const;
 
     return (
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="space-y-8 max-w-lg mx-auto text-center"
-      >
+      <div className="space-y-8 max-w-lg mx-auto text-center">
         <div>
           <h2 className="font-display text-3xl font-bold">{t("creatingCovers")}</h2>
           <p className="text-muted-foreground mt-2">{t("generatingTime")}</p>
@@ -387,18 +382,14 @@ export function StepReview() {
             );
           })}
         </div>
-      </motion.div>
+      </div>
     );
   }
 
   // ── Phase: Ready (covers generated) ──
   if (coverPhase === "ready") {
     return (
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="space-y-8 max-w-lg mx-auto"
-      >
+      <div className="space-y-8 max-w-lg mx-auto">
         <ReviewSubStepDots phase={coverPhase} />
 
         <div className="text-center">
@@ -499,18 +490,13 @@ export function StepReview() {
             {t("goBackEdit")}
           </Button>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
   // ── Phase: Review (default) ──
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-8 max-w-lg mx-auto"
-    >
+    <div className="space-y-8 max-w-lg mx-auto">
       <ReviewSubStepDots phase={coverPhase} />
 
       <div className="text-center">
@@ -716,6 +702,6 @@ export function StepReview() {
           {t("freePreview")}
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 }

@@ -40,7 +40,15 @@
       "cta": "צור את הספר שלך — $24.99",
       "seeExamples": "ראו דוגמאות",
       "disclaimer": "יצירה בחינם. תשלום רק בהזמנת עותק מודפס.",
-      "bookShowcaseAlt": "תצוגת ספרים מונפשת"
+      "bookShowcaseAlt": "תצוגת ספרים מונפשת",
+      "examples": {
+        "lunaCaption": "לונה, 5 — הרפתקה בחלל",
+        "marcusCaption": "מרקוס, 7 — היער הקסום",
+        "riverCaption": "ריבר, 4 — גילוי מתחת למים",
+        "lunaTitle": "לונה והרקטה של אבק כוכבים",
+        "marcusTitle": "מרקוס והיער הקסום",
+        "riverTitle": "המסע התת-ימי של ריבר"
+      }
     },
     "howItWorks": {
       "title": "איך זה עובד",

@@ -418,12 +418,7 @@ export function StepCreativeDirection() {
   );
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className="space-y-2 max-w-2xl mx-auto px-1"
-    >
+    <div className="space-y-2 max-w-2xl mx-auto px-1">
       {/* Sentence stack */}
       <div className="min-h-[300px] space-y-1 py-2">
         {sentenceConfigs.map((config, i) => {
@@ -482,6 +477,6 @@ export function StepCreativeDirection() {
           </Button>
         </motion.div>
       )}
-    </motion.div>
+    </div>
   );
 }

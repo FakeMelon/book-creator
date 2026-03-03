@@ -9,6 +9,11 @@ import { useDemoGeneration } from "@/hooks/use-demo-generation";
 import { isDemoMode } from "@/lib/config";
 import { WizardProgressBar } from "@/components/wizard/progress-bar";
 import { WizardSteps } from "@/components/wizard/wizard-steps";
+import dynamic from "next/dynamic";
+
+const DebugPanel = process.env.NODE_ENV === "development"
+  ? dynamic(() => import("@/components/wizard/debug-panel").then((m) => ({ default: m.DebugPanel })), { ssr: false })
+  : () => null;
 import { Header } from "@/components/shared/header";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -141,6 +146,8 @@ export default function CreatePage() {
           uploadFile={demo?.demoUploadFile}
         />
       </main>
+
+      <DebugPanel />
     </div>
   );
 }
