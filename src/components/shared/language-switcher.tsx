@@ -10,7 +10,11 @@ const LOCALES = [
   { code: "he", label: "hebrew" },
 ] as const;
 
-export function LanguageSwitcher() {
+export interface LanguageSwitcherProps {
+  className?: string;
+}
+
+export function LanguageSwitcher({ className }: LanguageSwitcherProps = {}) {
   const t = useTranslations("LanguageSwitcher");
   const locale = useLocale();
   const router = useRouter();
@@ -48,7 +52,7 @@ export function LanguageSwitcher() {
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+        className={`flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm transition-colors cursor-pointer ${className ?? "text-muted-foreground hover:text-foreground hover:bg-muted"}`}
         aria-label="Switch language"
       >
         <Globe className="w-4 h-4" />

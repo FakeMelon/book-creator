@@ -32,23 +32,8 @@
       "createBook": "Create a Book"
     },
     "hero": {
-      "badge": "AI-Powered Personalized Books",
-      "titleStart": "Your Child as the",
-      "titleHighlight": "Star",
-      "titleEnd": "of Their Own Book",
-      "description": "Upload a photo, choose a theme, and get a beautifully illustrated 32-page hardcover book delivered to your door. Created in under 5 minutes.",
-      "cta": "Create Your Book — $24.99",
-      "seeExamples": "See Examples",
-      "disclaimer": "Free to create. Only pay when you order a printed copy.",
-      "bookShowcaseAlt": "Animated book showcase",
-      "examples": {
-        "lunaCaption": "Luna, 5 — Space Adventure",
-        "marcusCaption": "Marcus, 7 — Enchanted Forest",
-        "riverCaption": "River, 4 — Underwater Discovery",
-        "lunaTitle": "Luna and the Stardust Rocket",
-        "marcusTitle": "Marcus and the Enchanted Forest",
-        "riverTitle": "River's Underwater Quest"
-      }
+      "title": "Create the Perfect Gift Book for Your Child",
+      "cta": "Create Your Book — $24.99"
     },
     "howItWorks": {
       "title": "How It Works",

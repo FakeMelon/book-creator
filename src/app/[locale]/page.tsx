@@ -1,18 +1,15 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { LanguageSwitcher } from "@/components/shared/language-switcher";
-
-const EXAMPLE_BOOKS = [
-  { key: "luna", src: "/images/examples/luna-space.png" },
-  { key: "marcus", src: "/images/examples/marcus-forest.png" },
-  { key: "river", src: "/images/examples/river-underwater.png" },
-] as const;
+import { cn } from "@/lib/utils";
 
 const STEP_KEYS = [
   { key: "step1", icon: "👶" },
@@ -36,18 +33,48 @@ const FAQ_KEYS = ["q1", "q2", "q3", "q4", "q5"] as const;
 
 export default function LandingPage() {
   const t = useTranslations("Landing");
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="min-h-screen">
       {/* Nav */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur-sm border-b">
+      <nav
+        className={cn(
+          "fixed top-0 inset-x-0 z-50 transition-colors duration-300",
+          scrolled
+            ? "bg-white/80 backdrop-blur-sm border-b"
+            : "bg-transparent"
+        )}
+      >
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="font-display text-2xl font-bold text-primary">
+          <Link
+            href="/"
+            className={cn(
+              "font-display text-2xl font-bold transition-colors",
+              scrolled ? "text-primary" : "text-white"
+            )}
+          >
             Littletales
           </Link>
           <div className="flex items-center gap-4">
-            <LanguageSwitcher />
-            <Link href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+            <LanguageSwitcher
+              className={scrolled ? undefined : "text-white/80 hover:text-white hover:bg-white/10"}
+            />
+            <Link
+              href="/login"
+              className={cn(
+                "text-sm font-medium transition-colors",
+                scrolled
+                  ? "text-muted-foreground hover:text-foreground"
+                  : "text-white/80 hover:text-white"
+              )}
+            >
               {t("nav.signIn")}
             </Link>
             <Link href="/get-started">
@@ -58,89 +85,64 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 px-4 bg-gradient-to-br from-rose-50 via-white to-rose-50">
-        <div className="max-w-6xl mx-auto text-center">
-          <motion.div
+      <section className="relative h-screen min-h-[600px] max-h-[1200px] flex items-end justify-center overflow-hidden">
+        {/* Desktop background */}
+        <Image
+          src="/images/hero/hero-desktop.png"
+          alt=""
+          fill
+          priority
+          className="object-cover hidden md:block"
+          sizes="100vw"
+          quality={85}
+        />
+        {/* Mobile background */}
+        <Image
+          src="/images/hero/hero-mobile.png"
+          alt=""
+          fill
+          priority
+          className="object-cover md:hidden"
+          sizes="100vw"
+          quality={85}
+        />
+
+        {/* Gradient overlay for text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+        {/* Content — pinned toward bottom */}
+        <div className="relative z-10 text-center px-4 pb-20 max-w-3xl mx-auto">
+          <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
+            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white leading-tight drop-shadow-lg"
           >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-semibold mb-6">
-              {t("hero.badge")}
-            </span>
-            <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight text-foreground max-w-4xl mx-auto leading-tight">
-              {t("hero.titleStart")}{" "}
-              <span className="text-primary">{t("hero.titleHighlight")}</span>{" "}
-              {t("hero.titleEnd")}
-            </h1>
-            <p className="mt-6 text-xl text-muted-foreground max-w-2xl mx-auto">
-              {t("hero.description")}
-            </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/get-started">
-                <Button size="xl" className="text-lg px-10">
-                  {t("hero.cta")}
-                </Button>
-              </Link>
-              <Link href="/examples">
-                <Button variant="outline" size="xl" className="text-lg px-10">
-                  {t("hero.seeExamples")}
-                </Button>
-              </Link>
-            </div>
-            <p className="mt-4 text-sm text-muted-foreground">
-              {t("hero.disclaimer")}
-            </p>
+            {t("hero.title")}
+          </motion.h1>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-8"
+          >
+            <Link href="/get-started">
+              <Button size="xl" className="text-lg px-10">
+                {t("hero.cta")}
+              </Button>
+            </Link>
           </motion.div>
-
-          {/* Example book covers */}
-          <div className="mt-16 max-w-4xl mx-auto flex items-end justify-center gap-4 sm:gap-8">
-            {EXAMPLE_BOOKS.map((book, i) => {
-              const isCenter = i === 1;
-              return (
-                <motion.div
-                  key={book.key}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 + i * 0.15 }}
-                  className={`flex flex-col items-center ${isCenter ? "z-10" : ""}`}
-                >
-                  <div
-                    className={`aspect-square rounded-xl overflow-hidden shadow-xl border relative transition-transform hover:scale-105 ${
-                      isCenter
-                        ? "w-40 sm:w-56 md:w-64 -mb-2"
-                        : "w-32 sm:w-44 md:w-52"
-                    }`}
-                    style={{ containerType: "inline-size" }}
-                  >
-                    <Image
-                      src={book.src}
-                      alt={t(`hero.examples.${book.key}Caption`)}
-                      width={512}
-                      height={512}
-                      className="w-full h-full object-cover"
-                      priority={isCenter}
-                    />
-                    <div className="absolute inset-x-0 top-0 px-8 pt-4 text-center">
-                      <h3
-                        className="font-display font-bold text-white leading-tight line-clamp-2"
-                        style={{
-                          fontSize: "clamp(0.55rem, 3cqi, 1rem)",
-                          textShadow: "0 1px 4px rgba(0,0,0,0.6), 0 0 8px rgba(0,0,0,0.3)",
-                        }}
-                      >
-                        {t(`hero.examples.${book.key}Title`)}
-                      </h3>
-                    </div>
-                  </div>
-                  <p className="mt-3 text-xs sm:text-sm text-muted-foreground font-medium">
-                    {t(`hero.examples.${book.key}Caption`)}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
         </div>
+
+        {/* Scroll-down indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 0.6 }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
+        >
+          <ChevronDown className="w-6 h-6 text-white/60 animate-bounce" />
+        </motion.div>
       </section>
 
       {/* How It Works */}

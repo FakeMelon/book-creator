@@ -22,7 +22,8 @@ export function dataUrlToBuffer(dataUrl: string): Buffer {
 
 export async function generateImage(
   prompt: string,
-  referenceImageUrl?: string
+  referenceImageUrl?: string,
+  options?: { aspectRatio?: string }
 ): Promise<string> {
   const client = getClient();
 
@@ -43,7 +44,7 @@ export async function generateImage(
     // @ts-expect-error -- OpenRouter extends the OpenAI API with modalities and image_config
     modalities: IS_MULTIMODAL_MODEL ? ["image", "text"] : ["image"],
     image_config: {
-      aspect_ratio: "1:1",
+      aspect_ratio: options?.aspectRatio ?? "1:1",
       image_size: IMAGE_SIZE,
     },
   });
