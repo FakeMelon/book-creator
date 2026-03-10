@@ -1,6 +1,7 @@
 import { Resend } from "resend";
+import { routing } from "@/i18n/routing";
 
-type Locale = "en" | "he";
+export type EmailLocale = (typeof routing.locales)[number];
 
 function getResend(): Resend {
   return new Resend(process.env.RESEND_API_KEY);
@@ -8,21 +9,22 @@ function getResend(): Resend {
 
 const fromEmail = process.env.RESEND_FROM_EMAIL || "books@littletales.com";
 
-function isRtl(locale: Locale): boolean {
+function isRtl(locale: EmailLocale): boolean {
   return locale === "he";
 }
 
-function fontStack(locale: Locale): string {
+function fontStack(locale: EmailLocale): string {
   if (locale === "he") {
     return "'Rubik', 'Heebo', 'Arial', sans-serif";
   }
   return "'Quicksand', sans-serif";
 }
 
-function wrapHtml(locale: Locale, content: string): string {
-  const dir = isRtl(locale) ? "rtl" : "ltr";
+function wrapHtml(locale: EmailLocale, content: string): string {
+  const rtl = isRtl(locale);
+  const dir = rtl ? "rtl" : "ltr";
   const fonts = fontStack(locale);
-  const textAlign = isRtl(locale) ? "right" : "left";
+  const textAlign = rtl ? "right" : "left";
 
   return `
     <div dir="${dir}" style="font-family: ${fonts}; max-width: 600px; margin: 0 auto; padding: 20px; text-align: ${textAlign};">
@@ -92,6 +94,36 @@ const emailStrings = {
       cta: "עקבו אחר המשלוח",
     },
   },
+  fr: {
+    bookReady: {
+      subject: (childName: string) => `Le livre de ${childName} est prêt !`,
+      heading: "Votre livre est prêt !",
+      body: (bookTitle: string, childName: string) =>
+        `<strong>« ${bookTitle} »</strong> mettant en vedette ${childName} est terminé !`,
+      cta: "Voir votre livre",
+      footer: "Parcourez les pages, apportez des modifications et commandez votre exemplaire imprimé !",
+    },
+    orderConfirmation: {
+      subject: (bookTitle: string, orderNumber: string) =>
+        `Commande confirmée : ${bookTitle} (#${orderNumber})`,
+      heading: "Commande confirmée !",
+      body: (bookTitle: string, childName: string) =>
+        `Merci pour votre commande ! « ${bookTitle} » pour ${childName} est en cours d'impression.`,
+      orderLabel: "Commande :",
+      totalLabel: "Total :",
+      deliveryLabel: "Livraison estimée :",
+      deliveryValue: "7 à 10 jours ouvrables",
+      footer: "Nous vous enverrons les informations de suivi dès que votre livre sera expédié !",
+    },
+    shippingNotification: {
+      subject: (childName: string) => `Le livre de ${childName} a été expédié !`,
+      heading: "Votre livre a été expédié !",
+      body: (bookTitle: string) => `« ${bookTitle} » est en route !`,
+      carrierLabel: "Transporteur :",
+      trackingLabel: "Suivi :",
+      cta: "Suivre votre colis",
+    },
+  },
 } as const;
 
 export async function sendBookReadyEmail(params: {
@@ -99,7 +131,7 @@ export async function sendBookReadyEmail(params: {
   childName: string;
   bookTitle: string;
   previewUrl: string;
-  locale?: Locale;
+  locale?: EmailLocale;
 }): Promise<void> {
   const locale = params.locale ?? "en";
   const strings = emailStrings[locale].bookReady;
@@ -134,7 +166,7 @@ export async function sendOrderConfirmationEmail(params: {
   childName: string;
   bookTitle: string;
   total: string;
-  locale?: Locale;
+  locale?: EmailLocale;
 }): Promise<void> {
   const locale = params.locale ?? "en";
   const strings = emailStrings[locale].orderConfirmation;
@@ -169,7 +201,7 @@ export async function sendShippingNotificationEmail(params: {
   trackingUrl: string;
   trackingNumber: string;
   carrier: string;
-  locale?: Locale;
+  locale?: EmailLocale;
 }): Promise<void> {
   const locale = params.locale ?? "en";
   const strings = emailStrings[locale].shippingNotification;

@@ -1,0 +1,790 @@
+{
+  "Common": {
+    "back": "Retour",
+    "continue": "Continuer",
+    "skip": "Passer",
+    "loading": "Chargement...",
+    "tryAgain": "Réessayer",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "createBook": "Créer un livre",
+    "getStarted": "Commencer",
+    "goBack": "Retour",
+    "add": "Ajouter",
+    "addAll": "Tout ajouter",
+    "invalidCustomTag": "Utilisez au moins 2 lettres",
+    "nextStep": "Étape suivante",
+    "dashboard": "Tableau de bord",
+    "or": "ou",
+    "littletales": "Littletales",
+    "goToDashboard": "Aller au tableau de bord",
+    "pageOf": "Page {current} sur {total}"
+  },
+  "Header": {
+    "brand": "Littletales",
+    "goBack": "Retour",
+    "signIn": "Se connecter",
+    "dashboard": "Tableau de bord"
+  },
+  "Landing": {
+    "nav": {
+      "signIn": "Se connecter",
+      "createBook": "Créer un livre"
+    },
+    "hero": {
+      "title": "Créez le livre cadeau parfait pour votre enfant",
+      "cta": "Créez votre livre — 24,99 $"
+    },
+    "howItWorks": {
+      "title": "Comment ça marche",
+      "subtitle": "De la photo au livre imprimé en 4 étapes simples",
+      "step1": {
+        "title": "Parlez-nous de votre enfant",
+        "description": "Nom, âge, personnalité et choses préférées — seulement 60 secondes."
+      },
+      "step2": {
+        "title": "Téléchargez une photo",
+        "description": "Une photo claire du visage. Nous la transformerons en personnage illustré."
+      },
+      "step3": {
+        "title": "Choisissez votre style",
+        "description": "Choisissez parmi 4 magnifiques styles d'illustration et prose ou rime."
+      },
+      "step4": {
+        "title": "L'IA crée votre livre",
+        "description": "En moins de 5 minutes, obtenez une histoire illustrée complète de 32 pages."
+      }
+    },
+    "features": {
+      "title": "Pourquoi les parents adorent Littletales",
+      "looksLikeChild": {
+        "title": "Il ressemble à VOTRE enfant",
+        "description": "Notre IA transforme sa photo en un personnage illustré qui lui ressemble vraiment — pas un avatar générique."
+      },
+      "storyQuality": {
+        "title": "Une qualité d'histoire qui surprend",
+        "description": "Écrit par l'IA Claude avec le savoir-faire d'un vrai auteur de livres pour enfants. Les parents disent qu'ils aiment vraiment le lire à voix haute."
+      },
+      "readyFast": {
+        "title": "Prêt en moins de 5 minutes",
+        "description": "Pas d'attente de jours ou de semaines. Répondez à quelques questions, téléchargez une photo et regardez votre livre prendre vie en temps réel."
+      },
+      "artStyles": {
+        "title": "4 magnifiques styles artistiques",
+        "description": "Des aquarelles oniriques aux illustrations modernes et audacieuses. Chaque style est cohérent sur les 32 pages."
+      },
+      "printQuality": {
+        "title": "Qualité d'impression premium",
+        "description": "Couverture rigide ou souple professionnelle, imprimé en 300 DPI avec des couleurs vibrantes. Livraison mondiale."
+      },
+      "perfectGift": {
+        "title": "Le cadeau parfait",
+        "description": "Grands-parents, oncles, tantes — tout le monde veut offrir à l'enfant qu'il aime son propre livre."
+      }
+    },
+    "testimonials": {
+      "title": "Ce que disent les parents",
+      "items": {
+        "sarah": {
+          "quote": "Ma fille a crié 'C'EST MOI !' quand elle s'est vue dans le livre. Ça vaut chaque centime.",
+          "name": "Sarah M.",
+          "role": "Maman d'une fille de 5 ans"
+        },
+        "david": {
+          "quote": "La qualité de l'histoire m'a époustouflé. Ça ne se lit pas comme de l'IA — ça se lit comme un vrai livre pour enfants.",
+          "name": "David K.",
+          "role": "Papa de jumeaux de 4 ans"
+        },
+        "linda": {
+          "quote": "J'en ai commandé un pour chaque petit-enfant. Ils ADORENT se voir comme le héros.",
+          "name": "Linda R.",
+          "role": "Grand-mère fière"
+        }
+      }
+    },
+    "pricing": {
+      "title": "Tarification simple",
+      "subtitle": "Création et aperçu gratuits. Payez uniquement lors de la commande d'un exemplaire imprimé.",
+      "softcover": "Couverture souple",
+      "softcoverPrice": "24,99 $",
+      "hardcover": "Couverture rigide",
+      "hardcoverPrice": "34,99 $",
+      "mostPopular": "Le plus populaire",
+      "fullColorPages": "32 pages en couleur",
+      "premiumPaper": "Papier premium",
+      "worldwideShipping": "Livraison mondiale",
+      "durableHardcover": "Couverture rigide durable",
+      "getStarted": "Commencer"
+    },
+    "faq": {
+      "title": "Questions fréquentes",
+      "q1": {
+        "question": "Combien de temps faut-il pour créer un livre ?",
+        "answer": "L'assistant prend environ 2 minutes. La génération par IA prend 3 à 5 minutes. Vous aurez un aperçu complet du livre en moins de 10 minutes au total."
+      },
+      "q2": {
+        "question": "À quel point le personnage ressemble-t-il à la photo de mon enfant ?",
+        "answer": "Notre IA crée une version illustrée clairement reconnaissable comme votre enfant — même forme de visage, cheveux et traits — mais rendue dans un beau style d'illustration."
+      },
+      "q3": {
+        "question": "Combien de temps prend la livraison ?",
+        "answer": "La livraison standard est de 7 à 10 jours ouvrables. Nous imprimons et expédions depuis le centre de distribution le plus proche dans le monde."
+      },
+      "q4": {
+        "question": "Puis-je modifier l'histoire après sa génération ?",
+        "answer": "Oui ! Vous pouvez modifier le texte de n'importe quelle page et régénérer les illustrations avant de commander."
+      },
+      "q5": {
+        "question": "Est-ce sans danger pour les enfants ? Qu'en est-il de la modération du contenu ?",
+        "answer": "Chaque histoire passe par un contrôle de sécurité par IA pour garantir un contenu adapté à l'âge. Toutes les illustrations sont vérifiées en termes de qualité et de pertinence."
+      }
+    },
+    "cta": {
+      "title": "Créez un livre qu'ils chériront pour toujours",
+      "subtitle": "Ça prend moins de 5 minutes. Commencez gratuitement.",
+      "button": "Créez votre livre maintenant"
+    },
+    "footer": {
+      "tagline": "Livres pour enfants personnalisés par IA qui font de votre enfant la star.",
+      "product": "Produit",
+      "createBook": "Créer un livre",
+      "examples": "Exemples",
+      "pricing": "Tarifs",
+      "faq": "FAQ",
+      "company": "Entreprise",
+      "about": "À propos",
+      "contact": "Contact",
+      "privacyPolicy": "Politique de confidentialité",
+      "termsOfService": "Conditions d'utilisation",
+      "support": "Support"
+    }
+  },
+  "Auth": {
+    "login": {
+      "title": "Bon retour",
+      "subtitle": "Connectez-vous pour créer des livres magiques",
+      "google": "Continuer avec Google",
+      "emailPlaceholder": "E-mail",
+      "passwordPlaceholder": "Mot de passe",
+      "submit": "Se connecter",
+      "error": "E-mail ou mot de passe invalide",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "signUp": "S'inscrire"
+    },
+    "register": {
+      "title": "Créer un compte",
+      "subtitle": "Commencez à créer des livres personnalisés en quelques minutes",
+      "google": "Continuer avec Google",
+      "namePlaceholder": "Nom complet",
+      "emailPlaceholder": "E-mail",
+      "passwordPlaceholder": "Mot de passe (min. 8 caractères)",
+      "submit": "Créer un compte",
+      "genericError": "Une erreur s'est produite. Veuillez réessayer.",
+      "signInFailed": "Compte créé mais la connexion a échoué. Veuillez essayer de vous connecter.",
+      "hasAccount": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter"
+    }
+  },
+  "GetStarted": {
+    "step1": {
+      "title": "Faisons connaissance",
+      "subtitle": "D'abord, comment vous appelez-vous ?",
+      "placeholder": "Votre prénom",
+      "continue": "Continuer"
+    },
+    "step2": {
+      "titleWithName": "Bonjour, {name} ! 👋",
+      "subtitle": "Où devons-nous envoyer les mises à jour de votre livre ?",
+      "placeholder": "votre@email.com",
+      "continue": "Continuer",
+      "agreement": "En continuant, vous acceptez nos",
+      "terms": "Conditions d'utilisation",
+      "and": "et notre",
+      "privacy": "Politique de confidentialité"
+    },
+    "step3": {
+      "title": "Comment avez-vous entendu parler de nous ?",
+      "subtitle": "Cela nous aide à atteindre plus de familles comme la vôtre",
+      "skip": "Passer"
+    },
+    "step4": {
+      "title": "Le cadeau parfait pour votre enfant",
+      "subtitle": "Un livre d'histoires unique où votre enfant est le héros",
+      "theAmazing": "L'incroyable",
+      "adventure": "Aventure",
+      "storyAbout": "Une histoire sur votre enfant",
+      "start": "Commencer à créer"
+    }
+  },
+  "Wizard": {
+    "progress": {
+      "step1": "Infos enfant",
+      "step2": "Créatif",
+      "step3": "Photos",
+      "step4": "Style",
+      "step5": "Idée de livre",
+      "step6": "Aperçu couverture"
+    },
+    "childInfo": {
+      "heading": "À qui est destiné ce livre ?",
+      "subtitle": "Parlez-nous de la petite star de l'histoire",
+      "nameLabel": "Prénom de l'enfant",
+      "namePlaceholder": "Entrez son prénom...",
+      "ageLabel": "Âge",
+      "pronounsLabel": "Genre",
+      "genderBoy": "Garçon",
+      "genderGirl": "Fille",
+      "genderNonBinary": "Non-binaire"
+    },
+    "creative": {
+      "substep1Label": "Occasion et thème",
+      "substep1Hint": "De quoi parle l'histoire ?",
+      "substep2Label": "À propos de l'enfant",
+      "substep2Hint": "Dites-nous ce qui le rend spécial",
+      "substep3Label": "Extras",
+      "substep3Hint": "Détails optionnels pour une histoire plus riche",
+      "occasionLabel": "Quelle est l'occasion ?",
+      "occasionPlaceholder": "Ou tapez votre propre occasion...",
+      "themeLabel": "Choisissez un thème d'histoire",
+      "traitsLabel": "Traits de personnalité",
+      "traitsCounter": "({count}/3)",
+      "traitsPlaceholder": "Ajoutez le vôtre...",
+      "hobbiesLabel": "Loisirs",
+      "hobbiesCounter": "({count}/5)",
+      "hobbiesPlaceholder": "Ajoutez le vôtre...",
+      "optionalInfo": "Ces informations sont optionnelles mais nous aident à rendre l'histoire encore plus personnelle.",
+      "animalsLabel": "Animaux préférés",
+      "animalsCounter": "({count}/3)",
+      "animalsPlaceholder": "Ajoutez le vôtre...",
+      "foodsLabel": "Plats préférés",
+      "foodsCounter": "({count}/3)",
+      "foodsPlaceholder": "Ajoutez le vôtre...",
+      "multipleItemsSuggestion": "On dirait que vous avez plusieurs éléments — ajoutez-les séparément pour de meilleurs résultats !",
+      "sentences": {
+        "occasion": "Le livre de {childName} est pour {blank}",
+        "theme": "L'histoire de {childName} parlera de {blank}",
+        "traits": "{childName} est un enfant {blank}",
+        "hobbies": "{pronoun} adore {blank}",
+        "animals": "L'animal préféré de {childName} est {blank}",
+        "foods": "Et {pronoun} ne dit jamais non à {blank}"
+      },
+      "pronouns": {
+        "boy": { "subject": "Il", "possessive": "Son" },
+        "girl": { "subject": "Elle", "possessive": "Sa" },
+        "non-binary": { "subject": "Iel", "possessive": "Son/Sa" }
+      },
+      "doneButton": "Terminé",
+      "skipLink": "Passer"
+    },
+    "photos": {
+      "substep1Label": "Télécharger des photos",
+      "substep1Hint": "Nous les transformerons en personnages illustrés",
+      "substep2Label": "Personnages supplémentaires",
+      "substep2Hint": "Ajoutez des membres de la famille, des amis ou des animaux",
+      "headingWithName": "Téléchargez les photos de {childName}",
+      "headingDefault": "Téléchargez les photos de votre enfant",
+      "slotLabel1": "Meilleure photo",
+      "slotLabel2": "Angle différent",
+      "slotLabel3": "Corps entier",
+      "slotLabel4": "Autre angle",
+      "photoAlt": "Photo {index}",
+      "checking": "Vérification...",
+      "errorTooLarge": "Chaque photo doit faire moins de 10 Mo",
+      "errorMaxPhotos": "Maximum 4 photos",
+      "multipleAnglesInfo": "Plusieurs angles nous aident à créer un personnage plus fidèle",
+      "noFaceHeading": "Nous n'avons pas détecté de visage",
+      "noFaceMessage": "Cette photo ne semble pas contenir de visage visible. Pour les meilleurs personnages illustrés, veuillez utiliser une photo où le visage de votre enfant est clair et facile à voir.",
+      "quickTipsHeading": "Conseils rapides",
+      "tip1": "Utilisez un gros plan ou une photo mi-corps",
+      "tip2": "Assurez-vous que le visage est bien éclairé et net",
+      "tip3": "Évitez les lunettes de soleil, masques ou ombres prononcées",
+      "noFaceDismiss": "Compris, je vais essayer une autre photo",
+      "incompleteHeading": "Presque terminé !",
+      "incompleteMessage": "{count, plural, =1 {Un de vos personnages n'a pas de nom ou de photo.} other {# personnages n'ont pas de nom ou de photo.}}",
+      "incompleteNeedsBoth": "Chaque personnage a besoin des deux pour apparaître dans l'histoire.",
+      "incompleteGoBack": "Revenir et compléter",
+      "incompleteRemove": "Supprimer les incomplets et continuer",
+      "requiredHeading": "Nous avons besoin d'une photo !",
+      "requiredMessage": "Veuillez télécharger au moins une photo de votre enfant pour que nous puissions créer son personnage illustré pour le livre.",
+      "requiredDismiss": "Compris",
+      "whoElse": "Qui d'autre devrait apparaître dans l'histoire ?",
+      "addAnother": "Ajouter un autre personnage",
+      "optionalHint": "C'est optionnel — vous pouvez passer si l'histoire ne concerne que votre enfant",
+      "tapPhotoToAdd": "appuyez pour ajouter une photo",
+      "rolePlaceholder": "Nom de {role}",
+      "uploading": "Téléchargement..."
+    },
+    "style": {
+      "heading": "Style de l'histoire",
+      "subtitle": "Choisissez l'apparence et le style de lecture de votre livre",
+      "writingLabel": "Style d'écriture",
+      "proseLabel": "Prose",
+      "proseDesc": "Récit fluide avec de belles descriptions",
+      "proseExample": "\"Luna traversa le jardin sur la pointe des pieds, le cœur battant d'excitation...\"",
+      "rhymeLabel": "Rime",
+      "rhymeDesc": "Vers rimés amusants avec un rythme enjoué",
+      "rhymeExample": "\"À travers le jardin, Luna se faufila / Tandis que les petites fleurs sommeillaient déjà...\"",
+      "illustrationLabel": "Style d'illustration",
+      "dedicationLabel": "Dédicace",
+      "optional": "(optionnel)",
+      "dedicationPlaceholder": "ex. \"Pour notre petit explorateur — Avec amour, Maman et Papa\"",
+      "charCounter": "{count}/200 caractères"
+    },
+    "titles": {
+      "loadingHeading": "Réflexion en cours...",
+      "loadingMessage": "Notre auteur IA imagine des idées de livres uniques pour {childName}",
+      "errorHeading": "Oups !",
+      "errorSubheading": "Nous n'avons pas pu générer d'idées de livres",
+      "mainHeading": "Choisissez une idée de livre",
+      "subtitle": "Choisissez l'histoire parfaite pour le livre de {childName}",
+      "generateNew": "Générer de nouvelles idées",
+      "noIdeasError": "Aucune idée de livre n'a été retournée. Veuillez réessayer."
+    },
+    "review": {
+      "readyHeading": "Prêt à créer !",
+      "readySubtext": "Vérifiez vos choix, puis générez un aperçu gratuit de la couverture",
+      "bookIdeaLabel": "Idée du livre",
+      "ageDisplay": "Âge {age}",
+      "pronounHeHim": "Il/Lui",
+      "pronounSheHer": "Elle",
+      "pronounTheyThem": "Non-binaire",
+      "photoCount": "{count, plural, one {# photo} other {# photos}} téléchargée(s)",
+      "occasionLabel": "Occasion",
+      "themeLabel": "Thème",
+      "personalityLabel": "Personnalité",
+      "foodsLabel": "Plats préférés",
+      "hobbiesLabel": "Loisirs",
+      "charactersLabel": "Personnages préférés",
+      "animalsLabel": "Animaux préférés",
+      "additionalCharsLabel": "Personnages supplémentaires",
+      "unnamed": "Sans nom",
+      "writingLabel": "Écriture",
+      "styleProse": "Prose",
+      "styleRhyme": "Rime",
+      "artStyleLabel": "Style artistique",
+      "dedicationLabel": "Dédicace",
+      "generateCoverPreview": "Générer un aperçu de la couverture",
+      "freePreview": "Aperçu gratuit — voyez vos couvertures avant de vous engager",
+      "creatingCovers": "Création de vos couvertures",
+      "generatingTime": "Cela prend généralement 1 à 2 minutes",
+      "frontCover": "Couverture avant",
+      "backCover": "Couverture arrière",
+      "errorHeading": "Échec de la génération de la couverture",
+      "errorDefault": "Une erreur s'est produite lors de la génération de vos couvertures. Veuillez réessayer.",
+      "goBackEdit": "Revenir et modifier",
+      "coversReady": "Vos couvertures sont prêtes !",
+      "sneakPeek": "Voici un aperçu de",
+      "loading": "Chargement...",
+      "signUpButton": "Inscrivez-vous pour générer le livre complet",
+      "demoInfo": "Créez un compte pour générer le livre illustré complet",
+      "generateFullBook": "Générer le livre complet",
+      "generateInfo": "Générez le livre illustré complet avec toutes les pages",
+      "generatingMsg1": "Rédaction de l'histoire...",
+      "generatingMsg2": "Imagination des personnages...",
+      "generatingMsg3": "Peinture des scènes...",
+      "generatingMsg4": "Ajout d'une pincée de magie...",
+      "generatingMsg5": "Mélange des couleurs...",
+      "generatingMsg6": "Écriture de l'aventure...",
+      "generatingMsg7": "Peaufinage des détails...",
+      "generatingMsg8": "Presque terminé..."
+    }
+  },
+  "Dashboard": {
+    "createNew": "Créer un nouveau livre",
+    "orderSuccess": "Commande #{orderNumber} confirmée !",
+    "orderShipping": "Votre livre est en cours d'impression et sera expédié dans 7 à 10 jours ouvrables.",
+    "title": "Mes livres",
+    "emptyTitle": "Pas encore de livres",
+    "emptyDescription": "Créez votre premier livre personnalisé pour enfants en moins de 5 minutes !",
+    "emptyButton": "Créer votre premier livre",
+    "statusDraft": "Brouillon",
+    "statusGenerating": "Création...",
+    "statusCoverReady": "Aperçu prêt",
+    "statusPreviewReady": "Aperçu prêt",
+    "statusApproved": "Approuvé",
+    "statusOrdered": "Commandé",
+    "bookFor": "Pour"
+  },
+  "Generate": {
+    "title": "Création de votre livre",
+    "funMessages": {
+      "msg1": "Mélange des couleurs parfaites...",
+      "msg2": "Ajout d'une pincée de magie...",
+      "msg3": "On apprend aux personnages à sourire...",
+      "msg4": "Un secret caché sur chaque page...",
+      "msg5": "On s'assure que l'histoire a une fin heureuse..."
+    },
+    "percentComplete": "{percent} % terminé",
+    "sneakPeek": "Aperçu",
+    "readyTitle": "Votre livre est prêt !",
+    "readySubtitle": "{childName} vous attend",
+    "previewButton": "Voir mon livre",
+    "errorTitle": "Une erreur s'est produite",
+    "stages": {
+      "STORY_GENERATION": {
+        "label": "Écriture de l'histoire",
+        "description": "Claude rédige un conte magique rien que pour {childName}..."
+      },
+      "SAFETY_REVIEW": {
+        "label": "Contrôle qualité",
+        "description": "Vérification que tout est parfait et adapté à l'âge..."
+      },
+      "CHARACTER_DESIGN": {
+        "label": "Création du personnage",
+        "description": "Transformation de la photo de {childName} en personnage de livre..."
+      },
+      "PAGE_ILLUSTRATIONS": {
+        "label": "Illustration des pages",
+        "description": "Peinture de belles illustrations pour chaque page..."
+      },
+      "PDF_ASSEMBLY": {
+        "label": "Assemblage du livre",
+        "description": "Mise en page de toutes les pages dans un beau livre..."
+      },
+      "QUALITY_CHECK": {
+        "label": "Vérification finale",
+        "description": "Un dernier coup d'œil pour s'assurer que tout est parfait..."
+      }
+    }
+  },
+  "Preview": {
+    "myBooks": "Mes livres",
+    "notFound": "Livre introuvable",
+    "loadError": "Échec du chargement de l'aperçu du livre",
+    "bookFor": "Un livre personnalisé pour",
+    "orderButton": "Commander mon livre — À partir de 24,99 $",
+    "editText": "Modifier le texte",
+    "freePreview": "Aperçu gratuit — payez uniquement lors de la commande d'un exemplaire imprimé"
+  },
+  "Checkout": {
+    "backToPreview": "Retour à l'aperçu",
+    "title": "Commander votre livre",
+    "chooseFormat": "Choisir le format",
+    "hardcover": "Couverture rigide",
+    "premiumQuality": "Qualité premium",
+    "softcover": "Couverture souple",
+    "greatValue": "Excellent rapport qualité-prix",
+    "shippingAddress": "Adresse de livraison",
+    "fullName": "Nom complet",
+    "address1": "Ligne d'adresse 1",
+    "address2": "Ligne d'adresse 2 (optionnel)",
+    "city": "Ville",
+    "state": "État/Province",
+    "postalCode": "Code postal",
+    "country": {
+      "US": "États-Unis",
+      "CA": "Canada",
+      "GB": "Royaume-Uni",
+      "AU": "Australie",
+      "DE": "Allemagne",
+      "FR": "France",
+      "IL": "Israël"
+    },
+    "proceedToPayment": "Procéder au paiement",
+    "shipping": "Livraison",
+    "calculatedAtCheckout": "Calculé lors du paiement",
+    "total": "Total",
+    "shipsIn": "Expédition sous 7 à 10 jours ouvrables"
+  },
+  "Marketing": {
+    "faq": {
+      "title": "Questions fréquentes",
+      "stillHaveQuestions": "Vous avez encore des questions ?",
+      "loveToHelp": "Nous serions ravis de vous aider !",
+      "contactUs": "Contactez-nous",
+      "categories": {
+        "creating": {
+          "title": "Créer votre livre",
+          "q1": {
+            "question": "Combien de temps faut-il pour créer un livre ?",
+            "answer": "L'assistant de création prend environ 2 minutes. La génération par IA prend 3 à 5 minutes. Vous aurez un aperçu complet du livre en moins de 10 minutes au total."
+          },
+          "q2": {
+            "question": "Pour quelle tranche d'âge les livres sont-ils conçus ?",
+            "answer": "Nos livres sont conçus pour les enfants de 3 à 8 ans, l'âge idéal pour les albums illustrés. L'IA adapte le vocabulaire et la complexité de l'histoire en fonction de l'âge de l'enfant."
+          },
+          "q3": {
+            "question": "Quelle photo dois-je utiliser ?",
+            "answer": "Une photo claire, de face, avec un bon éclairage fonctionne le mieux. Évitez les ombres prononcées, les lunettes de soleil ou les photos où le visage est partiellement caché."
+          },
+          "q4": {
+            "question": "Puis-je inclure plusieurs enfants dans un seul livre ?",
+            "answer": "Cette fonctionnalité arrive bientôt ! Actuellement, chaque livre met en scène un enfant comme personnage principal."
+          }
+        },
+        "quality": {
+          "title": "Qualité et contenu",
+          "q1": {
+            "question": "À quel point le personnage illustré est-il fidèle ?",
+            "answer": "Notre IA crée un personnage clairement reconnaissable comme votre enfant — même forme de visage, couleur de cheveux et traits — mais magnifiquement rendu dans le style d'illustration choisi."
+          },
+          "q2": {
+            "question": "Le contenu est-il sûr et adapté à l'âge ?",
+            "answer": "Absolument. Chaque histoire passe par un contrôle de sécurité automatisé vérifiant l'adéquation à l'âge, les biais et la qualité du contenu avant que vous ne le voyiez."
+          },
+          "q3": {
+            "question": "Puis-je modifier l'histoire ?",
+            "answer": "Oui ! Après la génération, vous pouvez modifier le texte de n'importe quelle page et régénérer les illustrations (jusqu'à 3 fois par page) avant de commander."
+          }
+        },
+        "ordering": {
+          "title": "Commande et livraison",
+          "q1": {
+            "question": "Quelle est la qualité d'impression ?",
+            "answer": "Nous utilisons l'impression professionnelle à la demande en 300 DPI, couleurs vibrantes et papier premium. Les couvertures rigides sont faites pour résister à de nombreuses lectures du soir."
+          },
+          "q2": {
+            "question": "Où livrez-vous ?",
+            "answer": "Nous livrons dans plus de 150 pays dans le monde grâce au réseau de distribution mondial de notre partenaire d'impression."
+          },
+          "q3": {
+            "question": "Combien de temps prend la livraison ?",
+            "answer": "La livraison standard est de 7 à 10 jours ouvrables pour la plupart des destinations. Les livres sont imprimés au centre de distribution le plus proche pour minimiser le délai de transit."
+          },
+          "q4": {
+            "question": "Quelle est votre politique de retour ?",
+            "answer": "En cas de problème de qualité d'impression, nous réimprimons et expédions un remplacement sans frais. Contactez-nous dans les 30 jours suivant la livraison."
+          }
+        }
+      }
+    },
+    "pricing": {
+      "title": "Tarification simple et transparente",
+      "subtitle": "Création et aperçu gratuits. Payez uniquement pour les exemplaires imprimés.",
+      "softcover8x8": "Couverture souple 8x8",
+      "hardcover8x8": "Couverture rigide 8x8",
+      "hardcover8x10": "Couverture rigide 8x10",
+      "mostPopular": "Le plus populaire",
+      "fullColorPages": "32 pages en couleur",
+      "highQualityPaper": "Papier haute qualité",
+      "standardShipping": "Livraison standard",
+      "durableHardcover": "Couverture rigide durable",
+      "premiumPaper": "Papier premium",
+      "largerFormat": "Format plus grand",
+      "premiumQuality": "Qualité premium",
+      "addOns": "Options supplémentaires",
+      "rushProcessing": "Traitement prioritaire",
+      "rushProcessingDesc": "Génération et impression prioritaires",
+      "giftWrapping": "Emballage cadeau",
+      "giftWrappingDesc": "Bel emballage prêt à offrir",
+      "audioNarration": "Narration audio",
+      "audioNarrationDesc": "QR code dans le livre vers la narration",
+      "getStarted": "Commencer"
+    },
+    "examples": {
+      "title": "Exemples de livres",
+      "subtitle": "Découvrez ce que Littletales peut créer. Chaque livre est unique !",
+      "readyTitle": "Prêt à créer le vôtre ?",
+      "createButton": "Créez votre livre maintenant",
+      "books": {
+        "luna": {
+          "title": "Le jardin enchanté de Luna",
+          "child": "Luna, 5 ans",
+          "description": "Luna découvre un jardin caché où les fleurs chantent et les papillons racontent des histoires."
+        },
+        "max": {
+          "title": "Capitaine Max et la carte des étoiles",
+          "child": "Max, 7 ans",
+          "description": "Max pilote une fusée à travers le système solaire, se faisant des amis sur chaque planète."
+        },
+        "mia": {
+          "title": "L'orchestre sous-marin de Mia",
+          "child": "Mia, 4 ans",
+          "description": "Mia plonge sous les vagues pour diriger un concert avec ses amis les créatures marines."
+        },
+        "ethan": {
+          "title": "Les aventures courageuses d'Ethan",
+          "child": "Ethan, 6 ans",
+          "description": "Ethan gravit la plus haute montagne, traverse la plus large rivière et découvre le plus grand trésor de tous."
+        },
+        "sophie": {
+          "title": "Sophie et le secret du dragon",
+          "child": "Sophie, 5 ans",
+          "description": "Sophie se lie d'amitié avec un dragon timide qui a besoin d'aide pour trouver sa voix."
+        },
+        "daniel": {
+          "title": "Journée dinosaure avec Daniel",
+          "child": "Daniel, 3 ans",
+          "description": "Daniel se réveille et trouve un dinosaure amical dans son jardin — et l'aventure commence !"
+        }
+      }
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "lastUpdated": "Dernière mise à jour : 24 février 2026"
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "lastUpdated": "Dernière mise à jour : 24 février 2026"
+    }
+  },
+  "Constants": {
+    "themes": {
+      "adventure": {
+        "name": "Aventure",
+        "description": "Quêtes épiques et découvertes courageuses"
+      },
+      "friendship": {
+        "name": "Amitié",
+        "description": "Se faire des amis et travailler ensemble"
+      },
+      "space": {
+        "name": "Espace",
+        "description": "Fusées, planètes et merveilles cosmiques"
+      },
+      "enchanted-forest": {
+        "name": "Forêt enchantée",
+        "description": "Bois magiques pleins de merveilles"
+      },
+      "superheroes": {
+        "name": "Super-héros",
+        "description": "Découvrez vos pouvoirs spéciaux"
+      },
+      "fairy-tale": {
+        "name": "Conte de fées",
+        "description": "La magie du il était une fois"
+      },
+      "robots": {
+        "name": "Robots",
+        "description": "Robots sympathiques et inventions géniales"
+      },
+      "underwater": {
+        "name": "Sous-marin",
+        "description": "Aventures en haute mer et amis de l'océan"
+      },
+      "dinosaurs": {
+        "name": "Dinosaures",
+        "description": "Amusement rugissant à l'ère préhistorique"
+      }
+    },
+    "styles": {
+      "WATERCOLOR_WHIMSY": {
+        "name": "Aquarelle fantaisiste",
+        "description": "Textures d'aquarelle douces et oniriques avec un mélange délicat de couleurs"
+      },
+      "BRIGHT_AND_BOLD": {
+        "name": "Vif et audacieux",
+        "description": "Couleurs vives et contours marqués, moderne et énergique"
+      },
+      "STORYBOOK_CLASSIC": {
+        "name": "Classique de conte",
+        "description": "Style dessin à la main intemporel, chaleureux et nostalgique"
+      },
+      "COZY_AND_WARM": {
+        "name": "Douillet et chaleureux",
+        "description": "Éclairage doux, formes arrondies, atmosphère réconfortante"
+      }
+    },
+    "traits": {
+      "brave": "Courageux",
+      "curious": "Curieux",
+      "kind": "Gentil",
+      "funny": "Drôle",
+      "creative": "Créatif"
+    },
+    "occasions": {
+      "birthday": "Anniversaire",
+      "holiday": "Fête",
+      "just-because": "Juste comme ça",
+      "achievement": "Réussite",
+      "new-sibling": "Nouveau frère/sœur"
+    },
+    "hobbies": {
+      "drawing": "Dessin",
+      "sports": "Sports",
+      "music": "Musique",
+      "building": "Construction",
+      "outdoor-play": "Jeux en plein air"
+    },
+    "animals": {
+      "dog": "Chien",
+      "cat": "Chat",
+      "bunny": "Lapin",
+      "horse": "Cheval",
+      "dolphin": "Dauphin"
+    },
+    "foods": {
+      "pizza": "Pizza",
+      "ice-cream": "Glace",
+      "pasta": "Pâtes",
+      "chocolate": "Chocolat",
+      "pancakes": "Crêpes"
+    },
+    "characters": {
+      "superheroes": "Super-héros",
+      "princesses": "Princesses",
+      "dinosaurs": "Dinosaures",
+      "animals": "Animaux",
+      "robots": "Robots"
+    },
+    "favoriteThings": {
+      "animals": "Animaux",
+      "dinosaurs": "Dinosaures",
+      "space": "Espace",
+      "music": "Musique",
+      "art": "Art"
+    },
+    "roles": {
+      "mom": "Maman",
+      "dad": "Papa",
+      "sister": "Sœur",
+      "brother": "Frère",
+      "pet": "Animal de compagnie",
+      "friend": "Ami(e)",
+      "grandparent": "Grand-parent"
+    }
+  },
+  "Validation": {
+    "nameRequired": "Le nom est requis",
+    "nameMaxLength": "Le nom doit comporter 30 caractères ou moins",
+    "namePattern": "Le nom ne peut contenir que des lettres, espaces, tirets et apostrophes",
+    "selectOption": "Veuillez sélectionner une option",
+    "ageRange": "L'âge doit être entre 3 et 8",
+    "selectOccasion": "Veuillez sélectionner une occasion",
+    "pickFavoriteThing": "Choisissez au moins une chose préférée",
+    "maxFavoriteThings": "Choisissez jusqu'à 5 choses préférées",
+    "pickTrait": "Choisissez au moins un trait",
+    "maxTraits": "Choisissez jusqu'à 3 traits",
+    "chooseTheme": "Veuillez choisir un thème",
+    "uploadPhoto": "Veuillez télécharger une photo",
+    "dedicationMaxLength": "La dédicace doit comporter 200 caractères ou moins",
+    "addressRequired": "L'adresse est requise",
+    "cityRequired": "La ville est requise",
+    "postalCodeRequired": "Le code postal est requis",
+    "selectStoryStyle": "Veuillez sélectionner un style d'histoire",
+    "selectIllustrationStyle": "Veuillez sélectionner un style d'illustration"
+  },
+  "Create": {
+    "generatingTitle": "Génération de l'histoire...",
+    "generatingTime": "Cela peut prendre 30 à 60 secondes",
+    "startOver": "Recommencer",
+    "storyFor": "Une histoire pour {childName}",
+    "generatingCharRef": "Génération du personnage de référence...",
+    "generatingIllustrations": "Génération des illustrations : {done} sur {total}",
+    "allIllustrationsGenerated": "Toutes les illustrations sont générées",
+    "preparingIllustrations": "Préparation des illustrations...",
+    "textOnlyNoPhoto": "Texte uniquement — aucune photo téléchargée pour les illustrations"
+  },
+  "BookViewer": {
+    "pageOf": "Page {current} sur {total}",
+    "pageAlt": "Page {pageNumber}"
+  },
+  "LanguageSwitcher": {
+    "english": "English",
+    "hebrew": "עברית",
+    "french": "Français"
+  },
+  "ReferralSources": {
+    "google": "Google",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "youtube": "YouTube",
+    "friend": "Ami(e)",
+    "tv": "TV",
+    "pinterest": "Pinterest",
+    "email": "E-mail",
+    "podcast": "Podcast",
+    "other": "Autre"
+  }
+}

@@ -4,11 +4,18 @@ import { useRef, useState, useEffect } from "react";
 import { Globe } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 
-const LOCALES = [
-  { code: "en", label: "english" },
-  { code: "he", label: "hebrew" },
-] as const;
+const LOCALE_LABELS: Record<string, string> = {
+  en: "english",
+  he: "hebrew",
+  fr: "french",
+};
+
+const LOCALES = routing.locales.map((code) => ({
+  code,
+  label: LOCALE_LABELS[code] ?? code,
+}));
 
 export interface LanguageSwitcherProps {
   className?: string;
@@ -57,7 +64,7 @@ export function LanguageSwitcher({ className }: LanguageSwitcherProps = {}) {
       >
         <Globe className="w-4 h-4" />
         <span className="hidden sm:inline">
-          {locale === "he" ? t("hebrew") : t("english")}
+          {t(LOCALES.find((l) => l.code === locale)?.label ?? "english")}
         </span>
       </button>
 

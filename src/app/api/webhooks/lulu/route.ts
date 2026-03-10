@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { sendShippingNotificationEmail } from "@/lib/resend";
+import { sendShippingNotificationEmail, type EmailLocale } from "@/lib/resend";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -54,8 +54,7 @@ export async function POST(req: Request) {
           trackingUrl,
           trackingNumber: trackingId || "N/A",
           carrier: carrier || "Standard Shipping",
-          // Only "he" has translated email templates; all others fall back to English
-          locale: (order.book.language === "he" ? "he" : "en") as "en" | "he",
+          locale: order.book.language as EmailLocale,
         }).catch(console.error);
       }
     }

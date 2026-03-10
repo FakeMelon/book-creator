@@ -771,7 +771,8 @@
   },
   "LanguageSwitcher": {
     "english": "English",
-    "hebrew": "עברית"
+    "hebrew": "עברית",
+    "french": "Français"
   },
   "ReferralSources": {
     "google": "Google",

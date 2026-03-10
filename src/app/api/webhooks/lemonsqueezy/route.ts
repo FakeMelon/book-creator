@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { db } from "@/lib/db";
 import { createPrintOrder } from "@/lib/lulu";
-import { sendOrderConfirmationEmail } from "@/lib/resend";
+import { sendOrderConfirmationEmail, type EmailLocale } from "@/lib/resend";
 import { formatPrice } from "@/lib/utils";
 
 export async function POST(req: Request) {
@@ -98,8 +98,7 @@ export async function POST(req: Request) {
         childName: order.book.childName,
         bookTitle: order.book.title || "Your Custom Book",
         total: formatPrice(order.total),
-        // Only "he" has translated email templates; all others fall back to English
-        locale: (order.book.language === "he" ? "he" : "en") as "en" | "he",
+        locale: order.book.language as EmailLocale,
       }).catch(console.error);
     }
   }
