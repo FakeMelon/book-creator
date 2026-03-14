@@ -1,23 +1,10 @@
 import { z } from "zod";
+import { BOOK_LANGUAGES, AGE_RANGE_OPTIONS, ILLUSTRATION_STYLES } from "@/constants";
+import type { IllustrationStyle } from "@/types";
 
-const bookLanguages = ["en", "he", "fr", "es", "de", "ar", "ru", "pt", "zh", "ja", "ko"] as const;
-
-const ageRanges = ["0-2", "3-5", "6-9", "10+"] as const;
-
-const illustrationStyles = [
-  "WATERCOLOR",
-  "SOFT_ANIME",
-  "PAPER_COLLAGE",
-  "PLAYFUL_3D",
-  "GOUACHE_PAINTERLY",
-  "CLAYMATION",
-  "GEOMETRIC_MODERN",
-  "PICTURE_BOOK",
-  "BLOCK_CRAFT",
-  "KAWAII",
-  "COMIC_POP",
-  "STICKER_ART",
-] as const;
+const bookLanguages = BOOK_LANGUAGES.map((l) => l.code) as [string, ...string[]];
+const ageRanges = AGE_RANGE_OPTIONS.map((r) => r.id) as [string, ...string[]];
+const illustrationStyles = ILLUSTRATION_STYLES.map((s) => s.id) as [IllustrationStyle, ...IllustrationStyle[]];
 
 // ─── Wizard Step Validators ───
 

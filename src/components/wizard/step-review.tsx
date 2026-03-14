@@ -702,15 +702,15 @@ export function StepReview() {
               <p className="italic text-sm">&ldquo;{store.dedication}&rdquo;</p>
             </div>
           )}
-          {(store.bookLanguage || locale) && (
-            <div>
-              <p className="text-sm font-semibold text-muted-foreground">{t("languageLabel")}</p>
-              <p className="font-bold">
-                {BOOK_LANGUAGES.find((l) => l.code === (store.bookLanguage || locale))?.flag}{" "}
-                {BOOK_LANGUAGES.find((l) => l.code === (store.bookLanguage || locale))?.nativeName}
-              </p>
-            </div>
-          )}
+          {(() => {
+            const lang = BOOK_LANGUAGES.find((l) => l.code === (store.bookLanguage || locale));
+            return lang ? (
+              <div>
+                <p className="text-sm font-semibold text-muted-foreground">{t("languageLabel")}</p>
+                <p className="font-bold">{lang.flag} {lang.nativeName}</p>
+              </div>
+            ) : null;
+          })()}
         </div>
       </div>
 

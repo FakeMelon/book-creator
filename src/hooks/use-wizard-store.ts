@@ -4,6 +4,7 @@ import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { StoryStyle, IllustrationStyle, AdditionalCharacter, ChildPhoto, BookIdea } from "@/types";
+import { AGE_RANGE_OPTIONS } from "@/constants";
 
 interface WizardState {
   step: number;
@@ -177,8 +178,10 @@ const STYLE_MIGRATION: Record<string, string> = {
 };
 
 // Migration mapping for numeric ages → age ranges (v2 → v3)
+const VALID_AGE_IDS = new Set(AGE_RANGE_OPTIONS.map((a) => a.id));
+
 function migrateAge(age: unknown): string {
-  if (typeof age === "string" && ["0-2", "3-5", "6-9", "10+"].includes(age)) return age;
+  if (typeof age === "string" && VALID_AGE_IDS.has(age)) return age;
   if (typeof age === "number") {
     if (age <= 2) return "0-2";
     if (age <= 5) return "3-5";
@@ -203,8 +206,9 @@ export const useWizardStore = create<WizardState & WizardActions>()(
         });
       },
       nextStep: () => {
-        const next = Math.min(get().step + 1, 6);
-        set({ step: next, direction: 1, maxStepReached: Math.max(get().maxStepReached, next) });
+        const { step, maxStepReached } = get();
+        const next = Math.min(step + 1, 6);
+        set({ step: next, direction: 1, maxStepReached: Math.max(maxStepReached, next) });
       },
       prevStep: () => set({ step: Math.max(get().step - 1, 1), direction: -1 }),
 
