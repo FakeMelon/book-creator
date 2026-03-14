@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { useLocale } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
@@ -9,6 +10,7 @@ import { StepPhotoUpload } from "@/components/wizard/step-photo-upload";
 import { StepStoryStyle } from "@/components/wizard/step-story-style";
 import { StepTitleSelection } from "@/components/wizard/step-title-selection";
 import { StepReview } from "@/components/wizard/step-review";
+import { AGE_RANGE_OPTIONS, THEMES, OCCASION_OPTIONS, ILLUSTRATION_STYLES } from "@/constants";
 
 const stepVariants: Variants = {
   enter: (dir: number) => ({ opacity: 0, x: dir * 20 }),
@@ -21,11 +23,30 @@ interface WizardStepsProps {
   uploadFile?: (file: File) => Promise<string>;
 }
 
+// All wizard images to preload on mount
+const WIZARD_IMAGES = [
+  ...AGE_RANGE_OPTIONS.map((r) => r.image),
+  ...THEMES.map((t) => t.image),
+  ...OCCASION_OPTIONS.filter((o) => o.image).map((o) => o.image!),
+  ...ILLUSTRATION_STYLES.map((s) => s.previewImage),
+  "/images/wizard/gender-boy.webp",
+  "/images/wizard/gender-girl.webp",
+  "/images/wizard/gender-non-binary.webp",
+];
+
 export function WizardSteps({ uploadFile }: WizardStepsProps) {
   const step = useWizardStore((s) => s.step);
   const direction = useWizardStore((s) => s.direction);
   const locale = useLocale();
   const isRTL = locale === "he";
+
+  // Preload all wizard images on mount so they're cached before the user needs them
+  useEffect(() => {
+    WIZARD_IMAGES.forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, []);
 
   const effectiveDir = isRTL ? -direction : direction;
 
