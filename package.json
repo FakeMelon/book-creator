@@ -11,7 +11,7 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:seed": "npx tsx prisma/seed.ts",
-    "deploy": "prisma generate && prisma db push && next build && pm2 restart book-creator",
+    "deploy": "next build && pm2 restart book-creator",
     "logs": "pm2 logs $(basename $PWD)"
   },
   "dependencies": {
