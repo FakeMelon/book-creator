@@ -6,14 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { AGE_RANGE_OPTIONS } from "@/constants";
+import { AGE_RANGE_OPTIONS, GENDER_OPTIONS } from "@/constants";
 import { cn } from "@/lib/utils";
-
-const GENDER_OPTIONS = [
-  { value: "boy", labelKey: "genderBoy" as const, image: "/images/wizard/gender-boy.webp" },
-  { value: "girl", labelKey: "genderGirl" as const, image: "/images/wizard/gender-girl.webp" },
-  { value: "non-binary", labelKey: "genderNonBinary" as const, image: "/images/wizard/gender-non-binary.webp" },
-];
 
 type SubStep = "name" | "age" | "pronouns";
 

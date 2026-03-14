@@ -10,7 +10,7 @@ import { StepPhotoUpload } from "@/components/wizard/step-photo-upload";
 import { StepStoryStyle } from "@/components/wizard/step-story-style";
 import { StepTitleSelection } from "@/components/wizard/step-title-selection";
 import { StepReview } from "@/components/wizard/step-review";
-import { AGE_RANGE_OPTIONS, THEMES, OCCASION_OPTIONS, ILLUSTRATION_STYLES } from "@/constants";
+import { AGE_RANGE_OPTIONS, THEMES, OCCASION_OPTIONS, ILLUSTRATION_STYLES, GENDER_OPTIONS } from "@/constants";
 
 const stepVariants: Variants = {
   enter: (dir: number) => ({ opacity: 0, x: dir * 20 }),
@@ -27,11 +27,9 @@ interface WizardStepsProps {
 const WIZARD_IMAGES = [
   ...AGE_RANGE_OPTIONS.map((r) => r.image),
   ...THEMES.map((t) => t.image),
-  ...OCCASION_OPTIONS.filter((o) => o.image).map((o) => o.image!),
+  ...OCCASION_OPTIONS.flatMap((o) => o.image ? [o.image] : []),
   ...ILLUSTRATION_STYLES.map((s) => s.previewImage),
-  "/images/wizard/gender-boy.webp",
-  "/images/wizard/gender-girl.webp",
-  "/images/wizard/gender-non-binary.webp",
+  ...GENDER_OPTIONS.map((g) => g.image),
 ];
 
 export function WizardSteps({ uploadFile }: WizardStepsProps) {
