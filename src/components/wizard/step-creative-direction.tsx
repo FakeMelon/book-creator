@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo, useCallback, useRef, useEffect } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
@@ -470,11 +469,10 @@ export function StepCreativeDirection() {
               )}
             >
               {item.image ? (
-                <Image
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                   src={item.image}
                   alt={labelFn(item.id)}
-                  width={512}
-                  height={512}
                   className="w-full aspect-square object-contain"
                 />
               ) : (

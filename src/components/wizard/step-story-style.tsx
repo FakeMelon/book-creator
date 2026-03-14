@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Button } from "@/components/ui/button";
@@ -89,11 +88,10 @@ export function StepStoryStyle() {
                   : "border-transparent bg-muted/60 hover:bg-muted"
               )}
             >
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={style.previewImage}
                 alt={ts(`${style.id}.name`)}
-                width={512}
-                height={512}
                 className="w-full aspect-square object-contain"
               />
               <p className="text-xs font-bold text-center px-1">{ts(`${style.id}.name`)}</p>

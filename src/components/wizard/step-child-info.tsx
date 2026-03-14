@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import { useWizardStore } from "@/hooks/use-wizard-store";
@@ -137,11 +136,10 @@ export function StepChildInfo() {
                       : "border-transparent bg-muted/60 hover:bg-muted"
                   )}
                 >
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={range.image}
                     alt={tConst(`ageRanges.${range.id}.name`)}
-                    width={512}
-                    height={512}
                     className="w-full aspect-square object-contain"
                   />
                   <span className={cn(
@@ -178,11 +176,10 @@ export function StepChildInfo() {
                       : "border-transparent bg-muted/60 hover:bg-muted"
                   )}
                 >
-                  <Image
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
                     src={option.image}
                     alt={t(option.labelKey)}
-                    width={512}
-                    height={512}
                     className="w-full aspect-square object-contain"
                   />
                   <span className={cn(
