@@ -11,7 +11,7 @@ interface WizardState {
   direction: 1 | -1;
   maxStepReached: number;
   childName: string;
-  childAge: number | null;
+  childAge: string;
   childGender: string;
   favoriteThings: string[];
   customFavoriteThings: string[];
@@ -19,6 +19,8 @@ interface WizardState {
   customPersonalityTraits: string[];
   theme: string;
   occasion: string;
+  subject: string;
+  storyMessage: string;
   hobbies: string[];
   customHobbies: string[];
   favoriteCharacters: string[];
@@ -39,6 +41,8 @@ interface WizardState {
   storyStyle: StoryStyle;
   illustrationStyle: IllustrationStyle;
   dedication: string;
+  // Book language
+  bookLanguage: string;
   // Book idea selection
   selectedTitle: string;
   bookIdeas: BookIdea[];
@@ -60,7 +64,7 @@ interface WizardActions {
   nextStep: () => void;
   prevStep: () => void;
   setChildName: (name: string) => void;
-  setChildAge: (age: number | null) => void;
+  setChildAge: (age: string) => void;
   setChildGender: (gender: string) => void;
   toggleFavoriteThing: (thing: string) => void;
   addCustomFavoriteThing: (thing: string) => void;
@@ -70,6 +74,8 @@ interface WizardActions {
   removeCustomPersonalityTrait: (trait: string) => void;
   setTheme: (theme: string) => void;
   setOccasion: (occasion: string) => void;
+  setSubject: (subject: string) => void;
+  setStoryMessage: (storyMessage: string) => void;
   toggleHobby: (hobby: string) => void;
   addCustomHobby: (hobby: string) => void;
   removeCustomHobby: (hobby: string) => void;
@@ -96,6 +102,8 @@ interface WizardActions {
   setStoryStyle: (style: StoryStyle) => void;
   setIllustrationStyle: (style: IllustrationStyle) => void;
   setDedication: (text: string) => void;
+  // Book language
+  setBookLanguage: (lang: string) => void;
   // Book ideas
   setSelectedTitle: (title: string) => void;
   setBookIdeas: (ideas: BookIdea[], fingerprint: string) => void;
@@ -119,7 +127,7 @@ const initialState: WizardState = {
   direction: 1,
   maxStepReached: 1,
   childName: "",
-  childAge: null,
+  childAge: "",
   childGender: "",
   favoriteThings: [],
   customFavoriteThings: [],
@@ -127,6 +135,8 @@ const initialState: WizardState = {
   customPersonalityTraits: [],
   theme: "",
   occasion: "",
+  subject: "",
+  storyMessage: "",
   hobbies: [],
   customHobbies: [],
   favoriteCharacters: [],
@@ -142,8 +152,9 @@ const initialState: WizardState = {
   childPhotoKeys: [],
   additionalCharacters: [],
   storyStyle: "PROSE",
-  illustrationStyle: "WATERCOLOR_WHIMSY",
+  illustrationStyle: "WATERCOLOR",
   dedication: "",
+  bookLanguage: "",
   selectedTitle: "",
   bookIdeas: [],
   selectedBookIdea: null,
@@ -156,6 +167,26 @@ const initialState: WizardState = {
   referralSource: "",
   onboardingComplete: false,
 };
+
+// Migration mapping for illustration styles (v2 → v3)
+const STYLE_MIGRATION: Record<string, string> = {
+  WATERCOLOR_WHIMSY: "WATERCOLOR",
+  BRIGHT_AND_BOLD: "COMIC_POP",
+  STORYBOOK_CLASSIC: "PICTURE_BOOK",
+  COZY_AND_WARM: "GOUACHE_PAINTERLY",
+};
+
+// Migration mapping for numeric ages → age ranges (v2 → v3)
+function migrateAge(age: unknown): string {
+  if (typeof age === "string" && ["0-2", "3-5", "6-9", "10+"].includes(age)) return age;
+  if (typeof age === "number") {
+    if (age <= 2) return "0-2";
+    if (age <= 5) return "3-5";
+    if (age <= 9) return "6-9";
+    return "10+";
+  }
+  return "";
+}
 
 export const useWizardStore = create<WizardState & WizardActions>()(
   persist(
@@ -229,8 +260,10 @@ export const useWizardStore = create<WizardState & WizardActions>()(
         set({ customPersonalityTraits: get().customPersonalityTraits.filter((t) => t !== trait) });
       },
 
-      setTheme: (theme) => set({ theme }),
+      setTheme: (theme) => set({ theme, subject: "" }),
       setOccasion: (occasion) => set({ occasion }),
+      setSubject: (subject) => set({ subject }),
+      setStoryMessage: (storyMessage) => set({ storyMessage }),
 
       // Hobbies (preset + custom share max of 5)
       toggleHobby: (hobby) => {
@@ -353,6 +386,9 @@ export const useWizardStore = create<WizardState & WizardActions>()(
       setIllustrationStyle: (illustrationStyle) => set({ illustrationStyle }),
       setDedication: (dedication) => set({ dedication }),
 
+      // Book language
+      setBookLanguage: (bookLanguage) => set({ bookLanguage }),
+
       // Book ideas — prefer setSelectedBookIdea; selectedTitle is kept for createBook API compat
       setSelectedTitle: (selectedTitle) => set({ selectedTitle }),
       setBookIdeas: (bookIdeas, ideasInputFingerprint) =>
@@ -383,24 +419,35 @@ export const useWizardStore = create<WizardState & WizardActions>()(
     }),
     {
       name: "wizard-storage",
-      version: 2,
+      version: 3,
       migrate: (persisted: any, version: number) => {
         if (!persisted || typeof persisted !== "object") {
           return initialState;
         }
         if (version === 0) {
-          // Reset cover-related state added in v1
-          return { ...persisted, step: Math.min(persisted.step ?? 1, 5), bookId: null, coverPhase: "review", coverError: null, maxStepReached: persisted.step ?? 1 };
+          persisted = { ...persisted, step: Math.min(persisted.step ?? 1, 5), bookId: null, coverPhase: "review", coverError: null, maxStepReached: persisted.step ?? 1 };
         }
-        if (version === 1) {
-          // Add maxStepReached field introduced in v2
-          return { ...persisted, maxStepReached: persisted.step ?? 1 };
+        if (version <= 1) {
+          persisted = { ...persisted, maxStepReached: persisted.step ?? 1 };
+        }
+        if (version <= 2) {
+          // v2 → v3: migrate illustration styles, age format, add new fields
+          const oldStyle = persisted.illustrationStyle;
+          persisted = {
+            ...persisted,
+            illustrationStyle: STYLE_MIGRATION[oldStyle] || oldStyle || "WATERCOLOR",
+            childAge: migrateAge(persisted.childAge),
+            subject: persisted.subject ?? "",
+            storyMessage: persisted.storyMessage ?? "",
+            bookLanguage: persisted.bookLanguage ?? "",
+          };
         }
         return persisted as WizardState;
       },
-      partialize: (state) => ({
+      partialize: (state): WizardState => ({
         // Cap at step 5 so users re-enter the cover preview flow fresh
         step: Math.min(state.step, 5),
+        direction: 1,
         maxStepReached: Math.min(state.maxStepReached, 5),
         childName: state.childName,
         childAge: state.childAge,
@@ -411,6 +458,8 @@ export const useWizardStore = create<WizardState & WizardActions>()(
         customPersonalityTraits: state.customPersonalityTraits,
         theme: state.theme,
         occasion: state.occasion,
+        subject: state.subject,
+        storyMessage: state.storyMessage,
         hobbies: state.hobbies,
         customHobbies: state.customHobbies,
         favoriteCharacters: state.favoriteCharacters,
@@ -419,6 +468,7 @@ export const useWizardStore = create<WizardState & WizardActions>()(
         customFavoriteAnimals: state.customFavoriteAnimals,
         favoriteFoods: state.favoriteFoods,
         customFavoriteFoods: state.customFavoriteFoods,
+        photoFile: null,
         photoPreview: state.photoPreview,
         photoKey: state.photoKey,
         childPhotoKeys: state.childPhotoKeys,
@@ -432,6 +482,7 @@ export const useWizardStore = create<WizardState & WizardActions>()(
         storyStyle: state.storyStyle,
         illustrationStyle: state.illustrationStyle,
         dedication: state.dedication,
+        bookLanguage: state.bookLanguage,
         selectedTitle: state.selectedTitle,
         bookIdeas: state.bookIdeas,
         selectedBookIdea: state.selectedBookIdea,
@@ -441,6 +492,9 @@ export const useWizardStore = create<WizardState & WizardActions>()(
           file: null,
           preview: p.preview,
         })),
+        bookId: null,
+        coverPhase: "review",
+        coverError: null,
         guestName: state.guestName,
         guestEmail: state.guestEmail,
         referralSource: state.referralSource,

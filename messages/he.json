@@ -263,6 +263,8 @@
       "sentences": {
         "occasion": "הספר של {childName} הוא לרגל {blank}",
         "theme": "הסיפור של {childName} יעסוק ב{blank}",
+        "subject": "ההרפתקה מתרחשת סביב {blank}",
+        "storyHeart": "הלב של הסיפור הוא {blank}",
         "traits": "{gender, select, boy {{childName} הוא ילד {blank}} girl {{childName} היא ילדה {blank}} other {{childName} {blank}}}",
         "hobbies": "{gender, select, boy {{pronoun} אוהב {blank}} girl {{pronoun} אוהבת {blank}} other {{pronoun} אוהבים {blank}}}",
         "animals": "החיה האהובה על {childName} היא {blank}",
@@ -328,7 +330,9 @@
       "dedicationLabel": "הקדשה",
       "optional": "(אופציונלי)",
       "dedicationPlaceholder": "למשל \"לחוקר הקטן שלנו — באהבה, אמא ואבא\"",
-      "charCounter": "{count}/200 תווים"
+      "charCounter": "{count}/200 תווים",
+      "bookLanguageLabel": "שפת הספר",
+      "bookLanguageHint": "השפה שבה הסיפור ייכתב"
     },
     "titles": {
       "loadingHeading": "חושבים על רעיונות...",
@@ -362,6 +366,9 @@
       "styleProse": "פרוזה",
       "styleRhyme": "חרוזים",
       "artStyleLabel": "סגנון איור",
+      "subjectLabel": "נושא",
+      "storyHeartLabel": "הלב של הסיפור",
+      "languageLabel": "שפת הספר",
       "dedicationLabel": "הקדשה",
       "generateCoverPreview": "צרו תצוגת כריכה מקדימה",
       "freePreview": "תצוגה מקדימה חינמית — ראו את כריכות הספר לפני שמתחייבים",
@@ -658,22 +665,137 @@
       }
     },
     "styles": {
-      "WATERCOLOR_WHIMSY": {
-        "name": "מימי צבעוניים",
+      "WATERCOLOR": {
+        "name": "צבעי מים",
         "description": "מרקמי צבעי מים רכים וחלומיים עם מיזוג צבעים עדין"
       },
-      "BRIGHT_AND_BOLD": {
-        "name": "בהיר ונועז",
-        "description": "צבעים חיים וקווי מתאר חזקים, מודרני ואנרגטי"
+      "SOFT_ANIME": {
+        "name": "אנימה רכה",
+        "description": "עיניים גדולות ומבעיות, פלטת פסטל עדינה, זוהר חם"
       },
-      "STORYBOOK_CLASSIC": {
-        "name": "קלאסי מספר סיפורים",
+      "PAPER_COLLAGE": {
+        "name": "קולאז' נייר",
+        "description": "מרקמי נייר גזור, תחושה עבודת יד שכבתית"
+      },
+      "PLAYFUL_3D": {
+        "name": "תלת-ממד שובב",
+        "description": "צורות מעוגלות רכות, צבעים מרהיבים, בהשראת פיקסאר"
+      },
+      "GOUACHE_PAINTERLY": {
+        "name": "גואש ציורי",
+        "description": "צבעים עשירים ואטומים, משיכות מכחול גלויות, גוונים חמים"
+      },
+      "CLAYMATION": {
+        "name": "קליימיישן",
+        "description": "דמויות חימר מפוסלות, מרקמים עבודת יד"
+      },
+      "GEOMETRIC_MODERN": {
+        "name": "גיאומטרי מודרני",
+        "description": "צורות שטוחות נקיות, בלוקים צבעוניים נועזים, מינימליסטי"
+      },
+      "PICTURE_BOOK": {
+        "name": "ספר תמונות",
         "description": "מראה ציור יד נצחי, חם ונוסטלגי"
       },
-      "COZY_AND_WARM": {
-        "name": "חמים ונעים",
-        "description": "תאורה רכה, צורות מעוגלות, אווירה מנחמת"
+      "BLOCK_CRAFT": {
+        "name": "בלוק קראפט",
+        "description": "צורות בלוקיות, צבעי יסוד בהירים"
+      },
+      "KAWAII": {
+        "name": "קוואיי",
+        "description": "דמויות צ'יבי חמודות במיוחד, פלטת פסטל קשתית"
+      },
+      "COMIC_POP": {
+        "name": "קומיקס פופ",
+        "description": "צבעים חיים, קווי מתאר חזקים, אנרגיה קומית דינמית"
+      },
+      "STICKER_ART": {
+        "name": "אמנות מדבקות",
+        "description": "מראה מדבקה גזורה, עיצוב שטוח צבעוני"
       }
+    },
+    "ageRanges": {
+      "0-2": { "label": "0–2", "name": "תינוק ופעוט" },
+      "3-5": { "label": "3–5", "name": "גן ילדים" },
+      "6-9": { "label": "6–9", "name": "קורא מתחיל" },
+      "10+": { "label": "10+", "name": "קורא בטוח" }
+    },
+    "subjects": {
+      "adventure": {
+        "treasure-hunt": "ציד אוצרות",
+        "jungle-expedition": "מסע בג'ונגל",
+        "mountain-quest": "משימה הררית",
+        "lost-city": "העיר האבודה",
+        "island-explorer": "חוקר האי"
+      },
+      "friendship": {
+        "new-friend": "חבר חדש",
+        "teamwork": "עבודת צוות",
+        "pen-pals": "חברי עט",
+        "neighborhood": "שכונה",
+        "playdate-adventure": "הרפתקת משחק"
+      },
+      "space": {
+        "planet-hopper": "מטייל בין כוכבים",
+        "astronaut-training": "אימון אסטרונאוטים",
+        "alien-friends": "חברים חייזרים",
+        "moon-mission": "משימה לירח",
+        "space-station": "תחנת חלל"
+      },
+      "enchanted-forest": {
+        "talking-trees": "עצים מדברים",
+        "fairy-ring": "מעגל פיות",
+        "mushroom-village": "כפר פטריות",
+        "enchanted-animals": "חיות קסומות",
+        "hidden-waterfall": "מפל נסתר"
+      },
+      "superheroes": {
+        "origin-story": "סיפור מקור",
+        "team-up": "שיתוף פעולה",
+        "powers-discovery": "גילוי כוחות",
+        "secret-identity": "זהות סודית",
+        "villain-reform": "שיקום הנבל"
+      },
+      "fairy-tale": {
+        "castle-quest": "משימת הטירה",
+        "magic-mirror": "מראה קסומה",
+        "enchanted-ball": "נשף קסום",
+        "magic-beans": "שעועיות קסומות",
+        "sleeping-spell": "כישוף שינה"
+      },
+      "robots": {
+        "robot-friend": "חבר רובוט",
+        "invention-lab": "מעבדת המצאות",
+        "robot-school": "בית ספר לרובוטים",
+        "rescue-bot": "רובוט הצלה",
+        "building-crew": "צוות בנייה"
+      },
+      "underwater": {
+        "coral-reef": "שונית אלמוגים",
+        "pirate-ship": "ספינת פיראטים",
+        "mermaid-kingdom": "ממלכת בת הים",
+        "deep-sea-dive": "צלילה לעומק",
+        "whale-song": "שירת הלווייתן"
+      },
+      "dinosaurs": {
+        "dino-park": "פארק דינוזאורים",
+        "fossil-hunt": "ציד מאובנים",
+        "baby-dino": "דינוזאור תינוק",
+        "time-travel": "מסע בזמן",
+        "volcano-adventure": "הרפתקת הר געש"
+      }
+    },
+    "storyHearts": {
+      "courage": "אומץ",
+      "kindness": "חסד",
+      "self-belief": "אמונה עצמית",
+      "teamwork": "עבודת צוות",
+      "creativity": "יצירתיות",
+      "perseverance": "התמדה",
+      "empathy": "אמפתיה",
+      "gratitude": "הכרת תודה",
+      "curiosity": "סקרנות",
+      "acceptance": "קבלה"
     },
     "traits": {
       "brave": "אמיץ",
@@ -739,7 +861,7 @@
     "nameMaxLength": "השם חייב להיות עד 30 תווים",
     "namePattern": "השם יכול להכיל רק אותיות, רווחים, מקפים וגרשיים",
     "selectOption": "אנא בחרו אפשרות",
-    "ageRange": "הגיל חייב להיות בין 3 ל-8",
+    "ageRange": "אנא בחרו טווח גילאים",
     "selectOccasion": "אנא בחרו אירוע",
     "pickFavoriteThing": "בחרו לפחות דבר אהוב אחד",
     "maxFavoriteThings": "בחרו עד 5 דברים אהובים",

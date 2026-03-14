@@ -263,6 +263,8 @@
       "sentences": {
         "occasion": "Le livre de {childName} est pour {blank}",
         "theme": "L'histoire de {childName} parlera de {blank}",
+        "subject": "L'aventure se déroule autour de {blank}",
+        "storyHeart": "Le cœur de l'histoire est {blank}",
         "traits": "{childName} est un enfant {blank}",
         "hobbies": "{pronoun} adore {blank}",
         "animals": "L'animal préféré de {childName} est {blank}",
@@ -328,7 +330,9 @@
       "dedicationLabel": "Dédicace",
       "optional": "(optionnel)",
       "dedicationPlaceholder": "ex. \"Pour notre petit explorateur — Avec amour, Maman et Papa\"",
-      "charCounter": "{count}/200 caractères"
+      "charCounter": "{count}/200 caractères",
+      "bookLanguageLabel": "Langue du livre",
+      "bookLanguageHint": "La langue dans laquelle l'histoire sera écrite"
     },
     "titles": {
       "loadingHeading": "Réflexion en cours...",
@@ -362,6 +366,9 @@
       "styleProse": "Prose",
       "styleRhyme": "Rime",
       "artStyleLabel": "Style artistique",
+      "subjectLabel": "Sujet",
+      "storyHeartLabel": "Cœur de l'histoire",
+      "languageLabel": "Langue du livre",
       "dedicationLabel": "Dédicace",
       "generateCoverPreview": "Générer un aperçu de la couverture",
       "freePreview": "Aperçu gratuit — voyez vos couvertures avant de vous engager",
@@ -658,22 +665,137 @@
       }
     },
     "styles": {
-      "WATERCOLOR_WHIMSY": {
-        "name": "Aquarelle fantaisiste",
+      "WATERCOLOR": {
+        "name": "Aquarelle",
         "description": "Textures d'aquarelle douces et oniriques avec un mélange délicat de couleurs"
       },
-      "BRIGHT_AND_BOLD": {
-        "name": "Vif et audacieux",
-        "description": "Couleurs vives et contours marqués, moderne et énergique"
+      "SOFT_ANIME": {
+        "name": "Anime doux",
+        "description": "Grands yeux expressifs, palette pastel douce, lueur chaleureuse"
       },
-      "STORYBOOK_CLASSIC": {
-        "name": "Classique de conte",
+      "PAPER_COLLAGE": {
+        "name": "Collage papier",
+        "description": "Textures de papier découpé, sensation artisanale en couches"
+      },
+      "PLAYFUL_3D": {
+        "name": "3D ludique",
+        "description": "Formes arrondies, couleurs vibrantes, inspiré de Pixar"
+      },
+      "GOUACHE_PAINTERLY": {
+        "name": "Gouache picturale",
+        "description": "Couleurs riches et opaques, coups de pinceau visibles, tons chauds"
+      },
+      "CLAYMATION": {
+        "name": "Pâte à modeler",
+        "description": "Personnages en pâte sculptée, textures artisanales"
+      },
+      "GEOMETRIC_MODERN": {
+        "name": "Géométrique moderne",
+        "description": "Formes plates nettes, blocs de couleurs audacieux, minimaliste"
+      },
+      "PICTURE_BOOK": {
+        "name": "Livre d'images",
         "description": "Style dessin à la main intemporel, chaleureux et nostalgique"
       },
-      "COZY_AND_WARM": {
-        "name": "Douillet et chaleureux",
-        "description": "Éclairage doux, formes arrondies, atmosphère réconfortante"
+      "BLOCK_CRAFT": {
+        "name": "Blocs créatifs",
+        "description": "Formes cubiques, couleurs primaires vives"
+      },
+      "KAWAII": {
+        "name": "Kawaii",
+        "description": "Personnages chibi ultra-mignons, palette pastel arc-en-ciel"
+      },
+      "COMIC_POP": {
+        "name": "Comic Pop",
+        "description": "Couleurs vives, contours marqués, énergie de bande dessinée"
+      },
+      "STICKER_ART": {
+        "name": "Art autocollant",
+        "description": "Look autocollant découpé, design plat coloré"
       }
+    },
+    "ageRanges": {
+      "0-2": { "label": "0–2", "name": "Bébé et bambin" },
+      "3-5": { "label": "3–5", "name": "Maternelle" },
+      "6-9": { "label": "6–9", "name": "Jeune lecteur" },
+      "10+": { "label": "10+", "name": "Lecteur confirmé" }
+    },
+    "subjects": {
+      "adventure": {
+        "treasure-hunt": "Chasse au trésor",
+        "jungle-expedition": "Expédition dans la jungle",
+        "mountain-quest": "Quête en montagne",
+        "lost-city": "La cité perdue",
+        "island-explorer": "Explorateur d'île"
+      },
+      "friendship": {
+        "new-friend": "Nouvel ami",
+        "teamwork": "Travail d'équipe",
+        "pen-pals": "Correspondants",
+        "neighborhood": "Quartier",
+        "playdate-adventure": "Aventure de jeu"
+      },
+      "space": {
+        "planet-hopper": "Voyageur de planètes",
+        "astronaut-training": "Formation d'astronaute",
+        "alien-friends": "Amis extraterrestres",
+        "moon-mission": "Mission lunaire",
+        "space-station": "Station spatiale"
+      },
+      "enchanted-forest": {
+        "talking-trees": "Arbres parlants",
+        "fairy-ring": "Cercle de fées",
+        "mushroom-village": "Village de champignons",
+        "enchanted-animals": "Animaux enchantés",
+        "hidden-waterfall": "Cascade cachée"
+      },
+      "superheroes": {
+        "origin-story": "Histoire d'origine",
+        "team-up": "Alliance",
+        "powers-discovery": "Découverte de pouvoirs",
+        "secret-identity": "Identité secrète",
+        "villain-reform": "Réforme du vilain"
+      },
+      "fairy-tale": {
+        "castle-quest": "Quête du château",
+        "magic-mirror": "Miroir magique",
+        "enchanted-ball": "Bal enchanté",
+        "magic-beans": "Haricots magiques",
+        "sleeping-spell": "Sort de sommeil"
+      },
+      "robots": {
+        "robot-friend": "Ami robot",
+        "invention-lab": "Laboratoire d'inventions",
+        "robot-school": "École de robots",
+        "rescue-bot": "Robot de sauvetage",
+        "building-crew": "Équipe de construction"
+      },
+      "underwater": {
+        "coral-reef": "Récif corallien",
+        "pirate-ship": "Bateau pirate",
+        "mermaid-kingdom": "Royaume des sirènes",
+        "deep-sea-dive": "Plongée en eau profonde",
+        "whale-song": "Chant de la baleine"
+      },
+      "dinosaurs": {
+        "dino-park": "Parc de dinosaures",
+        "fossil-hunt": "Chasse aux fossiles",
+        "baby-dino": "Bébé dinosaure",
+        "time-travel": "Voyage dans le temps",
+        "volcano-adventure": "Aventure volcanique"
+      }
+    },
+    "storyHearts": {
+      "courage": "Courage",
+      "kindness": "Gentillesse",
+      "self-belief": "Confiance en soi",
+      "teamwork": "Travail d'équipe",
+      "creativity": "Créativité",
+      "perseverance": "Persévérance",
+      "empathy": "Empathie",
+      "gratitude": "Gratitude",
+      "curiosity": "Curiosité",
+      "acceptance": "Acceptation"
     },
     "traits": {
       "brave": "Courageux",
@@ -739,7 +861,7 @@
     "nameMaxLength": "Le nom doit comporter 30 caractères ou moins",
     "namePattern": "Le nom ne peut contenir que des lettres, espaces, tirets et apostrophes",
     "selectOption": "Veuillez sélectionner une option",
-    "ageRange": "L'âge doit être entre 3 et 8",
+    "ageRange": "Veuillez sélectionner une tranche d'âge",
     "selectOccasion": "Veuillez sélectionner une occasion",
     "pickFavoriteThing": "Choisissez au moins une chose préférée",
     "maxFavoriteThings": "Choisissez jusqu'à 5 choses préférées",

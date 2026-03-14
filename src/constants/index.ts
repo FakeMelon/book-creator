@@ -63,24 +63,64 @@ export const THEMES: ThemeConfig[] = [
 
 export const ILLUSTRATION_STYLES: IllustrationStyleConfig[] = [
   {
-    id: "WATERCOLOR_WHIMSY",
+    id: "WATERCOLOR",
     previewImage: "/images/style-watercolor.jpg",
     fluxStylePrompt: "soft watercolor children's book illustration style, dreamy washes, gentle color blending, delicate brushstrokes, whimsical and airy feel, pastel undertones with vibrant accents",
   },
   {
-    id: "BRIGHT_AND_BOLD",
-    previewImage: "/images/style-bold.jpg",
-    fluxStylePrompt: "bright bold children's book illustration style, vivid saturated colors, strong clean outlines, flat design with playful shapes, modern energetic feel, graphic and punchy",
+    id: "SOFT_ANIME",
+    previewImage: "/images/style-soft-anime.jpg",
+    fluxStylePrompt: "soft anime children's book illustration style, large expressive eyes, gentle pastel palette, smooth cel-shading, warm glow lighting, cute rounded character designs",
   },
   {
-    id: "STORYBOOK_CLASSIC",
-    previewImage: "/images/style-classic.jpg",
-    fluxStylePrompt: "classic storybook illustration style, hand-drawn detailed linework, warm rich colors, traditional children's book art, nostalgic golden age illustration feel, cross-hatching details",
+    id: "PAPER_COLLAGE",
+    previewImage: "/images/style-paper-collage.jpg",
+    fluxStylePrompt: "paper collage children's book illustration style, cut-out paper textures, layered handmade feel, torn edges, mixed media with fabric and paper patterns, tactile and craft-like",
   },
   {
-    id: "COZY_AND_WARM",
-    previewImage: "/images/style-cozy.jpg",
-    fluxStylePrompt: "cozy warm children's book illustration style, soft golden lighting, rounded friendly shapes, gentle gradients, comforting atmosphere, slightly textured background, warm color palette with earth tones",
+    id: "PLAYFUL_3D",
+    previewImage: "/images/style-playful-3d.jpg",
+    fluxStylePrompt: "playful 3D animated children's book illustration style, soft rounded forms, vibrant colors, Pixar-inspired lighting, smooth plastic-like textures, cheerful and modern",
+  },
+  {
+    id: "GOUACHE_PAINTERLY",
+    previewImage: "/images/style-gouache.jpg",
+    fluxStylePrompt: "gouache painterly children's book illustration style, rich opaque colors, visible brushwork, warm and earthy tones, cozy atmospheric lighting, traditional painted feel",
+  },
+  {
+    id: "CLAYMATION",
+    previewImage: "/images/style-claymation.jpg",
+    fluxStylePrompt: "claymation children's book illustration style, sculpted clay characters, handcrafted textures, stop-motion animation feel, soft studio lighting, charming imperfections",
+  },
+  {
+    id: "GEOMETRIC_MODERN",
+    previewImage: "/images/style-geometric.jpg",
+    fluxStylePrompt: "geometric modern children's book illustration style, clean flat shapes, bold color blocks, minimalist design, mid-century modern aesthetic, playful abstract compositions",
+  },
+  {
+    id: "PICTURE_BOOK",
+    previewImage: "/images/style-picture-book.jpg",
+    fluxStylePrompt: "classic picture book illustration style, hand-drawn detailed linework, warm rich colors, traditional children's book art, nostalgic golden age illustration feel, cross-hatching details",
+  },
+  {
+    id: "BLOCK_CRAFT",
+    previewImage: "/images/style-block-craft.jpg",
+    fluxStylePrompt: "block craft children's book illustration style, voxel-inspired blocky shapes, Minecraft-like world, bright primary colors, low-poly 3D feel, playful cubic characters",
+  },
+  {
+    id: "KAWAII",
+    previewImage: "/images/style-kawaii.jpg",
+    fluxStylePrompt: "kawaii children's book illustration style, ultra-cute chibi characters, pastel rainbow palette, sparkles and stars, rounded soft shapes, Japanese cute culture aesthetic",
+  },
+  {
+    id: "COMIC_POP",
+    previewImage: "/images/style-comic-pop.jpg",
+    fluxStylePrompt: "comic pop children's book illustration style, vivid saturated colors, strong clean outlines, halftone dots, dynamic action poses, bold graphic panels, comic book energy",
+  },
+  {
+    id: "STICKER_ART",
+    previewImage: "/images/style-sticker-art.jpg",
+    fluxStylePrompt: "sticker art children's book illustration style, die-cut sticker look, white outlines, glossy finish, colorful flat design, playful scattered arrangement, vinyl sticker aesthetic",
   },
 ];
 
@@ -187,6 +227,127 @@ export const REFERRAL_SOURCE_OPTIONS = [
   "email",
   "podcast",
   "other",
+];
+
+// ─── Age Range Options ───
+
+export interface AgeRangeOption {
+  id: string;
+  emoji: string;
+  label: string;
+  comprehensionHint: string;
+}
+
+export const AGE_RANGE_OPTIONS: AgeRangeOption[] = [
+  { id: "0-2", emoji: "👶", label: "0–2", comprehensionHint: "a baby or toddler (very simple words, sensory descriptions, repetitive patterns)" },
+  { id: "3-5", emoji: "🧒", label: "3–5", comprehensionHint: "a preschooler (short sentences, familiar concepts, gentle humor, repetition)" },
+  { id: "6-9", emoji: "📚", label: "6–9", comprehensionHint: "an early reader (longer sentences, simple plot twists, emerging vocabulary, cause-and-effect)" },
+  { id: "10+", emoji: "🌟", label: "10+", comprehensionHint: "a confident reader (richer vocabulary, multi-layered plots, nuanced emotions)" },
+];
+
+// ─── Subjects (per theme) ───
+
+export const SUBJECTS: Record<string, OptionItem[]> = {
+  "adventure": [
+    { id: "treasure-hunt", emoji: "🗺️" },
+    { id: "jungle-expedition", emoji: "🌴" },
+    { id: "mountain-quest", emoji: "🏔️" },
+    { id: "lost-city", emoji: "🏛️" },
+    { id: "island-explorer", emoji: "🏝️" },
+  ],
+  "friendship": [
+    { id: "new-friend", emoji: "🤗" },
+    { id: "teamwork", emoji: "🤝" },
+    { id: "pen-pals", emoji: "✉️" },
+    { id: "neighborhood", emoji: "🏘️" },
+    { id: "playdate-adventure", emoji: "🎪" },
+  ],
+  "space": [
+    { id: "planet-hopper", emoji: "🪐" },
+    { id: "astronaut-training", emoji: "👨‍🚀" },
+    { id: "alien-friends", emoji: "👽" },
+    { id: "moon-mission", emoji: "🌙" },
+    { id: "space-station", emoji: "🛸" },
+  ],
+  "enchanted-forest": [
+    { id: "talking-trees", emoji: "🌳" },
+    { id: "fairy-ring", emoji: "🧚" },
+    { id: "mushroom-village", emoji: "🍄" },
+    { id: "enchanted-animals", emoji: "🦊" },
+    { id: "hidden-waterfall", emoji: "💧" },
+  ],
+  "superheroes": [
+    { id: "origin-story", emoji: "💥" },
+    { id: "team-up", emoji: "🦸" },
+    { id: "powers-discovery", emoji: "✨" },
+    { id: "secret-identity", emoji: "🎭" },
+    { id: "villain-reform", emoji: "💫" },
+  ],
+  "fairy-tale": [
+    { id: "castle-quest", emoji: "🏰" },
+    { id: "magic-mirror", emoji: "🪞" },
+    { id: "enchanted-ball", emoji: "💃" },
+    { id: "magic-beans", emoji: "🌱" },
+    { id: "sleeping-spell", emoji: "😴" },
+  ],
+  "robots": [
+    { id: "robot-friend", emoji: "🤖" },
+    { id: "invention-lab", emoji: "🔬" },
+    { id: "robot-school", emoji: "🏫" },
+    { id: "rescue-bot", emoji: "🚒" },
+    { id: "building-crew", emoji: "🔧" },
+  ],
+  "underwater": [
+    { id: "coral-reef", emoji: "🪸" },
+    { id: "pirate-ship", emoji: "🏴‍☠️" },
+    { id: "mermaid-kingdom", emoji: "🧜" },
+    { id: "deep-sea-dive", emoji: "🤿" },
+    { id: "whale-song", emoji: "🐋" },
+  ],
+  "dinosaurs": [
+    { id: "dino-park", emoji: "🦖" },
+    { id: "fossil-hunt", emoji: "🦴" },
+    { id: "baby-dino", emoji: "🥚" },
+    { id: "time-travel", emoji: "⏰" },
+    { id: "volcano-adventure", emoji: "🌋" },
+  ],
+};
+
+// ─── Story Hearts ───
+
+export const STORY_HEARTS: OptionItem[] = [
+  { id: "courage", emoji: "🦁" },
+  { id: "kindness", emoji: "💝" },
+  { id: "self-belief", emoji: "🌟" },
+  { id: "teamwork", emoji: "🤝" },
+  { id: "creativity", emoji: "🎨" },
+  { id: "perseverance", emoji: "💪" },
+  { id: "empathy", emoji: "🫂" },
+  { id: "gratitude", emoji: "🙏" },
+  { id: "curiosity", emoji: "🔍" },
+  { id: "acceptance", emoji: "🌈" },
+];
+
+// ─── Book Languages ───
+
+export interface BookLanguage {
+  code: string;
+  flag: string;
+  nativeName: string;
+}
+
+export const BOOK_LANGUAGES: BookLanguage[] = [
+  { code: "en", flag: "🇬🇧", nativeName: "English" },
+  { code: "he", flag: "🇮🇱", nativeName: "עברית" },
+  { code: "fr", flag: "🇫🇷", nativeName: "Français" },
+  { code: "es", flag: "🇪🇸", nativeName: "Español" },
+  { code: "de", flag: "🇩🇪", nativeName: "Deutsch" },
+  { code: "ar", flag: "🇸🇦", nativeName: "العربية" },
+  { code: "ru", flag: "🇷🇺", nativeName: "Русский" },
+  { code: "pt", flag: "🇧🇷", nativeName: "Português" },
+  { code: "zh", flag: "🇨🇳", nativeName: "中文" },
+  { code: "ja", flag: "🇯🇵", nativeName: "日本語" },
+  { code: "ko", flag: "🇰🇷", nativeName: "한국어" },
 ];
 
 // ─── Book Specs ───

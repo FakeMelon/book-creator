@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import type { GeneratedStory, StoryStyle, IllustrationStyle } from "@/types";
-import { THEMES, PERSONALITY_TRAITS, ILLUSTRATION_STYLES } from "@/constants";
-import { getThemeName, getTraitLabel, getStyleName, getStyleDescription } from "@/lib/constant-labels";
+import { THEMES, PERSONALITY_TRAITS, ILLUSTRATION_STYLES, AGE_RANGE_OPTIONS } from "@/constants";
+import { getThemeName, getTraitLabel, getStyleName, getStyleDescription, getSubjectName, getStoryHeartName } from "@/lib/constant-labels";
 
 // Language display names keyed by ISO 639-1 code
 export const LANGUAGE_NAMES: Record<string, string> = {
@@ -41,7 +41,7 @@ interface AdditionalCharacterInput {
 
 interface StoryGenerationInput {
   childName: string;
-  childAge: number;
+  childAge: string;
   childGender: string;
   favoriteThings: string[];
   personalityTraits: string[];
@@ -50,6 +50,8 @@ interface StoryGenerationInput {
   illustrationStyle: IllustrationStyle;
   dedication?: string;
   occasion?: string;
+  subject?: string;
+  storyMessage?: string;
   hobbies?: string[];
   favoriteCharacters?: string[];
   favoriteAnimal?: string[];
@@ -87,6 +89,20 @@ export async function generateStory(input: StoryGenerationInput): Promise<Genera
     ? `\nThe occasion for this book is: ${input.occasion}. Subtly reflect this context in the story.`
     : "";
 
+  // Build subject context
+  let subjectContext = "";
+  if (input.subject && input.theme) {
+    const subjectLabel = getSubjectName(input.theme, input.subject);
+    subjectContext = `\nStory subject/setting: ${subjectLabel} — build the plot around this specific scenario within the theme.`;
+  }
+
+  // Build story heart (moral/message) context
+  let storyHeartContext = "";
+  if (input.storyMessage) {
+    const heartLabel = getStoryHeartName(input.storyMessage);
+    storyHeartContext = `\nHeart of the story: ${heartLabel} — let this value emerge naturally through the narrative, do NOT be preachy.`;
+  }
+
   // Build hobbies/interests context
   let interestsContext = "";
   if (input.hobbies?.length) {
@@ -104,11 +120,15 @@ export async function generateStory(input: StoryGenerationInput): Promise<Genera
     ? `\nIMPORTANT: The book title MUST be "${input.title}". Use this exact title in the output.`
     : "";
 
-  const systemPrompt = `You are a world-class children's book author who writes picture books for ages 3-8. You create stories that parents genuinely enjoy reading aloud — with rhythm, humor, heart, and a satisfying narrative arc.
+  const ageConfig = AGE_RANGE_OPTIONS.find((a) => a.id === input.childAge);
+  const ageLabel = ageConfig?.label ?? input.childAge;
+  const ageHint = ageConfig?.comprehensionHint ?? `a ${input.childAge}-year-old`;
+
+  const systemPrompt = `You are a world-class children's book author who writes picture books. You create stories that parents genuinely enjoy reading aloud — with rhythm, humor, heart, and a satisfying narrative arc.
 
 CRITICAL RULES:
-- The story MUST feature ${input.childName} (age ${input.childAge}, ${pronouns}) as the main character/protagonist
-- Write for a ${input.childAge}-year-old's comprehension level
+- The story MUST feature ${input.childName} (age range ${ageLabel}, ${pronouns}) as the main character/protagonist
+- Write for ${ageHint}
 - Total word count: 500-800 words across all pages
 - Use ${input.storyStyle === "RHYME" ? "rhyming verse with consistent meter" : "lyrical prose with occasional repeated refrains"}
 - Include a hidden recurring visual motif (like a small butterfly or star) that appears in every illustration description
@@ -116,7 +136,7 @@ CRITICAL RULES:
 - Incorporate at least 2-3 of the child's favorite things naturally into the plot
 - The child's personality traits should be evident in how they act in the story
 - NO scary content, violence, or anything inappropriate for young children
-- DO NOT be preachy or overly moralistic — let lessons emerge naturally from the story${titleInstruction}${occasionContext}${interestsContext}${additionalCharactersPrompt}${lang !== "en" ? `\nIMPORTANT: Write the ENTIRE story in ${LANGUAGE_NAMES[lang] || lang}. All page text, dialogue, and narration must be in ${LANGUAGE_NAMES[lang] || lang}. The title must also be in ${LANGUAGE_NAMES[lang] || lang}. However, keep all illustrationDescription values in English — they are used by an image generator that only understands English.` : ""}
+- DO NOT be preachy or overly moralistic — let lessons emerge naturally from the story${titleInstruction}${occasionContext}${subjectContext}${storyHeartContext}${interestsContext}${additionalCharactersPrompt}${lang !== "en" ? `\nIMPORTANT: Write the ENTIRE story in ${LANGUAGE_NAMES[lang] || lang}. All page text, dialogue, and narration must be in ${LANGUAGE_NAMES[lang] || lang}. The title must also be in ${LANGUAGE_NAMES[lang] || lang}. However, keep all illustrationDescription values in English — they are used by an image generator that only understands English.` : ""}
 
 NARRATIVE STRUCTURE:
 Use a cumulative or circular structure (common in the best children's books):
@@ -175,10 +195,12 @@ Each illustrationDescription must be detailed enough for an AI image generator t
 
   const userPrompt = `Create a children's book with these details:
 
-Child: ${input.childName}, age ${input.childAge}, ${input.childGender}
+Child: ${input.childName}, age range ${ageLabel}, ${input.childGender}
 Personality: ${traitDescriptions}
 Favorite things: ${input.favoriteThings.join(", ")}
 Theme: ${themeConfig ? getThemeName(themeConfig.id) : input.theme} — ${themeConfig?.storyPromptHint}
+${input.subject ? `Subject: ${getSubjectName(input.theme, input.subject)}` : ""}
+${input.storyMessage ? `Heart of the story: ${getStoryHeartName(input.storyMessage)}` : ""}
 Story style: ${input.storyStyle === "RHYME" ? "Rhyming verse" : "Prose"}
 Illustration style: ${styleConfig ? `${getStyleName(styleConfig.id)} — ${getStyleDescription(styleConfig.id)}` : ""}
 ${input.occasion ? `Occasion: ${input.occasion}` : ""}

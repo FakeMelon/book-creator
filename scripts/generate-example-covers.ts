@@ -22,7 +22,7 @@ const PREDEFINED: CoverExample[] = [
     age: 5,
     gender: "girl",
     themeId: "space",
-    styleId: "WATERCOLOR_WHIMSY",
+    styleId: "WATERCOLOR",
     title: "Luna's Cosmic Birthday Adventure",
   },
   {
@@ -30,7 +30,7 @@ const PREDEFINED: CoverExample[] = [
     age: 7,
     gender: "boy",
     themeId: "enchanted-forest",
-    styleId: "BRIGHT_AND_BOLD",
+    styleId: "COMIC_POP",
     title: "Marcus and the Enchanted Forest",
   },
   {
@@ -38,7 +38,7 @@ const PREDEFINED: CoverExample[] = [
     age: 4,
     gender: "non-binary child",
     themeId: "underwater",
-    styleId: "COZY_AND_WARM",
+    styleId: "GOUACHE_PAINTERLY",
     title: "River's Undersea Discovery",
   },
 ];

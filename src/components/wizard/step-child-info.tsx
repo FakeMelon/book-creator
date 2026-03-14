@@ -4,9 +4,9 @@ import { useTranslations } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { AGE_RANGE_OPTIONS } from "@/constants";
 import { cn } from "@/lib/utils";
 
-const AGE_OPTIONS = [3, 4, 5, 6, 7, 8];
 const GENDER_OPTIONS = [
   { value: "boy", labelKey: "genderBoy" as const, icon: "👦" },
   { value: "girl", labelKey: "genderGirl" as const, icon: "👧" },
@@ -18,8 +18,9 @@ export function StepChildInfo() {
     useWizardStore();
   const t = useTranslations("Wizard.childInfo");
   const tc = useTranslations("Common");
+  const tConst = useTranslations("Constants");
 
-  const isValid = childName.trim().length > 0 && childAge !== null && childGender !== "";
+  const isValid = childName.trim().length > 0 && childAge !== "" && childGender !== "";
 
   return (
     <div className="space-y-8 max-w-lg mx-auto">
@@ -45,19 +46,28 @@ export function StepChildInfo() {
 
         <div>
           <label className="block text-sm font-semibold mb-3">{t("ageLabel")}</label>
-          <div className="flex gap-3">
-            {AGE_OPTIONS.map((age) => (
+          <div className="grid grid-cols-2 gap-3">
+            {AGE_RANGE_OPTIONS.map((range) => (
               <button
-                key={age}
-                onClick={() => setChildAge(age)}
+                key={range.id}
+                onClick={() => setChildAge(range.id)}
                 className={cn(
-                  "w-14 h-14 rounded-xl text-lg font-bold transition-all duration-200",
-                  childAge === age
+                  "flex items-center gap-3 p-4 rounded-xl transition-all duration-200",
+                  childAge === range.id
                     ? "bg-primary text-primary-foreground shadow-lg scale-105"
                     : "bg-muted hover:bg-muted/80 text-foreground"
                 )}
               >
-                {age}
+                <span className="text-2xl">{range.emoji}</span>
+                <div className="text-start">
+                  <span className="font-bold">{tConst(`ageRanges.${range.id}.label`)}</span>
+                  <p className={cn(
+                    "text-xs mt-0.5",
+                    childAge === range.id ? "text-primary-foreground/80" : "text-muted-foreground"
+                  )}>
+                    {tConst(`ageRanges.${range.id}.name`)}
+                  </p>
+                </div>
               </button>
             ))}
           </div>

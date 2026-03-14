@@ -1,18 +1,26 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ILLUSTRATION_STYLES } from "@/constants";
+import { ILLUSTRATION_STYLES, BOOK_LANGUAGES } from "@/constants";
 import { cn } from "@/lib/utils";
 import type { IllustrationStyle, StoryStyle } from "@/types";
 
 const STYLE_ICONS: Record<string, string> = {
-  WATERCOLOR_WHIMSY: "🎨",
-  BRIGHT_AND_BOLD: "🌈",
-  STORYBOOK_CLASSIC: "📚",
-  COZY_AND_WARM: "🕯️",
+  WATERCOLOR: "🎨",
+  SOFT_ANIME: "✨",
+  PAPER_COLLAGE: "📎",
+  PLAYFUL_3D: "🧊",
+  GOUACHE_PAINTERLY: "🖌️",
+  CLAYMATION: "🎭",
+  GEOMETRIC_MODERN: "📐",
+  PICTURE_BOOK: "📚",
+  BLOCK_CRAFT: "🧱",
+  KAWAII: "🌸",
+  COMIC_POP: "💥",
+  STICKER_ART: "🏷️",
 };
 
 export function StepStoryStyle() {
@@ -20,14 +28,20 @@ export function StepStoryStyle() {
     storyStyle,
     illustrationStyle,
     dedication,
+    bookLanguage,
     setStoryStyle,
     setIllustrationStyle,
     setDedication,
+    setBookLanguage,
     nextStep,
   } = useWizardStore();
   const t = useTranslations("Wizard.style");
   const tc = useTranslations("Common");
   const ts = useTranslations("Constants.styles");
+  const locale = useLocale();
+
+  // Default to UI locale if no language selected
+  const effectiveLanguage = bookLanguage || locale;
 
   return (
     <div className="space-y-8 max-w-2xl mx-auto">
@@ -77,23 +91,48 @@ export function StepStoryStyle() {
       {/* Illustration Style */}
       <div>
         <label className="block text-sm font-semibold mb-3">{t("illustrationLabel")}</label>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
           {ILLUSTRATION_STYLES.map((style) => (
             <button
               key={style.id}
               onClick={() => setIllustrationStyle(style.id as IllustrationStyle)}
               className={cn(
-                "text-start p-5 rounded-xl transition-all duration-200 border-2",
+                "text-start p-4 rounded-xl transition-all duration-200 border-2",
                 illustrationStyle === style.id
                   ? "border-primary bg-primary/5 shadow-lg"
                   : "border-transparent bg-muted hover:bg-muted/80"
               )}
             >
-              <div className="w-full h-24 rounded-lg bg-gradient-to-br from-muted to-muted/50 mb-3 flex items-center justify-center text-4xl">
+              <div className="w-full h-20 rounded-lg bg-gradient-to-br from-muted to-muted/50 mb-3 flex items-center justify-center text-3xl">
                 {STYLE_ICONS[style.id]}
               </div>
-              <p className="font-bold">{ts(`${style.id}.name`)}</p>
-              <p className="text-sm text-muted-foreground mt-1">{ts(`${style.id}.description`)}</p>
+              <p className="font-bold text-sm">{ts(`${style.id}.name`)}</p>
+              <p className="text-xs text-muted-foreground mt-1">{ts(`${style.id}.description`)}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Book Language */}
+      <div>
+        <label className="block text-sm font-semibold mb-2">
+          {t("bookLanguageLabel")}
+        </label>
+        <p className="text-xs text-muted-foreground mb-3">{t("bookLanguageHint")}</p>
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+          {BOOK_LANGUAGES.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => setBookLanguage(lang.code)}
+              className={cn(
+                "flex items-center gap-2 px-3 py-2.5 rounded-lg transition-all duration-200 text-sm",
+                effectiveLanguage === lang.code
+                  ? "bg-primary text-primary-foreground shadow-md"
+                  : "bg-muted hover:bg-muted/80 text-foreground"
+              )}
+            >
+              <span>{lang.flag}</span>
+              <span className="font-medium truncate">{lang.nativeName}</span>
             </button>
           ))}
         </div>

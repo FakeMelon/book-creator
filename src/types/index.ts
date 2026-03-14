@@ -56,7 +56,7 @@ export interface ChildPhoto {
 export interface WizardState {
   step: number;
   childName: string;
-  childAge: number | null;
+  childAge: string;
   childGender: string;
   favoriteThings: string[];
   customFavoriteThings: string[];
@@ -64,6 +64,8 @@ export interface WizardState {
   customPersonalityTraits: string[];
   theme: string;
   occasion: string;
+  subject: string;
+  storyMessage: string;
   hobbies: string[];
   customHobbies: string[];
   favoriteCharacters: string[];
@@ -83,6 +85,8 @@ export interface WizardState {
   illustrationStyle: IllustrationStyle;
   dedication: string;
   photoKey: string | null;
+  // Book language
+  bookLanguage: string;
   // Book idea selection
   selectedTitle: string;
   bookIdeas: BookIdea[];

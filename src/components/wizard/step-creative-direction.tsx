@@ -13,6 +13,8 @@ import {
   HOBBY_OPTIONS,
   ANIMAL_OPTIONS,
   FOOD_OPTIONS,
+  SUBJECTS,
+  STORY_HEARTS,
 } from "@/constants";
 import { cn } from "@/lib/utils";
 import { TypewriterSentence, type SentenceConfig } from "./typewriter-sentence";
@@ -38,6 +40,26 @@ const SENTENCE_CONFIGS: SentenceConfig[] = [
     required: true,
     presets: THEMES.map((t) => ({ id: t.id, emoji: t.icon })),
     translationCategory: "themes",
+    customPlaceholder: "",
+  },
+  {
+    key: "subject",
+    field: "subject",
+    mode: "single",
+    max: 1,
+    required: false,
+    presets: [], // dynamic — populated based on current theme
+    translationCategory: "subjects",
+    customPlaceholder: "",
+  },
+  {
+    key: "storyHeart",
+    field: "storyMessage",
+    mode: "single",
+    max: 1,
+    required: false,
+    presets: STORY_HEARTS,
+    translationCategory: "storyHearts",
     customPlaceholder: "",
   },
   {
@@ -87,6 +109,8 @@ const SENTENCE_CONFIGS: SentenceConfig[] = [
 interface StoreSnapshot {
   occasion: string;
   theme: string;
+  subject: string;
+  storyMessage: string;
   personalityTraits: string[];
   customPersonalityTraits: string[];
   hobbies: string[];
@@ -119,6 +143,10 @@ function getSentenceValues(
       return { selected: store.occasion ? [store.occasion] : [], custom: [] };
     case "theme":
       return { selected: store.theme ? [store.theme] : [], custom: [] };
+    case "subject":
+      return { selected: store.subject ? [store.subject] : [], custom: [] };
+    case "storyMessage":
+      return { selected: store.storyMessage ? [store.storyMessage] : [], custom: [] };
     case "personalityTraits":
       return { selected: store.personalityTraits, custom: store.customPersonalityTraits };
     case "hobbies":
@@ -157,6 +185,8 @@ export function StepCreativeDirection() {
     childGender: s.childGender,
     occasion: s.occasion,
     theme: s.theme,
+    subject: s.subject,
+    storyMessage: s.storyMessage,
     personalityTraits: s.personalityTraits,
     customPersonalityTraits: s.customPersonalityTraits,
     hobbies: s.hobbies,
@@ -168,6 +198,8 @@ export function StepCreativeDirection() {
     nextStep: s.nextStep,
     setOccasion: s.setOccasion,
     setTheme: s.setTheme,
+    setSubject: s.setSubject,
+    setStoryMessage: s.setStoryMessage,
     togglePersonalityTrait: s.togglePersonalityTrait,
     addCustomPersonalityTrait: s.addCustomPersonalityTrait,
     removeCustomPersonalityTrait: s.removeCustomPersonalityTrait,
@@ -188,6 +220,22 @@ export function StepCreativeDirection() {
   const { childName, childGender, nextStep } = store;
 
   const { pronoun, possessive } = getPronouns(childGender, t);
+
+  // Dynamic subject presets based on current theme
+  const subjectPresets = useMemo(
+    () => (store.theme ? (SUBJECTS[store.theme] ?? []) : []),
+    [store.theme]
+  );
+
+  // Build sentence configs with dynamic presets
+  const sentenceConfigs = useMemo(() => {
+    return SENTENCE_CONFIGS.map((cfg) => {
+      if (cfg.key === "subject") {
+        return { ...cfg, presets: subjectPresets };
+      }
+      return cfg;
+    });
+  }, [subjectPresets]);
 
   // Compute which sentences were already filled on mount (intentionally run once)
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -216,18 +264,22 @@ export function StepCreativeDirection() {
   const placeholderMap: Record<string, string> = {
     occasion: t("occasionPlaceholder"),
     theme: "",
+    subject: "",
+    storyHeart: "",
     traits: t("traitsPlaceholder"),
     hobbies: t("hobbiesPlaceholder"),
     animals: t("animalsPlaceholder"),
     foods: t("foodsPlaceholder"),
   };
-  const sentenceConfigs = useMemo(() => {
-    return SENTENCE_CONFIGS.map((cfg) => ({
+  const resolvedConfigs = useMemo(() => {
+    return sentenceConfigs.map((cfg) => ({
       ...cfg,
       customPlaceholder: placeholderMap[cfg.key] ?? "",
+      // Subjects are nested by theme in translations: subjects.{theme}.{subject}
+      ...(cfg.key === "subject" && store.theme ? { translationPrefix: store.theme } : {}),
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [t]);
+  }, [sentenceConfigs, t, store.theme]);
 
   const genderKey = VALID_GENDERS.has(childGender) ? childGender : "non-binary";
 
@@ -337,6 +389,22 @@ export function StepCreativeDirection() {
             onSetSingle: (val: string) =>
               handleSingleSelect(sentenceIndex, store.setTheme, val),
           };
+        case "subject":
+          return {
+            onToggle: () => {},
+            onAddCustom: () => {},
+            onRemoveCustom: () => {},
+            onSetSingle: (val: string) =>
+              handleSingleSelect(sentenceIndex, store.setSubject, val),
+          };
+        case "storyMessage":
+          return {
+            onToggle: () => {},
+            onAddCustom: () => {},
+            onRemoveCustom: () => {},
+            onSetSingle: (val: string) =>
+              handleSingleSelect(sentenceIndex, store.setStoryMessage, val),
+          };
         case "personalityTraits":
           return {
             onToggle: store.togglePersonalityTrait,
@@ -417,11 +485,96 @@ export function StepCreativeDirection() {
     [tConst]
   );
 
+  // Custom subject card renderer
+  const renderSubjectPresets = useCallback(
+    ({
+      selectedValues,
+      onSetSingle,
+    }: {
+      selectedValues: string[];
+      onToggle: (value: string) => void;
+      onSetSingle: (value: string) => void;
+      mode: "single" | "multi";
+      disabled: boolean;
+    }) => {
+      const items = store.theme ? (SUBJECTS[store.theme] ?? []) : [];
+      if (items.length === 0) return <div />;
+      return (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {items.map((item) => (
+            <motion.button
+              key={item.id}
+              variants={{ hidden: { opacity: 0, y: 4 }, visible: { opacity: 1, y: 0 } }}
+              type="button"
+              onClick={() => onSetSingle(item.id)}
+              className={cn(
+                "flex flex-col items-center gap-2 p-3 rounded-xl transition-all duration-200 border-2",
+                selectedValues.includes(item.id)
+                  ? "border-primary bg-primary/5 shadow-lg scale-105"
+                  : "border-transparent bg-muted hover:bg-muted/80"
+              )}
+            >
+              <span className="text-2xl">{item.emoji}</span>
+              <span className="text-sm font-semibold">
+                {tConst(`subjects.${store.theme}.${item.id}`)}
+              </span>
+            </motion.button>
+          ))}
+        </div>
+      );
+    },
+    [tConst, store.theme]
+  );
+
+  // Custom story heart renderer
+  const renderStoryHeartPresets = useCallback(
+    ({
+      selectedValues,
+      onSetSingle,
+    }: {
+      selectedValues: string[];
+      onToggle: (value: string) => void;
+      onSetSingle: (value: string) => void;
+      mode: "single" | "multi";
+      disabled: boolean;
+    }) => (
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {STORY_HEARTS.map((heart) => (
+          <motion.button
+            key={heart.id}
+            variants={{ hidden: { opacity: 0, y: 4 }, visible: { opacity: 1, y: 0 } }}
+            type="button"
+            onClick={() => onSetSingle(heart.id)}
+            className={cn(
+              "flex items-center gap-2 p-3 rounded-xl transition-all duration-200 border-2",
+              selectedValues.includes(heart.id)
+                ? "border-primary bg-primary/5 shadow-lg scale-105"
+                : "border-transparent bg-muted hover:bg-muted/80"
+            )}
+          >
+            <span className="text-xl">{heart.emoji}</span>
+            <span className="text-sm font-semibold">
+              {tConst(`storyHearts.${heart.id}`)}
+            </span>
+          </motion.button>
+        ))}
+      </div>
+    ),
+    [tConst]
+  );
+
+  // Map config keys to custom renderers
+  const customRenderers: Record<string, typeof renderThemePresets | undefined> = {
+    theme: renderThemePresets,
+    subject: renderSubjectPresets,
+    storyHeart: renderStoryHeartPresets,
+  };
+
   return (
     <div className="space-y-2 max-w-2xl mx-auto px-1">
       {/* Sentence stack */}
       <div className="min-h-[300px] space-y-1 py-2">
-        {sentenceConfigs.map((config, i) => {
+        {resolvedConfigs.map((config, i) => {
           const isActive = i === activeSentenceIndex;
           const { selected, custom } = getSentenceValues(config, store);
           const isCompleted = !isActive && (selected.length + custom.length > 0);
@@ -430,6 +583,9 @@ export function StepCreativeDirection() {
 
           // Don't render future sentences
           if (isFuture && !isCompleted) return null;
+
+          // Don't render subject sentence if no theme is selected
+          if (config.key === "subject" && !store.theme) return null;
 
           const actions = getActions(config, i);
           const template = getSentenceTemplate(config.key);
@@ -453,7 +609,7 @@ export function StepCreativeDirection() {
               onDone={() => handleDone(i)}
               onSkip={() => handleSkip(i)}
               onReactivate={() => handleReactivate(i)}
-              renderPresets={config.key === "theme" ? renderThemePresets : undefined}
+              renderPresets={customRenderers[config.key]}
             />
           );
         })}

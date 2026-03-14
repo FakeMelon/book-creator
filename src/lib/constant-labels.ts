@@ -60,3 +60,21 @@ export function getOccasionLabel(occasionId: string): string {
   }
   return label;
 }
+
+export function getSubjectName(themeId: string, subjectId: string): string {
+  const subjects = (constants as any).subjects?.[themeId];
+  if (!subjects?.[subjectId]) {
+    console.warn(`[i18n] Missing English label for subject "${themeId}.${subjectId}" — using raw ID`);
+    return subjectId;
+  }
+  return subjects[subjectId];
+}
+
+export function getStoryHeartName(heartId: string): string {
+  const label = (constants as any).storyHearts?.[heartId];
+  if (!label) {
+    console.warn(`[i18n] Missing English label for storyHeart "${heartId}" — using raw ID`);
+    return heartId;
+  }
+  return label;
+}

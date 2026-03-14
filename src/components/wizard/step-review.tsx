@@ -10,7 +10,7 @@ import { isDemoMode } from "@/lib/config";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { THEMES, PERSONALITY_TRAITS, OCCASION_OPTIONS } from "@/constants";
+import { THEMES, PERSONALITY_TRAITS, OCCASION_OPTIONS, STORY_HEARTS, BOOK_LANGUAGES } from "@/constants";
 import { cn } from "@/lib/utils";
 
 const GENERATING_MESSAGE_COUNT = 8;
@@ -231,8 +231,10 @@ export function StepReview() {
                   photoKey: c.photoKey,
                 }))
               : undefined,
+          subject: store.subject || undefined,
+          storyMessage: store.storyMessage || undefined,
           selectedTitle: store.selectedTitle,
-          language: locale,
+          language: store.bookLanguage || locale,
         }),
       });
 
@@ -533,7 +535,7 @@ export function StepReview() {
           <div>
             <h3 className="font-bold text-lg">{store.childName}</h3>
             <p className="text-sm text-muted-foreground">
-              {t("ageDisplay", { age: store.childAge ?? 0 })} &middot;{" "}
+              {store.childAge ? tConst(`ageRanges.${store.childAge}.label`) : ""} &middot;{" "}
               {t(getPronounKey(store.childGender))}
             </p>
             {photoCount > 0 && (
@@ -562,6 +564,21 @@ export function StepReview() {
               {themeConfig?.icon} {tConst(`themes.${store.theme}.name`)}
             </p>
           </div>
+          {store.subject && (
+            <div>
+              <p className="text-sm font-semibold text-muted-foreground">{t("subjectLabel")}</p>
+              <p className="font-bold">{tConst(`subjects.${store.theme}.${store.subject}`)}</p>
+            </div>
+          )}
+          {store.storyMessage && (
+            <div>
+              <p className="text-sm font-semibold text-muted-foreground">{t("storyHeartLabel")}</p>
+              <p className="font-bold">
+                {STORY_HEARTS.find((h) => h.id === store.storyMessage)?.emoji}{" "}
+                {tConst(`storyHearts.${store.storyMessage}`)}
+              </p>
+            </div>
+          )}
           <div>
             <p className="text-sm font-semibold text-muted-foreground mb-1">{t("personalityLabel")}</p>
             <div className="flex flex-wrap gap-2">
@@ -683,6 +700,15 @@ export function StepReview() {
             <div>
               <p className="text-sm font-semibold text-muted-foreground">{t("dedicationLabel")}</p>
               <p className="italic text-sm">&ldquo;{store.dedication}&rdquo;</p>
+            </div>
+          )}
+          {(store.bookLanguage || locale) && (
+            <div>
+              <p className="text-sm font-semibold text-muted-foreground">{t("languageLabel")}</p>
+              <p className="font-bold">
+                {BOOK_LANGUAGES.find((l) => l.code === (store.bookLanguage || locale))?.flag}{" "}
+                {BOOK_LANGUAGES.find((l) => l.code === (store.bookLanguage || locale))?.nativeName}
+              </p>
             </div>
           )}
         </div>

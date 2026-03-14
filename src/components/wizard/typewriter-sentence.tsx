@@ -15,6 +15,8 @@ export interface SentenceConfig {
   required: boolean;
   presets: { id: string; emoji: string }[];
   translationCategory: string;
+  /** Optional prefix inserted between category and value id (e.g. theme id for subjects) */
+  translationPrefix?: string;
   customPlaceholder: string;
 }
 
@@ -77,16 +79,18 @@ function formatValues(
   values: string[],
   tConst: (key: string) => string,
   category: string,
-  presetIds: Set<string>
+  presetIds: Set<string>,
+  prefix?: string
 ): string {
   const suffix = NESTED_CATEGORIES.has(category) ? ".name" : "";
+  const prefixPart = prefix ? `${prefix}.` : "";
   const labels = values.map((v) => {
     // Only translate known preset IDs; custom values are used as-is
     if (!presetIds.has(v)) return v;
     try {
-      return tConst(`${category}.${v}${suffix}`);
+      return tConst(`${category}.${prefixPart}${v}${suffix}`);
     } catch (err) {
-      console.error(`[TypewriterSentence] Failed to translate "${category}.${v}${suffix}":`, err);
+      console.error(`[TypewriterSentence] Failed to translate "${category}.${prefixPart}${v}${suffix}":`, err);
       return v;
     }
   });
@@ -195,7 +199,7 @@ export function TypewriterSentence({
                 ? "text-foreground group-hover:text-primary"
                 : "text-primary"
             )}>
-              {formatValues(allValues, tConst, config.translationCategory, presetIds)}
+              {formatValues(allValues, tConst, config.translationCategory, presetIds, config.translationPrefix)}
             </strong>
           )}
           {blankRevealed && allValues.length === 0 && !isSkipped && (
@@ -255,7 +259,7 @@ export function TypewriterSentence({
                       )}
                     >
                       <span>{preset.emoji}</span>
-                      <span>{tConst(`${config.translationCategory}.${preset.id}${NESTED_CATEGORIES.has(config.translationCategory) ? ".name" : ""}`)}</span>
+                      <span>{tConst(`${config.translationCategory}.${config.translationPrefix ? `${config.translationPrefix}.` : ""}${preset.id}${NESTED_CATEGORIES.has(config.translationCategory) ? ".name" : ""}`)}</span>
                     </motion.button>
                   );
                 })}

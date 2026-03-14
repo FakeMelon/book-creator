@@ -263,6 +263,8 @@
       "sentences": {
         "occasion": "The book for {childName} is for a {blank}",
         "theme": "{childName}'s story will be about {blank}",
+        "subject": "The adventure is set around {blank}",
+        "storyHeart": "The heart of the story is {blank}",
         "traits": "{childName} is a {blank} kind of kid",
         "hobbies": "{pronoun} loves {blank}",
         "animals": "{possessive} favorite animal is {blank}",
@@ -328,7 +330,9 @@
       "dedicationLabel": "Dedication",
       "optional": "(optional)",
       "dedicationPlaceholder": "e.g. \"For our little explorer — Love, Mom & Dad\"",
-      "charCounter": "{count}/200 characters"
+      "charCounter": "{count}/200 characters",
+      "bookLanguageLabel": "Book Language",
+      "bookLanguageHint": "The language your story will be written in"
     },
     "titles": {
       "loadingHeading": "Brainstorming Ideas...",
@@ -362,6 +366,9 @@
       "styleProse": "Prose",
       "styleRhyme": "Rhyme",
       "artStyleLabel": "Art Style",
+      "subjectLabel": "Subject",
+      "storyHeartLabel": "Heart of the Story",
+      "languageLabel": "Book Language",
       "dedicationLabel": "Dedication",
       "generateCoverPreview": "Generate Cover Preview",
       "freePreview": "Free preview — see your book covers before committing",
@@ -658,22 +665,137 @@
       }
     },
     "styles": {
-      "WATERCOLOR_WHIMSY": {
-        "name": "Watercolor Whimsy",
+      "WATERCOLOR": {
+        "name": "Watercolor",
         "description": "Soft, dreamy watercolor textures with gentle color blending"
       },
-      "BRIGHT_AND_BOLD": {
-        "name": "Bright & Bold",
-        "description": "Vivid colors and strong outlines, modern and energetic"
+      "SOFT_ANIME": {
+        "name": "Soft Anime",
+        "description": "Large expressive eyes, gentle pastel palette, warm glow"
       },
-      "STORYBOOK_CLASSIC": {
-        "name": "Storybook Classic",
+      "PAPER_COLLAGE": {
+        "name": "Paper Collage",
+        "description": "Cut-out paper textures, layered handmade feel"
+      },
+      "PLAYFUL_3D": {
+        "name": "Playful 3D",
+        "description": "Soft rounded forms, vibrant colors, Pixar-inspired"
+      },
+      "GOUACHE_PAINTERLY": {
+        "name": "Gouache Painterly",
+        "description": "Rich opaque colors, visible brushwork, warm tones"
+      },
+      "CLAYMATION": {
+        "name": "Claymation",
+        "description": "Sculpted clay characters, handcrafted textures"
+      },
+      "GEOMETRIC_MODERN": {
+        "name": "Geometric Modern",
+        "description": "Clean flat shapes, bold color blocks, minimalist"
+      },
+      "PICTURE_BOOK": {
+        "name": "Picture Book",
         "description": "Timeless hand-drawn feel, warm and nostalgic"
       },
-      "COZY_AND_WARM": {
-        "name": "Cozy & Warm",
-        "description": "Soft lighting, rounded shapes, comforting atmosphere"
+      "BLOCK_CRAFT": {
+        "name": "Block Craft",
+        "description": "Blocky voxel shapes, bright primary colors"
+      },
+      "KAWAII": {
+        "name": "Kawaii",
+        "description": "Ultra-cute chibi characters, pastel rainbow palette"
+      },
+      "COMIC_POP": {
+        "name": "Comic Pop",
+        "description": "Vivid colors, strong outlines, dynamic comic energy"
+      },
+      "STICKER_ART": {
+        "name": "Sticker Art",
+        "description": "Die-cut sticker look, colorful flat design"
       }
+    },
+    "ageRanges": {
+      "0-2": { "label": "0–2", "name": "Baby & Toddler" },
+      "3-5": { "label": "3–5", "name": "Preschool" },
+      "6-9": { "label": "6–9", "name": "Early Reader" },
+      "10+": { "label": "10+", "name": "Confident Reader" }
+    },
+    "subjects": {
+      "adventure": {
+        "treasure-hunt": "Treasure Hunt",
+        "jungle-expedition": "Jungle Expedition",
+        "mountain-quest": "Mountain Quest",
+        "lost-city": "Lost City",
+        "island-explorer": "Island Explorer"
+      },
+      "friendship": {
+        "new-friend": "New Friend",
+        "teamwork": "Teamwork",
+        "pen-pals": "Pen Pals",
+        "neighborhood": "Neighborhood",
+        "playdate-adventure": "Playdate Adventure"
+      },
+      "space": {
+        "planet-hopper": "Planet Hopper",
+        "astronaut-training": "Astronaut Training",
+        "alien-friends": "Alien Friends",
+        "moon-mission": "Moon Mission",
+        "space-station": "Space Station"
+      },
+      "enchanted-forest": {
+        "talking-trees": "Talking Trees",
+        "fairy-ring": "Fairy Ring",
+        "mushroom-village": "Mushroom Village",
+        "enchanted-animals": "Enchanted Animals",
+        "hidden-waterfall": "Hidden Waterfall"
+      },
+      "superheroes": {
+        "origin-story": "Origin Story",
+        "team-up": "Team Up",
+        "powers-discovery": "Powers Discovery",
+        "secret-identity": "Secret Identity",
+        "villain-reform": "Villain Reform"
+      },
+      "fairy-tale": {
+        "castle-quest": "Castle Quest",
+        "magic-mirror": "Magic Mirror",
+        "enchanted-ball": "Enchanted Ball",
+        "magic-beans": "Magic Beans",
+        "sleeping-spell": "Sleeping Spell"
+      },
+      "robots": {
+        "robot-friend": "Robot Friend",
+        "invention-lab": "Invention Lab",
+        "robot-school": "Robot School",
+        "rescue-bot": "Rescue Bot",
+        "building-crew": "Building Crew"
+      },
+      "underwater": {
+        "coral-reef": "Coral Reef",
+        "pirate-ship": "Pirate Ship",
+        "mermaid-kingdom": "Mermaid Kingdom",
+        "deep-sea-dive": "Deep Sea Dive",
+        "whale-song": "Whale Song"
+      },
+      "dinosaurs": {
+        "dino-park": "Dino Park",
+        "fossil-hunt": "Fossil Hunt",
+        "baby-dino": "Baby Dino",
+        "time-travel": "Time Travel",
+        "volcano-adventure": "Volcano Adventure"
+      }
+    },
+    "storyHearts": {
+      "courage": "Courage",
+      "kindness": "Kindness",
+      "self-belief": "Self-Belief",
+      "teamwork": "Teamwork",
+      "creativity": "Creativity",
+      "perseverance": "Perseverance",
+      "empathy": "Empathy",
+      "gratitude": "Gratitude",
+      "curiosity": "Curiosity",
+      "acceptance": "Acceptance"
     },
     "traits": {
       "brave": "Brave",
@@ -739,7 +861,7 @@
     "nameMaxLength": "Name must be 30 characters or less",
     "namePattern": "Name can only contain letters, spaces, hyphens, and apostrophes",
     "selectOption": "Please select an option",
-    "ageRange": "Age must be between 3 and 8",
+    "ageRange": "Please select an age range",
     "selectOccasion": "Please select an occasion",
     "pickFavoriteThing": "Pick at least one favorite thing",
     "maxFavoriteThings": "Pick up to 5 favorite things",

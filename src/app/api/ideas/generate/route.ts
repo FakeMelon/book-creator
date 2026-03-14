@@ -3,8 +3,8 @@ import { isDemoMode } from "@/lib/config";
 import { auth } from "@/lib/auth";
 import { getClient, STORY_MODEL, LANGUAGE_NAMES } from "@/lib/claude";
 import { generateIdeasSchema } from "@/validators";
-import { THEMES, PERSONALITY_TRAITS } from "@/constants";
-import { getThemeName, getTraitLabel } from "@/lib/constant-labels";
+import { THEMES, PERSONALITY_TRAITS, AGE_RANGE_OPTIONS } from "@/constants";
+import { getThemeName, getTraitLabel, getSubjectName, getStoryHeartName } from "@/lib/constant-labels";
 import type { BookIdea } from "@/types";
 
 export async function POST(req: Request) {
@@ -41,7 +41,17 @@ export async function POST(req: Request) {
       ? `\nIMPORTANT: Write all titles and descriptions in ${LANGUAGE_NAMES[lang] || lang}. The child's name should remain as-is.`
       : "";
 
-    const systemPrompt = `You are a children's book author who brainstorms creative book concepts for ages 3-8. Given details about a child, generate exactly 3 unique book ideas. Each idea should have a catchy, age-appropriate title and a 1-2 sentence description of what the story is about.
+    const ageConfig = AGE_RANGE_OPTIONS.find((a) => a.id === data.childAge);
+    const ageLabel = ageConfig?.label ?? data.childAge;
+
+    const subjectLine = data.subject && data.theme
+      ? `\nSubject: ${getSubjectName(data.theme, data.subject)}`
+      : "";
+    const heartLine = data.storyMessage
+      ? `\nHeart of the story: ${getStoryHeartName(data.storyMessage)}`
+      : "";
+
+    const systemPrompt = `You are a children's book author who brainstorms creative book concepts. Given details about a child, generate exactly 3 unique book ideas. Each idea should have a catchy, age-appropriate title and a 1-2 sentence description of what the story is about.
 
 Return valid JSON only, no markdown. The structure must be:
 { "ideas": [{ "title": "...", "description": "..." }, ...] }
@@ -53,9 +63,9 @@ Rules:
 - Descriptions should excite both the child and their parents
 - NO scary or inappropriate content${langInstruction}`;
 
-    const userPrompt = `Child: ${data.childName}, age ${data.childAge}, ${data.childGender} (${pronouns})
+    const userPrompt = `Child: ${data.childName}, age range ${ageLabel}, ${data.childGender} (${pronouns})
 Personality: ${traitDescriptions}
-Theme: ${getThemeName(themeConfig.id)} — ${themeConfig.storyPromptHint}
+Theme: ${getThemeName(themeConfig.id)} — ${themeConfig.storyPromptHint}${subjectLine}${heartLine}
 Story style: ${data.storyStyle === "RHYME" ? "Rhyming verse" : "Prose"}
 Occasion: ${data.occasion}
 ${data.hobbies?.length ? `Hobbies: ${data.hobbies.join(", ")}` : ""}

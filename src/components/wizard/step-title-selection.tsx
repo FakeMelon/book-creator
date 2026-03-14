@@ -11,12 +11,13 @@ type FingerprintFields = Pick<
   WizardState,
   | "childName" | "childAge" | "childGender"
   | "personalityTraits" | "customPersonalityTraits"
-  | "theme" | "occasion"
+  | "theme" | "occasion" | "subject" | "storyMessage"
   | "hobbies" | "customHobbies"
   | "favoriteCharacters" | "customFavoriteCharacters"
   | "favoriteAnimal" | "customFavoriteAnimals"
   | "favoriteFoods" | "customFavoriteFoods"
   | "storyStyle" | "illustrationStyle"
+  | "bookLanguage"
 >;
 
 function computeFingerprint(state: FingerprintFields): string {
@@ -27,12 +28,15 @@ function computeFingerprint(state: FingerprintFields): string {
     personalityTraits: [...state.personalityTraits, ...state.customPersonalityTraits].sort(),
     theme: state.theme,
     occasion: state.occasion,
+    subject: state.subject,
+    storyMessage: state.storyMessage,
     hobbies: [...state.hobbies, ...state.customHobbies].sort(),
     favoriteCharacters: [...state.favoriteCharacters, ...state.customFavoriteCharacters].sort(),
     favoriteAnimal: [...state.favoriteAnimal, ...state.customFavoriteAnimals].sort(),
     favoriteFoods: [...state.favoriteFoods, ...state.customFavoriteFoods].sort(),
     storyStyle: state.storyStyle,
     illustrationStyle: state.illustrationStyle,
+    bookLanguage: state.bookLanguage,
   });
 }
 
@@ -84,9 +88,11 @@ export function StepTitleSelection() {
           favoriteCharacters: allCharacters.length > 0 ? allCharacters : undefined,
           favoriteAnimal: allAnimals.length > 0 ? allAnimals : undefined,
           favoriteFoods: allFoods.length > 0 ? allFoods : undefined,
+          subject: current.subject || undefined,
+          storyMessage: current.storyMessage || undefined,
           storyStyle: current.storyStyle,
           illustrationStyle: current.illustrationStyle,
-          language: locale,
+          language: current.bookLanguage || locale,
         }),
       });
 

@@ -27,6 +27,8 @@ export async function POST(req: Request) {
         hobbies: data.hobbies || [],
         favoriteCharacters: data.favoriteCharacters || [],
         favoriteAnimal: data.favoriteAnimal || [],
+        subject: data.subject,
+        storyMessage: data.storyMessage,
         storyStyle: data.storyStyle,
         illustrationStyle: data.illustrationStyle,
         dedication: data.dedication,

@@ -85,10 +85,18 @@ enum StoryStyle {
 }
 
 enum IllustrationStyle {
-  WATERCOLOR_WHIMSY
-  BRIGHT_AND_BOLD
-  STORYBOOK_CLASSIC
-  COZY_AND_WARM
+  WATERCOLOR
+  SOFT_ANIME
+  PAPER_COLLAGE
+  PLAYFUL_3D
+  GOUACHE_PAINTERLY
+  CLAYMATION
+  GEOMETRIC_MODERN
+  PICTURE_BOOK
+  BLOCK_CRAFT
+  KAWAII
+  COMIC_POP
+  STICKER_ART
 }
 
 enum PageType {
@@ -109,7 +117,7 @@ model Book {
 
   // Child info
   childName   String
-  childAge    Int
+  childAge    String
   childGender String
 
   // Photo
@@ -126,10 +134,14 @@ model Book {
   favoriteCharacters String[]
   favoriteAnimal     String[]
 
+  // 3-tier theme
+  subject       String?
+  storyMessage  String?
+
   // Additional characters
   additionalCharacters Json?
   storyStyle       StoryStyle       @default(PROSE)
-  illustrationStyle IllustrationStyle @default(WATERCOLOR_WHIMSY)
+  illustrationStyle IllustrationStyle @default(WATERCOLOR)
 
   // Format
   format    BookFormat @default(SQUARE_8X8)
