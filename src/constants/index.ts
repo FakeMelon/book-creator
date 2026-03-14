@@ -239,6 +239,14 @@ export const REFERRAL_SOURCE_OPTIONS = [
   "other",
 ];
 
+// ─── Gender Options ───
+
+export const GENDER_OPTIONS = [
+  { value: "boy", labelKey: "genderBoy" as const, image: "/images/wizard/gender-boy.webp" },
+  { value: "girl", labelKey: "genderGirl" as const, image: "/images/wizard/gender-girl.webp" },
+  { value: "non-binary", labelKey: "genderNonBinary" as const, image: "/images/wizard/gender-non-binary.webp" },
+];
+
 // ─── Age Range Options ───
 
 export interface AgeRangeOption {
