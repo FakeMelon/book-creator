@@ -6,63 +6,63 @@ export const THEMES: ThemeConfig[] = [
   {
     id: "adventure",
     icon: "🗺️",
-    image: "/images/wizard/theme-adventure.png",
+    image: "/images/wizard/theme-adventure.webp",
     color: "#f59e0b",
     storyPromptHint: "an exciting adventure with exploration, challenges to overcome, and hidden treasures",
   },
   {
     id: "friendship",
     icon: "🤝",
-    image: "/images/wizard/theme-friendship.png",
+    image: "/images/wizard/theme-friendship.webp",
     color: "#ec4899",
     storyPromptHint: "the power of friendship, making new friends, and learning to work together",
   },
   {
     id: "space",
     icon: "🚀",
-    image: "/images/wizard/theme-space.png",
+    image: "/images/wizard/theme-space.webp",
     color: "#FF6B6B",
     storyPromptHint: "a journey through outer space with rockets, planets, stars, and cosmic discoveries",
   },
   {
     id: "enchanted-forest",
     icon: "🌲",
-    image: "/images/wizard/theme-enchanted-forest.png",
+    image: "/images/wizard/theme-enchanted-forest.webp",
     color: "#22c55e",
     storyPromptHint: "a magical enchanted forest with talking animals, fairy lights, and woodland mysteries",
   },
   {
     id: "superheroes",
     icon: "⚡",
-    image: "/images/wizard/theme-superheroes.png",
+    image: "/images/wizard/theme-superheroes.webp",
     color: "#ef4444",
     storyPromptHint: "discovering special superpowers, saving the day, and learning that everyone has unique strengths",
   },
   {
     id: "fairy-tale",
     icon: "👑",
-    image: "/images/wizard/theme-fairy-tale.png",
+    image: "/images/wizard/theme-fairy-tale.webp",
     color: "#a855f7",
     storyPromptHint: "a classic fairy tale with castles, enchantments, and a happily-ever-after ending",
   },
   {
     id: "robots",
     icon: "🤖",
-    image: "/images/wizard/theme-robots.png",
+    image: "/images/wizard/theme-robots.webp",
     color: "#64748b",
     storyPromptHint: "a world of friendly robots, amazing inventions, and learning how things work together",
   },
   {
     id: "underwater",
     icon: "🐠",
-    image: "/images/wizard/theme-underwater.png",
+    image: "/images/wizard/theme-underwater.webp",
     color: "#06b6d4",
     storyPromptHint: "an underwater adventure with colorful sea creatures, coral reefs, and ocean mysteries",
   },
   {
     id: "dinosaurs",
     icon: "🦕",
-    image: "/images/wizard/theme-dinosaurs.png",
+    image: "/images/wizard/theme-dinosaurs.webp",
     color: "#84cc16",
     storyPromptHint: "a journey to a land of dinosaurs with gentle giants, exciting discoveries, and prehistoric wonders",
   },
@@ -73,62 +73,62 @@ export const THEMES: ThemeConfig[] = [
 export const ILLUSTRATION_STYLES: IllustrationStyleConfig[] = [
   {
     id: "WATERCOLOR",
-    previewImage: "/images/wizard/style-watercolor.png",
+    previewImage: "/images/wizard/style-watercolor.webp",
     fluxStylePrompt: "soft watercolor children's book illustration style, dreamy washes, gentle color blending, delicate brushstrokes, whimsical and airy feel, pastel undertones with vibrant accents",
   },
   {
     id: "SOFT_ANIME",
-    previewImage: "/images/wizard/style-soft-anime.png",
+    previewImage: "/images/wizard/style-soft-anime.webp",
     fluxStylePrompt: "soft anime children's book illustration style, large expressive eyes, gentle pastel palette, smooth cel-shading, warm glow lighting, cute rounded character designs",
   },
   {
     id: "PAPER_COLLAGE",
-    previewImage: "/images/wizard/style-paper-collage.png",
+    previewImage: "/images/wizard/style-paper-collage.webp",
     fluxStylePrompt: "paper collage children's book illustration style, cut-out paper textures, layered handmade feel, torn edges, mixed media with fabric and paper patterns, tactile and craft-like",
   },
   {
     id: "PLAYFUL_3D",
-    previewImage: "/images/wizard/style-playful-3d.png",
+    previewImage: "/images/wizard/style-playful-3d.webp",
     fluxStylePrompt: "playful 3D animated children's book illustration style, soft rounded forms, vibrant colors, Pixar-inspired lighting, smooth plastic-like textures, cheerful and modern",
   },
   {
     id: "GOUACHE_PAINTERLY",
-    previewImage: "/images/wizard/style-gouache.png",
+    previewImage: "/images/wizard/style-gouache.webp",
     fluxStylePrompt: "gouache painterly children's book illustration style, rich opaque colors, visible brushwork, warm and earthy tones, cozy atmospheric lighting, traditional painted feel",
   },
   {
     id: "CLAYMATION",
-    previewImage: "/images/wizard/style-claymation.png",
+    previewImage: "/images/wizard/style-claymation.webp",
     fluxStylePrompt: "claymation children's book illustration style, sculpted clay characters, handcrafted textures, stop-motion animation feel, soft studio lighting, charming imperfections",
   },
   {
     id: "GEOMETRIC_MODERN",
-    previewImage: "/images/wizard/style-geometric.png",
+    previewImage: "/images/wizard/style-geometric.webp",
     fluxStylePrompt: "geometric modern children's book illustration style, clean flat shapes, bold color blocks, minimalist design, mid-century modern aesthetic, playful abstract compositions",
   },
   {
     id: "PICTURE_BOOK",
-    previewImage: "/images/wizard/style-picture-book.png",
+    previewImage: "/images/wizard/style-picture-book.webp",
     fluxStylePrompt: "classic picture book illustration style, hand-drawn detailed linework, warm rich colors, traditional children's book art, nostalgic golden age illustration feel, cross-hatching details",
   },
   {
     id: "BLOCK_CRAFT",
-    previewImage: "/images/wizard/style-block-craft.png",
+    previewImage: "/images/wizard/style-block-craft.webp",
     fluxStylePrompt: "block craft children's book illustration style, voxel-inspired blocky shapes, Minecraft-like world, bright primary colors, low-poly 3D feel, playful cubic characters",
   },
   {
     id: "KAWAII",
-    previewImage: "/images/wizard/style-kawaii.png",
+    previewImage: "/images/wizard/style-kawaii.webp",
     fluxStylePrompt: "kawaii children's book illustration style, ultra-cute chibi characters, pastel rainbow palette, sparkles and stars, rounded soft shapes, Japanese cute culture aesthetic",
   },
   {
     id: "COMIC_POP",
-    previewImage: "/images/wizard/style-comic-pop.png",
+    previewImage: "/images/wizard/style-comic-pop.webp",
     fluxStylePrompt: "comic pop children's book illustration style, vivid saturated colors, strong clean outlines, halftone dots, dynamic action poses, bold graphic panels, comic book energy",
   },
   {
     id: "STICKER_ART",
-    previewImage: "/images/wizard/style-sticker-art.png",
+    previewImage: "/images/wizard/style-sticker-art.webp",
     fluxStylePrompt: "sticker art children's book illustration style, die-cut sticker look, white outlines, glossy finish, colorful flat design, playful scattered arrangement, vinyl sticker aesthetic",
   },
 ];
@@ -164,11 +164,11 @@ export const FAVORITE_THINGS_OPTIONS: OptionItem[] = [
 // ─── Occasion Options ───
 
 export const OCCASION_OPTIONS: OptionItem[] = [
-  { id: "birthday", emoji: "🎂", image: "/images/wizard/occasion-birthday.png" },
-  { id: "holiday", emoji: "🎄", image: "/images/wizard/occasion-holiday.png" },
-  { id: "just-because", emoji: "💫", image: "/images/wizard/occasion-just-because.png" },
-  { id: "achievement", emoji: "🏆", image: "/images/wizard/occasion-achievement.png" },
-  { id: "new-sibling", emoji: "👶", image: "/images/wizard/occasion-new-sibling.png" },
+  { id: "birthday", emoji: "🎂", image: "/images/wizard/occasion-birthday.webp" },
+  { id: "holiday", emoji: "🎄", image: "/images/wizard/occasion-holiday.webp" },
+  { id: "just-because", emoji: "💫", image: "/images/wizard/occasion-just-because.webp" },
+  { id: "achievement", emoji: "🏆", image: "/images/wizard/occasion-achievement.webp" },
+  { id: "new-sibling", emoji: "👶", image: "/images/wizard/occasion-new-sibling.webp" },
 ];
 
 // ─── Hobby Options ───
@@ -250,10 +250,10 @@ export interface AgeRangeOption {
 }
 
 export const AGE_RANGE_OPTIONS: AgeRangeOption[] = [
-  { id: "0-2", emoji: "👶", image: "/images/wizard/age-0-2.png", label: "0–2", comprehensionHint: "a baby or toddler (very simple words, sensory descriptions, repetitive patterns)" },
-  { id: "3-5", emoji: "🧒", image: "/images/wizard/age-3-5.png", label: "3–5", comprehensionHint: "a preschooler (short sentences, familiar concepts, gentle humor, repetition)" },
-  { id: "6-9", emoji: "📚", image: "/images/wizard/age-6-9.png", label: "6–9", comprehensionHint: "an early reader (longer sentences, simple plot twists, emerging vocabulary, cause-and-effect)" },
-  { id: "10+", emoji: "🌟", image: "/images/wizard/age-10-plus.png", label: "10+", comprehensionHint: "a confident reader (richer vocabulary, multi-layered plots, nuanced emotions)" },
+  { id: "0-2", emoji: "👶", image: "/images/wizard/age-0-2.webp", label: "0–2", comprehensionHint: "a baby or toddler (very simple words, sensory descriptions, repetitive patterns)" },
+  { id: "3-5", emoji: "🧒", image: "/images/wizard/age-3-5.webp", label: "3–5", comprehensionHint: "a preschooler (short sentences, familiar concepts, gentle humor, repetition)" },
+  { id: "6-9", emoji: "📚", image: "/images/wizard/age-6-9.webp", label: "6–9", comprehensionHint: "an early reader (longer sentences, simple plot twists, emerging vocabulary, cause-and-effect)" },
+  { id: "10+", emoji: "🌟", image: "/images/wizard/age-10-plus.webp", label: "10+", comprehensionHint: "a confident reader (richer vocabulary, multi-layered plots, nuanced emotions)" },
 ];
 
 // ─── Subjects (per theme) ───
