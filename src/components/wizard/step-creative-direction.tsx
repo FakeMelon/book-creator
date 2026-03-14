@@ -260,18 +260,17 @@ export function StepCreativeDirection() {
     };
   }, []);
 
-  // Populate placeholders from translations
-  const placeholderMap: Record<string, string> = {
-    occasion: t("occasionPlaceholder"),
-    theme: "",
-    subject: "",
-    storyHeart: "",
-    traits: t("traitsPlaceholder"),
-    hobbies: t("hobbiesPlaceholder"),
-    animals: t("animalsPlaceholder"),
-    foods: t("foodsPlaceholder"),
-  };
   const resolvedConfigs = useMemo(() => {
+    const placeholderMap: Record<string, string> = {
+      occasion: t("occasionPlaceholder"),
+      theme: "",
+      subject: "",
+      storyHeart: "",
+      traits: t("traitsPlaceholder"),
+      hobbies: t("hobbiesPlaceholder"),
+      animals: t("animalsPlaceholder"),
+      foods: t("foodsPlaceholder"),
+    };
     return sentenceConfigs.map((cfg) => ({
       ...cfg,
       customPlaceholder: placeholderMap[cfg.key] ?? "",
@@ -369,124 +368,74 @@ export function StepCreativeDirection() {
     (cfg) => !cfg.required || isSentenceFilled(cfg, store)
   );
 
-  // Build store action maps per sentence
+  // Lookup tables for building action maps per sentence
+  const singleSetters: Record<string, (val: string) => void> = useMemo(() => ({
+    occasion: store.setOccasion,
+    theme: store.setTheme,
+    subject: store.setSubject,
+    storyMessage: store.setStoryMessage,
+  }), [store.setOccasion, store.setTheme, store.setSubject, store.setStoryMessage]);
+
+  const noop = useCallback(() => {}, []);
+
   const getActions = useCallback(
     (config: SentenceConfig, sentenceIndex: number) => {
+      const setter = singleSetters[config.field];
+      if (setter) {
+        return {
+          onToggle: noop,
+          onAddCustom: noop,
+          onRemoveCustom: noop,
+          onSetSingle: (val: string) => handleSingleSelect(sentenceIndex, setter, val),
+        };
+      }
       switch (config.field) {
-        case "occasion":
-          return {
-            onToggle: () => {},
-            onAddCustom: () => {},
-            onRemoveCustom: () => {},
-            onSetSingle: (val: string) =>
-              handleSingleSelect(sentenceIndex, store.setOccasion, val),
-          };
-        case "theme":
-          return {
-            onToggle: () => {},
-            onAddCustom: () => {},
-            onRemoveCustom: () => {},
-            onSetSingle: (val: string) =>
-              handleSingleSelect(sentenceIndex, store.setTheme, val),
-          };
-        case "subject":
-          return {
-            onToggle: () => {},
-            onAddCustom: () => {},
-            onRemoveCustom: () => {},
-            onSetSingle: (val: string) =>
-              handleSingleSelect(sentenceIndex, store.setSubject, val),
-          };
-        case "storyMessage":
-          return {
-            onToggle: () => {},
-            onAddCustom: () => {},
-            onRemoveCustom: () => {},
-            onSetSingle: (val: string) =>
-              handleSingleSelect(sentenceIndex, store.setStoryMessage, val),
-          };
         case "personalityTraits":
           return {
             onToggle: store.togglePersonalityTrait,
             onAddCustom: store.addCustomPersonalityTrait,
             onRemoveCustom: store.removeCustomPersonalityTrait,
-            onSetSingle: () => {},
+            onSetSingle: noop,
           };
         case "hobbies":
           return {
             onToggle: store.toggleHobby,
             onAddCustom: store.addCustomHobby,
             onRemoveCustom: store.removeCustomHobby,
-            onSetSingle: () => {},
+            onSetSingle: noop,
           };
         case "favoriteAnimal":
           return {
             onToggle: store.toggleFavoriteAnimal,
             onAddCustom: store.addCustomFavoriteAnimal,
             onRemoveCustom: store.removeCustomFavoriteAnimal,
-            onSetSingle: () => {},
+            onSetSingle: noop,
           };
         case "favoriteFoods":
           return {
             onToggle: store.toggleFavoriteFood,
             onAddCustom: store.addCustomFavoriteFood,
             onRemoveCustom: store.removeCustomFavoriteFood,
-            onSetSingle: () => {},
+            onSetSingle: noop,
           };
         default:
-          return {
-            onToggle: () => {},
-            onAddCustom: () => {},
-            onRemoveCustom: () => {},
-            onSetSingle: () => {},
-          };
+          return { onToggle: noop, onAddCustom: noop, onRemoveCustom: noop, onSetSingle: noop };
       }
     },
-    [store, handleSingleSelect]
+    [singleSetters, noop, handleSingleSelect,
+     store.togglePersonalityTrait, store.addCustomPersonalityTrait, store.removeCustomPersonalityTrait,
+     store.toggleHobby, store.addCustomHobby, store.removeCustomHobby,
+     store.toggleFavoriteAnimal, store.addCustomFavoriteAnimal, store.removeCustomFavoriteAnimal,
+     store.toggleFavoriteFood, store.addCustomFavoriteFood, store.removeCustomFavoriteFood]
   );
 
-  // Custom theme card renderer for the theme sentence
-  const renderThemePresets = useCallback(
-    ({
-      selectedValues,
-      onSetSingle,
-    }: {
-      selectedValues: string[];
-      onToggle: (value: string) => void;
-      onSetSingle: (value: string) => void;
-      mode: "single" | "multi";
-      disabled: boolean;
-    }) => (
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        {THEMES.map((themeOption) => (
-          <motion.button
-            key={themeOption.id}
-            variants={{ hidden: { opacity: 0, y: 4 }, visible: { opacity: 1, y: 0 } }}
-            type="button"
-            onClick={() => onSetSingle(themeOption.id)}
-            className={cn(
-              "flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-200 border-2",
-              selectedValues.includes(themeOption.id)
-                ? "border-primary bg-primary/5 shadow-lg scale-105"
-                : "border-transparent bg-muted hover:bg-muted/80"
-            )}
-          >
-            <span className="text-3xl">{themeOption.icon}</span>
-            <span className="text-sm font-semibold">
-              {tConst(`themes.${themeOption.id}.name`)}
-            </span>
-            <span className="text-xs text-muted-foreground text-center">
-              {tConst(`themes.${themeOption.id}.description`)}
-            </span>
-          </motion.button>
-        ))}
-      </div>
-    ),
-    [tConst]
-  );
-
-  // Custom subject card renderer
-  const renderSubjectPresets = useCallback(
+  // Generic card preset renderer used by theme, subject, and storyHeart sentences
+  const renderCardPresets = useCallback(
+    (
+      items: { id: string; emoji?: string; icon?: string }[],
+      labelFn: (id: string) => string,
+      options?: { descriptionFn?: (id: string) => string },
+    ) =>
     ({
       selectedValues,
       onSetSingle,
@@ -497,8 +446,7 @@ export function StepCreativeDirection() {
       mode: "single" | "multi";
       disabled: boolean;
     }) => {
-      const items = store.theme ? (SUBJECTS[store.theme] ?? []) : [];
-      if (items.length === 0) return <div />;
+      if (items.length === 0) return null;
       return (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {items.map((item) => (
@@ -514,61 +462,37 @@ export function StepCreativeDirection() {
                   : "border-transparent bg-muted hover:bg-muted/80"
               )}
             >
-              <span className="text-2xl">{item.emoji}</span>
-              <span className="text-sm font-semibold">
-                {tConst(`subjects.${store.theme}.${item.id}`)}
-              </span>
+              <span className="text-2xl">{item.emoji ?? (item as any).icon}</span>
+              <span className="text-sm font-semibold">{labelFn(item.id)}</span>
+              {options?.descriptionFn && (
+                <span className="text-xs text-muted-foreground text-center">
+                  {options.descriptionFn(item.id)}
+                </span>
+              )}
             </motion.button>
           ))}
         </div>
       );
     },
-    [tConst, store.theme]
+    []
   );
 
-  // Custom story heart renderer
-  const renderStoryHeartPresets = useCallback(
-    ({
-      selectedValues,
-      onSetSingle,
-    }: {
-      selectedValues: string[];
-      onToggle: (value: string) => void;
-      onSetSingle: (value: string) => void;
-      mode: "single" | "multi";
-      disabled: boolean;
-    }) => (
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        {STORY_HEARTS.map((heart) => (
-          <motion.button
-            key={heart.id}
-            variants={{ hidden: { opacity: 0, y: 4 }, visible: { opacity: 1, y: 0 } }}
-            type="button"
-            onClick={() => onSetSingle(heart.id)}
-            className={cn(
-              "flex items-center gap-2 p-3 rounded-xl transition-all duration-200 border-2",
-              selectedValues.includes(heart.id)
-                ? "border-primary bg-primary/5 shadow-lg scale-105"
-                : "border-transparent bg-muted hover:bg-muted/80"
-            )}
-          >
-            <span className="text-xl">{heart.emoji}</span>
-            <span className="text-sm font-semibold">
-              {tConst(`storyHearts.${heart.id}`)}
-            </span>
-          </motion.button>
-        ))}
-      </div>
+  // Memoized custom renderers for each card-style sentence
+  const customRenderers: Record<string, ReturnType<typeof renderCardPresets> | undefined> = useMemo(() => ({
+    theme: renderCardPresets(
+      THEMES.map((t) => ({ id: t.id, emoji: t.icon })),
+      (id) => tConst(`themes.${id}.name`),
+      { descriptionFn: (id) => tConst(`themes.${id}.description`) },
     ),
-    [tConst]
-  );
-
-  // Map config keys to custom renderers
-  const customRenderers: Record<string, typeof renderThemePresets | undefined> = {
-    theme: renderThemePresets,
-    subject: renderSubjectPresets,
-    storyHeart: renderStoryHeartPresets,
-  };
+    subject: renderCardPresets(
+      subjectPresets,
+      (id) => tConst(`subjects.${store.theme}.${id}`),
+    ),
+    storyHeart: renderCardPresets(
+      STORY_HEARTS,
+      (id) => tConst(`storyHearts.${id}`),
+    ),
+  }), [renderCardPresets, tConst, subjectPresets, store.theme]);
 
   return (
     <div className="space-y-2 max-w-2xl mx-auto px-1">

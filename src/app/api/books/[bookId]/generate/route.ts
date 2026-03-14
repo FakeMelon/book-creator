@@ -80,6 +80,8 @@ export async function POST(
         storyStyle: book.storyStyle,
         illustrationStyle: book.illustrationStyle,
         dedication: book.dedication || undefined,
+        subject: book.subject || undefined,
+        storyMessage: book.storyMessage || undefined,
         title: book.title || undefined,
       });
 
