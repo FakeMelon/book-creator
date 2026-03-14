@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
@@ -457,7 +458,7 @@ export function StepCreativeDirection() {
       mode: "single" | "multi";
       disabled: boolean;
     }) => (
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         {THEMES.map((themeOption) => (
           <motion.button
             key={themeOption.id}
@@ -465,18 +466,21 @@ export function StepCreativeDirection() {
             type="button"
             onClick={() => onSetSingle(themeOption.id)}
             className={cn(
-              "flex flex-col items-center gap-2 p-4 rounded-xl transition-all duration-200 border-2",
+              "flex flex-col items-center gap-1 pb-2 rounded-2xl border-2 transition-all duration-200 overflow-hidden",
               selectedValues.includes(themeOption.id)
-                ? "border-primary bg-primary/5 shadow-lg scale-105"
-                : "border-transparent bg-muted hover:bg-muted/80"
+                ? "border-primary bg-primary/5 shadow-lg"
+                : "border-transparent bg-muted/60 hover:bg-muted"
             )}
           >
-            <span className="text-3xl">{themeOption.icon}</span>
-            <span className="text-sm font-semibold">
+            <Image
+              src={themeOption.image}
+              alt={tConst(`themes.${themeOption.id}.name`)}
+              width={512}
+              height={512}
+              className="w-full aspect-square object-contain"
+            />
+            <span className="text-sm font-bold">
               {tConst(`themes.${themeOption.id}.name`)}
-            </span>
-            <span className="text-xs text-muted-foreground text-center">
-              {tConst(`themes.${themeOption.id}.description`)}
             </span>
           </motion.button>
         ))}
@@ -563,8 +567,56 @@ export function StepCreativeDirection() {
     [tConst]
   );
 
+  // Custom occasion card renderer
+  const renderOccasionPresets = useCallback(
+    ({
+      selectedValues,
+      onSetSingle,
+    }: {
+      selectedValues: string[];
+      onToggle: (value: string) => void;
+      onSetSingle: (value: string) => void;
+      mode: "single" | "multi";
+      disabled: boolean;
+    }) => (
+      <div className="grid grid-cols-3 gap-3">
+        {OCCASION_OPTIONS.map((option) => (
+          <motion.button
+            key={option.id}
+            variants={{ hidden: { opacity: 0, y: 4 }, visible: { opacity: 1, y: 0 } }}
+            type="button"
+            onClick={() => onSetSingle(option.id)}
+            className={cn(
+              "flex flex-col items-center gap-1 pb-2 rounded-2xl border-2 transition-all duration-200 overflow-hidden",
+              selectedValues.includes(option.id)
+                ? "border-primary bg-primary/5 shadow-lg"
+                : "border-transparent bg-muted/60 hover:bg-muted"
+            )}
+          >
+            {option.image ? (
+              <Image
+                src={option.image}
+                alt={tConst(`occasions.${option.id}`)}
+                width={512}
+                height={512}
+                className="w-full aspect-square object-contain"
+              />
+            ) : (
+              <span className="text-3xl py-4">{option.emoji}</span>
+            )}
+            <span className="text-sm font-bold">
+              {tConst(`occasions.${option.id}`)}
+            </span>
+          </motion.button>
+        ))}
+      </div>
+    ),
+    [tConst]
+  );
+
   // Map config keys to custom renderers
   const customRenderers: Record<string, typeof renderThemePresets | undefined> = {
+    occasion: renderOccasionPresets,
     theme: renderThemePresets,
     subject: renderSubjectPresets,
     storyHeart: renderStoryHeartPresets,

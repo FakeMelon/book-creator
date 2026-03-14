@@ -193,6 +193,7 @@ export interface ApiResponse<T = unknown> {
 export interface ThemeConfig {
   id: string;
   icon: string;
+  image: string;
   color: string;
   storyPromptHint: string;
 }

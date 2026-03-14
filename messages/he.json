@@ -234,7 +234,8 @@
       "pronounsLabel": "מגדר",
       "genderBoy": "בן",
       "genderGirl": "בת",
-      "genderNonBinary": "לא בינארי"
+      "genderNonBinary": "לא בינארי",
+      "pressEnter": "לחצו Enter להמשך"
     },
     "creative": {
       "substep1Label": "אירוע ונושא",

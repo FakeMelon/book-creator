@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations, useLocale } from "next-intl";
 import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Button } from "@/components/ui/button";
@@ -7,21 +8,6 @@ import { Input } from "@/components/ui/input";
 import { ILLUSTRATION_STYLES, BOOK_LANGUAGES } from "@/constants";
 import { cn } from "@/lib/utils";
 import type { IllustrationStyle, StoryStyle } from "@/types";
-
-const STYLE_ICONS: Record<string, string> = {
-  WATERCOLOR: "🎨",
-  SOFT_ANIME: "✨",
-  PAPER_COLLAGE: "📎",
-  PLAYFUL_3D: "🧊",
-  GOUACHE_PAINTERLY: "🖌️",
-  CLAYMATION: "🎭",
-  GEOMETRIC_MODERN: "📐",
-  PICTURE_BOOK: "📚",
-  BLOCK_CRAFT: "🧱",
-  KAWAII: "🌸",
-  COMIC_POP: "💥",
-  STICKER_ART: "🏷️",
-};
 
 export function StepStoryStyle() {
   const {
@@ -91,23 +77,26 @@ export function StepStoryStyle() {
       {/* Illustration Style */}
       <div>
         <label className="block text-sm font-semibold mb-3">{t("illustrationLabel")}</label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
           {ILLUSTRATION_STYLES.map((style) => (
             <button
               key={style.id}
               onClick={() => setIllustrationStyle(style.id as IllustrationStyle)}
               className={cn(
-                "text-start p-4 rounded-xl transition-all duration-200 border-2",
+                "flex flex-col items-center gap-1 pb-2 rounded-2xl border-2 transition-all duration-200 overflow-hidden",
                 illustrationStyle === style.id
                   ? "border-primary bg-primary/5 shadow-lg"
-                  : "border-transparent bg-muted hover:bg-muted/80"
+                  : "border-transparent bg-muted/60 hover:bg-muted"
               )}
             >
-              <div className="w-full h-20 rounded-lg bg-gradient-to-br from-muted to-muted/50 mb-3 flex items-center justify-center text-3xl">
-                {STYLE_ICONS[style.id]}
-              </div>
-              <p className="font-bold text-sm">{ts(`${style.id}.name`)}</p>
-              <p className="text-xs text-muted-foreground mt-1">{ts(`${style.id}.description`)}</p>
+              <Image
+                src={style.previewImage}
+                alt={ts(`${style.id}.name`)}
+                width={512}
+                height={512}
+                className="w-full aspect-square object-contain"
+              />
+              <p className="text-xs font-bold text-center px-1">{ts(`${style.id}.name`)}</p>
             </button>
           ))}
         </div>

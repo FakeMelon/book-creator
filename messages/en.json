@@ -234,7 +234,8 @@
       "pronounsLabel": "Pronouns",
       "genderBoy": "Boy",
       "genderGirl": "Girl",
-      "genderNonBinary": "They/Them"
+      "genderNonBinary": "They/Them",
+      "pressEnter": "Press Enter to continue"
     },
     "creative": {
       "substep1Label": "Occasion & Theme",

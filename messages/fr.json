@@ -234,7 +234,8 @@
       "pronounsLabel": "Genre",
       "genderBoy": "Garçon",
       "genderGirl": "Fille",
-      "genderNonBinary": "Non-binaire"
+      "genderNonBinary": "Non-binaire",
+      "pressEnter": "Appuyez sur Entrée pour continuer"
     },
     "creative": {
       "substep1Label": "Occasion et thème",
