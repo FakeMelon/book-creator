@@ -177,6 +177,7 @@ export function StepReview() {
   }, [demoCover, demoCoverPhase, demoCoverProgress, demoCoverError, demoCoverData]);
 
   const themeConfig = THEMES.find((th) => th.id === store.theme);
+  const bookLanguage = BOOK_LANGUAGES.find((l) => l.code === (store.bookLanguage || locale));
   const isKnownOccasion = OCCASION_OPTIONS.some((o) => o.id === store.occasion);
   const selectedTraitIds = store.personalityTraits
     .filter((id) => PERSONALITY_TRAITS.some((pt) => pt.id === id));
@@ -702,15 +703,12 @@ export function StepReview() {
               <p className="italic text-sm">&ldquo;{store.dedication}&rdquo;</p>
             </div>
           )}
-          {(() => {
-            const lang = BOOK_LANGUAGES.find((l) => l.code === (store.bookLanguage || locale));
-            return lang ? (
-              <div>
-                <p className="text-sm font-semibold text-muted-foreground">{t("languageLabel")}</p>
-                <p className="font-bold">{lang.flag} {lang.nativeName}</p>
-              </div>
-            ) : null;
-          })()}
+          {bookLanguage && (
+            <div>
+              <p className="text-sm font-semibold text-muted-foreground">{t("languageLabel")}</p>
+              <p className="font-bold">{bookLanguage.flag} {bookLanguage.nativeName}</p>
+            </div>
+          )}
         </div>
       </div>
 

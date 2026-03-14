@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
@@ -25,14 +25,14 @@ export function StepChildInfo() {
   const tc = useTranslations("Common");
   const tConst = useTranslations("Constants");
 
-  const getInitialSubStep = (): SubStep => {
+  const [subStep, setSubStep] = useState<SubStep>(() => {
     if (!childName.trim()) return "name";
     if (!childAge) return "age";
-    if (!childGender) return "pronouns";
     return "pronouns";
-  };
+  });
 
-  const [subStep, setSubStep] = useState<SubStep>(getInitialSubStep);
+  const ageTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => { if (ageTimerRef.current) clearTimeout(ageTimerRef.current); }, []);
 
   const goToAge = useCallback(() => setSubStep("age"), []);
   const goToPronouns = useCallback(() => setSubStep("pronouns"), []);
@@ -46,26 +46,23 @@ export function StepChildInfo() {
   const handleAgeSelect = (id: string) => {
     setChildAge(id);
     // Small delay so the user sees the selection before advancing
-    setTimeout(goToPronouns, 200);
-  };
-
-  const handleGenderSelect = (value: string) => {
-    setChildGender(value);
+    if (ageTimerRef.current) clearTimeout(ageTimerRef.current);
+    ageTimerRef.current = setTimeout(goToPronouns, 200);
   };
 
   // Summary chips for previous selections
-  const summaryItems: { label: string; onClick: () => void }[] = [];
+  const summaryItems: { key: string; label: string; onClick: () => void }[] = [];
   if (childName.trim() && subStep !== "name") {
-    summaryItems.push({ label: childName.trim(), onClick: () => setSubStep("name") });
+    summaryItems.push({ key: "name", label: childName.trim(), onClick: () => setSubStep("name") });
   }
   if (childAge && subStep !== "age") {
     const ageLabel = tConst(`ageRanges.${childAge}.label`);
-    summaryItems.push({ label: ageLabel, onClick: () => setSubStep("age") });
+    summaryItems.push({ key: "age", label: ageLabel, onClick: () => setSubStep("age") });
   }
   if (childGender && subStep === "pronouns") {
     const genderOption = GENDER_OPTIONS.find((o) => o.value === childGender);
     if (genderOption) {
-      summaryItems.push({ label: t(genderOption.labelKey), onClick: () => setSubStep("pronouns") });
+      summaryItems.push({ key: "pronouns", label: t(genderOption.labelKey), onClick: () => setSubStep("pronouns") });
     }
   }
 
@@ -83,7 +80,7 @@ export function StepChildInfo() {
         <div className="flex items-center justify-center gap-2 flex-wrap">
           {summaryItems.map((item) => (
             <button
-              key={item.label}
+              key={item.key}
               onClick={item.onClick}
               className="px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors"
             >
@@ -173,7 +170,7 @@ export function StepChildInfo() {
               {GENDER_OPTIONS.map((option) => (
                 <button
                   key={option.value}
-                  onClick={() => handleGenderSelect(option.value)}
+                  onClick={() => setChildGender(option.value)}
                   className={cn(
                     "flex flex-col items-center gap-1 pb-3 rounded-2xl border-2 transition-all duration-200 overflow-hidden",
                     childGender === option.value

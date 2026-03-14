@@ -478,7 +478,7 @@ export function StepCreativeDirection() {
                   className="w-full aspect-square object-contain"
                 />
               ) : (
-                <span className="text-2xl">{item.emoji ?? (item as any).icon}</span>
+                <span className="text-2xl">{item.emoji ?? item.icon}</span>
               )}
               <span className="text-sm font-bold">{labelFn(item.id)}</span>
               {!hasImages && options?.descriptionFn && (
