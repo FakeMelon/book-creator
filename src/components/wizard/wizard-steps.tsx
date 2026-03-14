@@ -38,12 +38,32 @@ export function WizardSteps({ uploadFile }: WizardStepsProps) {
   const locale = useLocale();
   const isRTL = locale === "he";
 
-  // Preload all wizard images on mount so they're cached before the user needs them
+  // Preload all wizard images on mount so they're cached before the user needs them.
+  // Load in small batches to avoid overwhelming browser connection limits.
   useEffect(() => {
-    WIZARD_IMAGES.forEach((src) => {
-      const img = new window.Image();
-      img.src = src;
-    });
+    const cache: HTMLImageElement[] = [];
+    let cancelled = false;
+    async function preload() {
+      const BATCH = 6;
+      for (let i = 0; i < WIZARD_IMAGES.length; i += BATCH) {
+        if (cancelled) break;
+        await Promise.all(
+          WIZARD_IMAGES.slice(i, i + BATCH).map(
+            (src) =>
+              new Promise<void>((resolve) => {
+                const img = new window.Image();
+                img.onload = img.onerror = () => resolve();
+                img.src = src;
+                cache.push(img);
+              }),
+          ),
+        );
+      }
+    }
+    preload();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const effectiveDir = isRTL ? -direction : direction;

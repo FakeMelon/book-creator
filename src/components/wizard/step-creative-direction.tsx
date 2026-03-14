@@ -474,6 +474,13 @@ export function StepCreativeDirection() {
                   src={item.image}
                   alt={labelFn(item.id)}
                   className="w-full aspect-square object-contain"
+                  onError={(e) => {
+                    const img = e.currentTarget;
+                    if (!img.dataset.retried) {
+                      img.dataset.retried = "1";
+                      img.src = item.image + "?r=1";
+                    }
+                  }}
                 />
               ) : (
                 <span className="text-2xl">{item.emoji ?? item.icon}</span>

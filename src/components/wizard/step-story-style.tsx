@@ -93,6 +93,13 @@ export function StepStoryStyle() {
                 src={style.previewImage}
                 alt={ts(`${style.id}.name`)}
                 className="w-full aspect-square object-contain"
+                onError={(e) => {
+                  const img = e.currentTarget;
+                  if (!img.dataset.retried) {
+                    img.dataset.retried = "1";
+                    img.src = style.previewImage + "?r=1";
+                  }
+                }}
               />
               <p className="text-xs font-bold text-center px-1">{ts(`${style.id}.name`)}</p>
             </button>
