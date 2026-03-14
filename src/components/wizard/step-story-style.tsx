@@ -5,7 +5,7 @@ import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ILLUSTRATION_STYLES, BOOK_LANGUAGES } from "@/constants";
-import { cn } from "@/lib/utils";
+import { cn, handleImageError } from "@/lib/utils";
 import type { IllustrationStyle, StoryStyle } from "@/types";
 
 export function StepStoryStyle() {
@@ -93,13 +93,7 @@ export function StepStoryStyle() {
                 src={style.previewImage}
                 alt={ts(`${style.id}.name`)}
                 className="w-full aspect-square object-contain"
-                onError={(e) => {
-                  const img = e.currentTarget;
-                  if (!img.dataset.retried) {
-                    img.dataset.retried = "1";
-                    img.src = style.previewImage + "?r=1";
-                  }
-                }}
+                onError={handleImageError}
               />
               <p className="text-xs font-bold text-center px-1">{ts(`${style.id}.name`)}</p>
             </button>

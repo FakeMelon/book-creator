@@ -40,3 +40,12 @@ export function estimateReadingTime(wordCount: number): string {
   const minutes = Math.ceil(wordCount / 150);
   return `${minutes} min read`;
 }
+
+/** One-shot image retry: appends a cache-buster on first load failure. */
+export function handleImageError(e: { currentTarget: HTMLImageElement }) {
+  const img = e.currentTarget;
+  if (!img.dataset.retried) {
+    img.dataset.retried = "1";
+    img.src += "?r=1";
+  }
+}

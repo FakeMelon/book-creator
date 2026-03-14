@@ -7,7 +7,7 @@ import { useWizardStore } from "@/hooks/use-wizard-store";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AGE_RANGE_OPTIONS, GENDER_OPTIONS } from "@/constants";
-import { cn } from "@/lib/utils";
+import { cn, handleImageError } from "@/lib/utils";
 
 type SubStep = "name" | "age" | "pronouns";
 
@@ -135,13 +135,7 @@ export function StepChildInfo() {
                     src={range.image}
                     alt={tConst(`ageRanges.${range.id}.name`)}
                     className="w-full aspect-square object-contain"
-                    onError={(e) => {
-                      const img = e.currentTarget;
-                      if (!img.dataset.retried) {
-                        img.dataset.retried = "1";
-                        img.src = range.image + "?r=1";
-                      }
-                    }}
+                    onError={handleImageError}
                   />
                   <span className={cn(
                     "text-base font-bold",
@@ -182,13 +176,7 @@ export function StepChildInfo() {
                     src={option.image}
                     alt={t(option.labelKey)}
                     className="w-full aspect-square object-contain"
-                    onError={(e) => {
-                      const img = e.currentTarget;
-                      if (!img.dataset.retried) {
-                        img.dataset.retried = "1";
-                        img.src = option.image + "?r=1";
-                      }
-                    }}
+                    onError={handleImageError}
                   />
                   <span className={cn(
                     "text-base font-bold",
